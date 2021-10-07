@@ -1,3 +1,4 @@
+using Infrastructure.CustomAttributes.Swagger;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,8 @@ namespace JWTProvider
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
+                c.OperationFilter<CommandAttributeFilter>();
+                c.OperationFilter<QuerryAttributeFilter>();
                 c.EnableAnnotations();
                 c.SwaggerDoc("v1", 
                     new OpenApiInfo 
@@ -53,11 +56,7 @@ namespace JWTProvider
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => 
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTProvider v1");
-                c.RoutePrefix = string.Empty;
-            });
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTProvider v1"));
 
             app.UseHttpsRedirection();
 
@@ -67,7 +66,7 @@ namespace JWTProvider
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapSwagger();
             });
         }
     }

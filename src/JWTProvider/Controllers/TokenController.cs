@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.CustomAttributes.Swagger;
 
 namespace JWTProvider.Controllers
 {
@@ -12,21 +13,21 @@ namespace JWTProvider.Controllers
     [Route("[controller]")]
     public class TokenController: ControllerBase
     {
-        [HttpPost]
+        [HttpPost, Querry()]
         [SwaggerOperation("Получить токен JWT")]
         public async Task<IActionResult> GetToken()
         {
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet, Command()]
         [SwaggerOperation("Проверить актуальность токена")]
         public async Task<IActionResult> CheckToken()
         {
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut, Command()]
         [SwaggerOperation("Разлогиниться")]
         public async Task<IActionResult> LogOut()
         {
