@@ -11,18 +11,24 @@ namespace JWTProvider.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TokenController: ControllerBase
+    public class TokenController : ControllerBase
     {
-        [HttpPost, Querry()]
-        [SwaggerOperation("Получить токен JWT")]
-        public async Task<IActionResult> GetToken()
+        #region Querries
+
+        [HttpGet, Querry()]
+        [SwaggerOperation("Проверить актуальность токена")]
+        public async Task<IActionResult> CheckToken()
         {
             return Ok();
         }
 
-        [HttpGet, Command()]
-        [SwaggerOperation("Проверить актуальность токена")]
-        public async Task<IActionResult> CheckToken()
+        #endregion
+
+        #region Commands
+
+        [HttpPost, Command()]
+        [SwaggerOperation("Получить токен JWT")]
+        public async Task<IActionResult> GetToken()
         {
             return Ok();
         }
@@ -33,5 +39,7 @@ namespace JWTProvider.Controllers
         {
             return Ok();
         }
+
+        #endregion
     }
 }

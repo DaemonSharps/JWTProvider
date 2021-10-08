@@ -40,7 +40,7 @@ namespace JWTProvider
                     { 
                         Title = "JWTProvider", 
                         Version = "v1", 
-                        Description = "ѕровайдер дл€ авторизации в проектах [DaemonSharps](https://github.com/DaemonSharps)"
+                        Description = "Authorization provider for [DaemonSharps](https://github.com/DaemonSharps) apps"
                     });
             });
 
@@ -66,6 +66,7 @@ namespace JWTProvider
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapSwagger();
             });
         }
