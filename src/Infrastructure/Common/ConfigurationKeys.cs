@@ -1,9 +1,10 @@
 ﻿using System;
 namespace Infrastructure.Common
 {
-    public static class ConfigurationKeys
+    public struct ConfigurationKeys
     {
-        public static string TokenKey => "Token:SecretKey";
-        public static string DefaultConnection => "ConnectionString:DefaultConnection";
+        public const string TokenKey = "Token:SecretKey";
+
+        public const string DefaultConnection = "ConnectionString:DefaultConnection";
     }
 }

@@ -30,7 +30,7 @@ namespace Infrastructure.DataBase
                 Id = Guid.NewGuid(),
                 EMail = "test@mail.ru",
                 FirstName = "Денис",
-                SecondName = "Смирнов",
+                MiddleName = "Смирнов",
                 LastName = "Алексеевич",
                 RoleId = 1
             };

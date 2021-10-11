@@ -13,24 +13,4 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="DataBase\" />
-    <None Remove="DataBase\Context\" />
-    <None Remove="DataBase\Entities\" />
-    <None Remove="Entities\" />
-    <None Remove="Common\" />
-    <None Remove="Extentions\" />
-    <None Remove="System.IdentityModel.Tokens.Jwt" />
-    <None Remove="Microsoft.EntityFrameworkCore" />
-    <None Remove="Microsoft.EntityFrameworkCore.Tools" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataBase\" />
-    <Folder Include="DataBase\Context\" />
-    <Folder Include="DataBase\Entities\" />
-    <Folder Include="Entities\" />
-    <Folder Include="Common\" />
-    <Folder Include="Extentions\" />
-  </ItemGroup>
 </Project>

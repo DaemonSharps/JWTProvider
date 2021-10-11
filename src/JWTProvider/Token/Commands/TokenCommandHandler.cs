@@ -3,9 +3,11 @@ using MediatR;
 using Infrastructure.DataBase;
 using Infrastructure.Extentions;
 using Infrastructure.Common;
+using Infrastructure.Common.JWT;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace JWTProvider.Token.Commands
 {
@@ -38,8 +40,7 @@ namespace JWTProvider.Token.Commands
             return (new TokenModel
             {
                 Token = token,
-                User = user,
-                DisplayLogin = user.Login?.ChangeableLogin
+                RefreshToken = Guid.NewGuid().ToString() // todo: убрать временное решение
             }, null);
         }
     }

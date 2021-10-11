@@ -9,11 +9,11 @@ namespace Infrastructure.Entities
 
         public string FirstName { get; set; }
 
-        public string SecondName { get; set; }
+        public string MiddleName { get; set; }
 
         public string LastName { get; set; }
 
         public string GetFullName()
-            => string.Join(' ', FirstName, SecondName, LastName);
+            => string.Join(' ', FirstName, MiddleName, LastName);
     }
 }

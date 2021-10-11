@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
 
-namespace Infrastructure.Common
+namespace Infrastructure.Common.JWT
 {
     public class JWTGenerator
     {
@@ -21,21 +21,23 @@ namespace Infrastructure.Common
         {
             var claims = new List<Claim>
             {
-                new (JwtRegisteredClaimNames.Email, user.EMail)
+                new (JwtRegisteredClaimNames.Email, user.EMail),
+                new (JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new (JWTClaimKeys.MiddleName, user.MiddleName),
+                new (JwtRegisteredClaimNames.FamilyName, user.LastName)
             };
 
             if (user is DataBase.User userDB)
             {
-                claims.Add(new("role", userDB.Role.Name));
-
-                claims.Add(new("login", userDB.Login.GetFullLogin()));
+                claims.Add(new(JWTClaimKeys.Role, userDB.Role?.Name));
+                claims.Add(new(JWTClaimKeys.Login, userDB.Login?.GetFullLogin()));
             }
 
             var ceredentials = new SigningCredentials(_secretKey, SecurityAlgorithms.HmacSha512Signature);
             var descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(15),
                 SigningCredentials = ceredentials
             };
             var handler = new JwtSecurityTokenHandler();
