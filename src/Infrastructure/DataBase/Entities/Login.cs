@@ -7,18 +7,15 @@ namespace Infrastructure.DataBase
     public class Login
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
-        [Required]
-        public string ChangeableLogin { get; set; }
-
-        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid UserId { get; set; }
+
+        [Required]
+        public string DisplayLogin { get; set; }
 
         public User User { get; set; }
 
         public string GetFullLogin()
-            => string.Join('.', Id.ToString(), ChangeableLogin);
+            => string.Join('.', UserId.ToString(), DisplayLogin);
     }
 }

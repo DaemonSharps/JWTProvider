@@ -41,9 +41,8 @@ namespace Infrastructure.DataBase
             };
             var login = new Login
             {
-                Id = Guid.NewGuid(),
                 UserId = user.Id,
-                ChangeableLogin = "Test"
+                DisplayLogin = "Test"
             };
 
             builder.Entity<UserRole>()
