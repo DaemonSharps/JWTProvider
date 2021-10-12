@@ -13,6 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.DataBase;
+using Infrastructure.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace JWTProvider
 {
@@ -35,16 +38,18 @@ namespace JWTProvider
                 c.OperationFilter<CommandAttributeFilter>();
                 c.OperationFilter<QuerryAttributeFilter>();
                 c.EnableAnnotations();
-                c.SwaggerDoc("v1", 
-                    new OpenApiInfo 
-                    { 
-                        Title = "JWTProvider", 
-                        Version = "v1", 
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "JWTProvider",
+                        Version = "v1",
                         Description = "Authorization provider for [DaemonSharps](https://github.com/DaemonSharps) apps"
                     });
             });
 
             services.AddMediatR(typeof(Startup));
+
+            services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

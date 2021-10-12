@@ -6,16 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.CustomAttributes.Swagger;
+using JWTProvider.Token.Commands;
+using MediatR;
+using Infrastructure.DataBase;
+using Infrastructure.Extentions;
 
 namespace JWTProvider.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class TokenController : ControllerBase
+    public class TokenController : BaseController
     {
         #region Querries
 
-        [HttpGet, Querry()]
+        [HttpGet, Querry]
         [SwaggerOperation("Проверить актуальность токена")]
         public async Task<IActionResult> CheckToken()
         {
@@ -26,14 +28,21 @@ namespace JWTProvider.Controllers
 
         #region Commands
 
-        [HttpPost, Command()]
+        [HttpPost, Command]
         [SwaggerOperation("Получить токен JWT")]
-        public async Task<IActionResult> GetToken()
+        public async Task<IActionResult> GetToken(GetTokenCommand request)
         {
-            return Ok();
+            var (model, error) = await Mediator.Send(request);
+            IActionResult response = model switch
+            {
+                null => NotFound(error),
+                _ => Ok(model)
+            };
+
+            return response;
         }
 
-        [HttpPut, Command()]
+        [HttpPut, Command]
         [SwaggerOperation("Разлогиниться")]
         public async Task<IActionResult> LogOut()
         {
