@@ -35,13 +35,14 @@ namespace JWTProvider.Token.Commands
             var hashedPassword = user?.HashPassword(command.Password);
             if (!hashedPassword.Equals(user.Password.Hash)) return (null, new() { Message = "Invalid email or password" });
 
-            var tokenGenerator = new JWTGenerator(_config[ConfigurationKeys.TokenKey]);
-            var token = tokenGenerator.CreateToken(user);
+            var generator = JWTGenerator.GetGenerator(_config[ConfigurationKeys.TokenKey]);
+            var token = generator.CreateToken(user);
+            var refreshToken = generator.CreateToken(user.EMail, TimeSpan.FromDays(7));
 
             return (new TokenModel
             {
                 Token = token,
-                RefreshToken = Guid.NewGuid().ToString() // todo: убрать временное решение
+                RefreshToken = refreshToken
             }, null);
         }
     }

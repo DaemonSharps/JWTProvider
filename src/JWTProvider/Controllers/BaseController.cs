@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JWTProvider.Controllers
 {
@@ -12,13 +9,8 @@ namespace JWTProvider.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
-        protected readonly IMediator _mediator;
-
-        public BaseController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        protected IMediator Mediator => HttpContext.RequestServices.GetService<IMediator>();
     }
 }

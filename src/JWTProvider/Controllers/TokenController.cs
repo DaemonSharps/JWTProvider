@@ -15,8 +15,6 @@ namespace JWTProvider.Controllers
 {
     public class TokenController : BaseController
     {
-        public TokenController(IMediator mediator) : base(mediator) { }
-
         #region Querries
 
         [HttpGet, Querry]
@@ -34,7 +32,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Получить токен JWT")]
         public async Task<IActionResult> GetToken(GetTokenCommand request)
         {
-            var (model, error) = await _mediator.Send(request);
+            var (model, error) = await Mediator.Send(request);
             IActionResult response = model switch
             {
                 null => NotFound(error),
