@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace JWTProvider.Token.Commands
 {
@@ -16,11 +17,13 @@ namespace JWTProvider.Token.Commands
     {
         private readonly IConfiguration _config;
         private readonly UsersDBContext _context;
+        private readonly IMemoryCache _cache;
 
-        public GetTokenHandler(IConfiguration configuration, UsersDBContext dBContext)
+        public GetTokenHandler(IConfiguration configuration, UsersDBContext dBContext, IMemoryCache memoryCache)
         {
             _config = configuration;
             _context = dBContext;
+            _cache = memoryCache;
         }
 
         public async System.Threading.Tasks.Task<(TokenModel model, RestApiError error)> Handle(GetTokenCommand command, CancellationToken cancellationToken)
@@ -29,7 +32,7 @@ namespace JWTProvider.Token.Commands
                 .Include(u => u.Login)
                 .Include(u => u.Password)
                 .Include(u => u.Role)
-                .SingleOrDefaultAsync(u => u.EMail == command.EMail, cancellationToken);
+                .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
             if (user is null) return (null, new() { Message = "User not found"});
 
             var hashedPassword = user?.HashPassword(command.Password);
@@ -37,7 +40,7 @@ namespace JWTProvider.Token.Commands
 
             var generator = JWTGenerator.GetGenerator(_config[ConfigurationKeys.TokenKey]);
             var token = generator.CreateToken(user);
-            var refreshToken = generator.CreateToken(user.EMail, TimeSpan.FromDays(7));
+            var refreshToken = generator.CreateToken(user.Email, TimeSpan.FromDays(7));
 
             return (new TokenModel
             {

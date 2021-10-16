@@ -21,14 +21,14 @@ namespace Infrastructure.DataBase
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>()
-                .HasIndex(u => u.EMail)
+                .HasIndex(u => u.Email)
                 .IsUnique();
 
             #region SeedData
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                EMail = "test@mail.ru",
+                Email = "test@mail.ru",
                 FirstName = "Денис",
                 MiddleName = "Смирнов",
                 LastName = "Алексеевич",

@@ -40,7 +40,7 @@ namespace Infrastructure.Common.JWT
         {
             var claims = new List<Claim>
             {
-                new (JwtRegisteredClaimNames.Email, user.EMail),
+                new (JwtRegisteredClaimNames.Email, user.Email),
                 new (JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new (JWTClaimKeys.MiddleName, user.MiddleName),
                 new (JwtRegisteredClaimNames.FamilyName, user.LastName)

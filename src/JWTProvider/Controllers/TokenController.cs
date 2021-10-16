@@ -1,34 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.CustomAttributes.Swagger;
 using JWTProvider.Token.Commands;
-using MediatR;
-using Infrastructure.DataBase;
-using Infrastructure.Extentions;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JWTProvider.Controllers
 {
     public class TokenController : BaseController
     {
-        #region Querries
-
-        [HttpGet, Querry]
-        [SwaggerOperation("Проверить актуальность токена")]
-        public async Task<IActionResult> CheckToken()
-        {
-            return Ok();
-        }
-
-        #endregion
-
         #region Commands
 
-        [HttpPost, Command]
+        [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("Получить токен JWT")]
         public async Task<IActionResult> GetToken(GetTokenCommand request)
         {
@@ -39,12 +24,14 @@ namespace JWTProvider.Controllers
                 _ => Ok(model)
             };
 
+            if (error == null) Cache.Set(request.Email, model.RefreshToken, TimeSpan.FromDays(7));
+
             return response;
         }
 
-        [HttpPut, Command]
-        [SwaggerOperation("Разлогиниться")]
-        public async Task<IActionResult> LogOut()
+        [HttpPut, Command, Authorize]
+        [SwaggerOperation("Проверить Refresh Token и получить новую пару значений JWT RT")]
+        public async Task<IActionResult> CheckRefreshToken()
         {
             return Ok();
         }

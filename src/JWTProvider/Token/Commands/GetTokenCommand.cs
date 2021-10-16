@@ -7,7 +7,7 @@ namespace JWTProvider.Token.Commands
     public class GetTokenCommand : IRequest<(TokenModel model, RestApiError error)>
     {
         [Required, EmailAddress]
-        public string EMail { get; set; }
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
