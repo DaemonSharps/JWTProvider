@@ -9,6 +9,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Common.JWT
 {
+    /// <summary>
+    /// Генератор JWT
+    /// </summary>
     public class JWTGenerator
     {
         private readonly SecurityKey _secretKey;
@@ -19,9 +22,20 @@ namespace Infrastructure.Common.JWT
             _secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         }
 
+        /// <summary>
+        /// Создать экземпляр генератора
+        /// </summary>
+        /// <param name="secretKey"></param>
+        /// <returns></returns>
         public static JWTGenerator GetGenerator(string secretKey)
             => new (secretKey);
 
+        /// <summary>
+        /// Создать JWT из модели пользователя
+        /// </summary>
+        /// <param name="user">Пользователь</param>
+        /// <param name="expiresAfter">Время жизни токена</param>
+        /// <returns></returns>
         public string CreateToken(User user, TimeSpan? expiresAfter = null)
         {
             var claims = new List<Claim>
@@ -41,19 +55,31 @@ namespace Infrastructure.Common.JWT
             return MakeStringToken(expiresAfter ?? _expiresDefault, claims.ToArray());
         }
 
+        /// <summary>
+        /// Создать JWT из модели электронной почты
+        /// </summary>
+        /// <param name="email">Почта</param>
+        /// <param name="expiresAfter">Время жизни токена</param>
+        /// <returns></returns>
         public string CreateToken([EmailAddress] string email, TimeSpan? expiresAfter = null)
         {
             var claim = new Claim(JwtRegisteredClaimNames.Email, email);
             return MakeStringToken(expiresAfter ?? _expiresDefault, claim);
         }
 
+        /// <summary>
+        /// Создать строковое представление JWT
+        /// </summary>
+        /// <param name="expiresAfter">Время жизни токена</param>
+        /// <param name="claims">Список полей в payload</param>
+        /// <returns></returns>
         private string MakeStringToken(TimeSpan expiresAfter, params Claim[] claims)
         {
             var ceredentials = new SigningCredentials(_secretKey, SecurityAlgorithms.HmacSha512Signature);
             var descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMilliseconds(expiresAfter.TotalMilliseconds),
+                Expires = DateTime.UtcNow.AddMilliseconds(expiresAfter.TotalMilliseconds),
                 SigningCredentials = ceredentials
             };
             var handler = new JwtSecurityTokenHandler();
