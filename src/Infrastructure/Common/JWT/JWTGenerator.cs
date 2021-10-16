@@ -12,7 +12,7 @@ namespace Infrastructure.Common.JWT
     public class JWTGenerator
     {
         private readonly SecurityKey _secretKey;
-        private readonly TimeSpan _expiresDefault = TimeSpan.FromMinutes(15);
+        private readonly TimeSpan _expiresDefault = TimeSpan.FromMinutes(5);
 
         public JWTGenerator(string secretKey)
         {
