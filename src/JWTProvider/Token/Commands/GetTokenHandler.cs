@@ -4,6 +4,7 @@ using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
+using JWTProvider.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;

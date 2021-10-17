@@ -1,4 +1,4 @@
-﻿namespace JWTProvider.Token
+﻿namespace JWTProvider.Models
 {
     public class TokenModel
     {

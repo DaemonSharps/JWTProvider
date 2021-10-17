@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserRegistrationCommand : IRequest<(UserModel user,RestApiError error)>
+    public class UserRegistrationCommand : IRequest<(Infrastructure.DataBase.User user, RestApiError error)>
     {
         [Required, EmailAddress]
         public string Email { get; set; }
