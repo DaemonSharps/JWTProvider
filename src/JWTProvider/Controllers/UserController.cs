@@ -1,8 +1,7 @@
 ﻿using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Entities;
-using JWTProvider.Token;
+using JWTProvider.Models;
 using JWTProvider.Token.Commands;
-using JWTProvider.User;
 using JWTProvider.User.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,34 +12,27 @@ namespace JWTProvider.Controllers
 {
     public class UserController : BaseController
     {
-        internal class RegistrationModel
-        {
-            public UserModel User { get; set; }
-
-            public TokenModel Token { get; set; }
-        }
-
         [HttpPost, Command, AllowAnonymous]
-        [SwaggerOperation("Регистрация пользователя")]
-        [SwaggerResponse(200, "Регистрация прошла успешно", typeof(RegistrationModel))]
-        [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
+        [SwaggerOperation("User registration")]
+        [SwaggerResponse(200, "Registration completed successfully", typeof(TokenModel))]
+        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
         public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command)
         {
-            var (user, userError) = await Mediator.Send(command);
+            var (_, userError) = await Mediator.Send(command);
             if (userError != null) return BadRequest(userError);
-            var cmd = new GetTokenCommand 
+
+            var cmd = new GetTokenCommand
             {
                 Password = command.Password,
                 Email = command.Email
             };
             var (token, tokenError) = await Mediator.Send(cmd);
-            if (tokenError != null) return BadRequest(tokenError);
 
-            return Ok(new RegistrationModel
+            return token switch
             {
-                User = user,
-                Token = token
-            });
+                null => BadRequest(tokenError),
+                _ => Ok(token)
+            };
         }
     }
 }
