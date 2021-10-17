@@ -36,7 +36,7 @@ namespace Infrastructure.CustomAttributes.Swagger
                 operation.Tags = new[] {
                     new OpenApiTag
                     {
-                        Name = $"{attribute.ControllerName} - {attribute.Name}"
+                        Name = $"{attribute.Name} operations for {attribute.ControllerName}"
                     }
                 };
             }
