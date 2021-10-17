@@ -1,15 +1,12 @@
 ﻿using Infrastructure.Common;
-using Infrastructure.Entities;
+using Infrastructure.DataBase;
 
 namespace Infrastructure.Extentions
 {
     public static class UserExtentions
     {
         public static string HashPassword(this User user, string password)
-        {
-            var hasher = new StringHasher(password);
-
-            return hasher.Hash(user.Email, user.FirstName);
-        }
+            => new StringHasher(password)
+            .Hash(user.Email, user.Id.ToString());
     }
 }
