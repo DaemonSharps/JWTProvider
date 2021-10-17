@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using Infrastructure.Entities;
-using System.IdentityModel.Tokens.Jwt;
+﻿using Infrastructure.Entities;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Infrastructure.Common.JWT
 {
@@ -36,7 +35,7 @@ namespace Infrastructure.Common.JWT
         /// <param name="secretKey"></param>
         /// <returns></returns>
         public static JWTGenerator GetGenerator(string secretKey, string issuer)
-            => new (secretKey, issuer);
+            => new(secretKey, issuer);
 
         /// <summary>
         /// Создать JWT из модели пользователя
@@ -74,7 +73,7 @@ namespace Infrastructure.Common.JWT
         public JWTGenerator CreateRefreshToken(string email, TimeSpan? expiresAfter = null)
         {
             var claim = new Claim(JwtRegisteredClaimNames.Email, email);
-            _refreshToken =  MakeStringToken(expiresAfter ?? _expiresDefault, claim);
+            _refreshToken = MakeStringToken(expiresAfter ?? _expiresDefault, claim);
 
             return this;
         }

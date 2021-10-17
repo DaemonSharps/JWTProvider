@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Infrastructure.Entities;
 using MediatR;
-using Infrastructure.Entities;
 
 namespace JWTProvider.Token.Commands
 {

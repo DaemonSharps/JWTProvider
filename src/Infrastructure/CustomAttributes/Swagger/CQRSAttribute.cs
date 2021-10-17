@@ -1,10 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.CustomAttributes.Swagger
 {
@@ -16,7 +13,7 @@ namespace Infrastructure.CustomAttributes.Swagger
         public string ControllerName { get; set; }
     }
 
-    public abstract class CQRSAttributeFilter<T> : IOperationFilter where T: CQRSAttribute
+    public abstract class CQRSAttributeFilter<T> : IOperationFilter where T : CQRSAttribute
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {

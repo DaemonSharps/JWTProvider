@@ -9,7 +9,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
@@ -33,7 +32,7 @@ namespace JWTProvider.Token.Commands
         }
 
         public async Task<(TokenModel model, RestApiError error)> Handle(UpdateTokenCommand request, CancellationToken cancellationToken)
-        { 
+        {
             var tokenKey = _config[ConfigurationKeys.TokenKey];
             var tokenIssuer = _config[ConfigurationKeys.TokenIssuer];
 
@@ -66,10 +65,10 @@ namespace JWTProvider.Token.Commands
                         .CreateTokenPair(user);
                     _cache.Set(email, generator.RefteshToken, _defaultRTLifetime);
 
-                    return (new() 
-                    { 
+                    return (new()
+                    {
                         Token = generator.AcessToken,
-                        RefreshToken = generator.RefteshToken 
+                        RefreshToken = generator.RefteshToken
                     }, null);
                 }
             }

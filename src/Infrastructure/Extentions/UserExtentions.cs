@@ -1,5 +1,5 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Common;
+﻿using Infrastructure.Common;
+using Infrastructure.Entities;
 
 namespace Infrastructure.Extentions
 {

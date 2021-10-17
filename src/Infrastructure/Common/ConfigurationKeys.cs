@@ -1,5 +1,4 @@
-﻿using System;
-namespace Infrastructure.Common
+﻿namespace Infrastructure.Common
 {
     public struct ConfigurationKeys
     {

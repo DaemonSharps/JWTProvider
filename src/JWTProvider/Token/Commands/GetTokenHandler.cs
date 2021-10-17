@@ -1,16 +1,15 @@
-﻿using System.Threading;
-using MediatR;
-using Infrastructure.DataBase;
-using Infrastructure.Extentions;
-using Infrastructure.Common;
+﻿using Infrastructure.Common;
 using Infrastructure.Common.JWT;
-using Infrastructure.Entities;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System;
-using Microsoft.Extensions.Caching.Memory;
 using Infrastructure.Constants;
+using Infrastructure.DataBase;
+using Infrastructure.Entities;
+using Infrastructure.Extentions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Threading;
 
 namespace JWTProvider.Token.Commands
 {
@@ -36,7 +35,7 @@ namespace JWTProvider.Token.Commands
                 .Include(u => u.Password)
                 .Include(u => u.Role)
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
-            if (user is null) return (null, new() { Code = RestErrorCodes.LoginFalied, Message = "User not found"});
+            if (user is null) return (null, new() { Code = RestErrorCodes.LoginFalied, Message = "User not found" });
 
             var hashedPassword = user?.HashPassword(command.Password);
             if (!hashedPassword.Equals(user.Password.Hash)) return (null, new() { Code = RestErrorCodes.LoginFalied, Message = "Invalid email or password" });
