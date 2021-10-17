@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Infrastructure.DataBase;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace JWTProvider
 {

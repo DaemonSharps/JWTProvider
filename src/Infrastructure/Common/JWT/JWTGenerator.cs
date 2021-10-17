@@ -15,11 +15,19 @@ namespace Infrastructure.Common.JWT
     public class JWTGenerator
     {
         private readonly SecurityKey _secretKey;
+        private readonly string _issuer;
         private readonly TimeSpan _expiresDefault = TimeSpan.FromMinutes(5);
+        private readonly TimeSpan _refreshExpiresDefault = TimeSpan.FromDays(7);
+        private string _acessToken;
+        private string _refreshToken;
 
-        public JWTGenerator(string secretKey)
+        public string AcessToken => _acessToken;
+        public string RefteshToken => _refreshToken;
+
+        public JWTGenerator(string secretKey, string issuer)
         {
             _secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            _issuer = issuer;
         }
 
         /// <summary>
@@ -27,8 +35,8 @@ namespace Infrastructure.Common.JWT
         /// </summary>
         /// <param name="secretKey"></param>
         /// <returns></returns>
-        public static JWTGenerator GetGenerator(string secretKey)
-            => new (secretKey);
+        public static JWTGenerator GetGenerator(string secretKey, string issuer)
+            => new (secretKey, issuer);
 
         /// <summary>
         /// Создать JWT из модели пользователя
@@ -36,7 +44,7 @@ namespace Infrastructure.Common.JWT
         /// <param name="user">Пользователь</param>
         /// <param name="expiresAfter">Время жизни токена</param>
         /// <returns></returns>
-        public string CreateToken(User user, TimeSpan? expiresAfter = null)
+        public JWTGenerator CreateAcessToken(User user, TimeSpan? expiresAfter = null)
         {
             var claims = new List<Claim>
             {
@@ -52,19 +60,30 @@ namespace Infrastructure.Common.JWT
                 claims.Add(new(JWTClaimKeys.Login, userDB.Login?.GetFullLogin()));
             }
 
-            return MakeStringToken(expiresAfter ?? _expiresDefault, claims.ToArray());
+            _acessToken = MakeStringToken(expiresAfter ?? _expiresDefault, claims.ToArray());
+
+            return this;
         }
 
         /// <summary>
-        /// Создать JWT из модели электронной почты
+        /// Создать JWT из электронной почты
         /// </summary>
         /// <param name="email">Почта</param>
         /// <param name="expiresAfter">Время жизни токена</param>
         /// <returns></returns>
-        public string CreateToken([EmailAddress] string email, TimeSpan? expiresAfter = null)
+        public JWTGenerator CreateRefreshToken(string email, TimeSpan? expiresAfter = null)
         {
             var claim = new Claim(JwtRegisteredClaimNames.Email, email);
-            return MakeStringToken(expiresAfter ?? _expiresDefault, claim);
+            _refreshToken =  MakeStringToken(expiresAfter ?? _expiresDefault, claim);
+
+            return this;
+        }
+
+        public JWTGenerator CreateTokenPair(User user)
+        {
+            CreateAcessToken(user);
+            CreateRefreshToken(user.Email, _refreshExpiresDefault);
+            return this;
         }
 
         /// <summary>
@@ -80,7 +99,8 @@ namespace Infrastructure.Common.JWT
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMilliseconds(expiresAfter.TotalMilliseconds),
-                SigningCredentials = ceredentials
+                SigningCredentials = ceredentials,
+                Issuer = _issuer
             };
             var handler = new JwtSecurityTokenHandler();
 

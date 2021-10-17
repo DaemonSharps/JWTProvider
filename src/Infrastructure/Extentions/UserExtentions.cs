@@ -9,7 +9,7 @@ namespace Infrastructure.Extentions
         {
             var hasher = new StringHasher(password);
 
-            return hasher.Hash(user.Email);
+            return hasher.Hash(user.Email, user.FirstName);
         }
     }
 }

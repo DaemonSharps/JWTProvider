@@ -6,6 +6,15 @@ using Infrastructure.CustomAttributes.Swagger;
 using JWTProvider.Token.Commands;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Authorization;
+using Infrastructure.Common.JWT;
+using Microsoft.Extensions.Configuration;
+using Infrastructure.Common;
+using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using JWTProvider.Token;
+using Infrastructure.Entities;
 
 namespace JWTProvider.Controllers
 {
@@ -15,25 +24,38 @@ namespace JWTProvider.Controllers
 
         [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("Получить токен JWT")]
-        public async Task<IActionResult> GetToken(GetTokenCommand request)
+        [SwaggerResponse(200, "Авторизация прошла успешно", typeof(TokenModel))]
+        [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
+        public async Task<IActionResult> GetToken([EmailAddress, Required] string email, [Required]string password)
         {
+            var request = new GetTokenCommand 
+            {
+                Email = email,
+                Password = password
+            };
             var (model, error) = await Mediator.Send(request);
-            IActionResult response = model switch
+
+            return model switch
             {
                 null => NotFound(error),
                 _ => Ok(model)
             };
-
-            if (error == null) Cache.Set(request.Email, model.RefreshToken, TimeSpan.FromDays(7));
-
-            return response;
         }
 
-        [HttpPut, Command, Authorize]
+        [HttpPut, Command, AllowAnonymous]
         [SwaggerOperation("Проверить Refresh Token и получить новую пару значений JWT RT")]
-        public async Task<IActionResult> CheckRefreshToken()
+        [SwaggerResponse(200, "Токен проверен успешно", typeof(TokenModel))]
+        [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
+        public async Task<IActionResult> CheckRefreshToken([Required]string refreshToken)
         {
-            return Ok();
+            var cmd = new UpdateTokenCommand { Token = refreshToken };
+            var (model, error) = await Mediator.Send(cmd);
+
+            return model switch
+            {
+                null => BadRequest(error),
+                _ => Ok(model)
+            };
         }
 
         #endregion
