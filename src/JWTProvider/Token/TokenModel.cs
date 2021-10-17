@@ -1,7 +1,4 @@
-﻿using System;
-using Infrastructure.Entities;
-
-namespace JWTProvider.Token
+﻿namespace JWTProvider.Token
 {
     public class TokenModel
     {

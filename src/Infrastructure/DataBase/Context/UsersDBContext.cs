@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Infrastructure.DataBase
 {
@@ -21,14 +21,14 @@ namespace Infrastructure.DataBase
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>()
-                .HasIndex(u => u.EMail)
+                .HasIndex(u => u.Email)
                 .IsUnique();
 
             #region SeedData
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                EMail = "test@mail.ru",
+                Email = "test@mail.ru",
                 FirstName = "Денис",
                 MiddleName = "Смирнов",
                 LastName = "Алексеевич",
@@ -37,7 +37,7 @@ namespace Infrastructure.DataBase
             var pwd = new Password
             {
                 UserId = user.Id,
-                Hash = "xSN+wIT6Nj8tiI3kzqBWXf45V90="
+                Hash = "I3UX9g/lL94qcF4CNNtRiGnhP0E="
             };
             var login = new Login
             {

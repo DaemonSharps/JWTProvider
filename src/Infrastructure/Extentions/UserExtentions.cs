@@ -1,5 +1,5 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Common;
+﻿using Infrastructure.Common;
+using Infrastructure.Entities;
 
 namespace Infrastructure.Extentions
 {
@@ -9,7 +9,7 @@ namespace Infrastructure.Extentions
         {
             var hasher = new StringHasher(password);
 
-            return hasher.Hash(user.EMail);
+            return hasher.Hash(user.Email, user.FirstName);
         }
     }
 }

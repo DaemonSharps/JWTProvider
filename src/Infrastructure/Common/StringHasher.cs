@@ -1,7 +1,6 @@
-﻿using System;
-using Infrastructure.Extentions;
+﻿using Infrastructure.Extentions;
+using System;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Common
 {

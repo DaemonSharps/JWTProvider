@@ -1,52 +1,53 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.CustomAttributes.Swagger;
+﻿using Infrastructure.CustomAttributes.Swagger;
+using Infrastructure.Entities;
+using JWTProvider.Token;
 using JWTProvider.Token.Commands;
-using MediatR;
-using Infrastructure.DataBase;
-using Infrastructure.Extentions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace JWTProvider.Controllers
 {
     public class TokenController : BaseController
     {
-        #region Querries
-
-        [HttpGet, Querry]
-        [SwaggerOperation("Проверить актуальность токена")]
-        public async Task<IActionResult> CheckToken()
-        {
-            return Ok();
-        }
-
-        #endregion
-
         #region Commands
 
-        [HttpPost, Command]
+        [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("Получить токен JWT")]
-        public async Task<IActionResult> GetToken(GetTokenCommand request)
+        [SwaggerResponse(200, "Авторизация прошла успешно", typeof(TokenModel))]
+        [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
+        public async Task<IActionResult> GetToken([EmailAddress, Required] string email, [Required] string password)
         {
+            var request = new GetTokenCommand
+            {
+                Email = email,
+                Password = password
+            };
             var (model, error) = await Mediator.Send(request);
-            IActionResult response = model switch
+
+            return model switch
             {
                 null => NotFound(error),
                 _ => Ok(model)
             };
-
-            return response;
         }
 
-        [HttpPut, Command]
-        [SwaggerOperation("Разлогиниться")]
-        public async Task<IActionResult> LogOut()
+        [HttpPut, Command, AllowAnonymous]
+        [SwaggerOperation("Проверить Refresh Token и получить новую пару значений JWT RT")]
+        [SwaggerResponse(200, "Токен проверен успешно", typeof(TokenModel))]
+        [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
+        public async Task<IActionResult> CheckRefreshToken([Required] string refreshToken)
         {
-            return Ok();
+            var cmd = new UpdateTokenCommand { Token = refreshToken };
+            var (model, error) = await Mediator.Send(cmd);
+
+            return model switch
+            {
+                null => BadRequest(error),
+                _ => Ok(model)
+            };
         }
 
         #endregion
