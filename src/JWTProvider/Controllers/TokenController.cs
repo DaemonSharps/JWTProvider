@@ -18,13 +18,8 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Получить токен JWT")]
         [SwaggerResponse(200, "Авторизация прошла успешно", typeof(TokenModel))]
         [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
-        public async Task<IActionResult> GetToken([EmailAddress, Required] string email, [Required] string password)
+        public async Task<IActionResult> GetToken([FromQuery] GetTokenCommand request)
         {
-            var request = new GetTokenCommand
-            {
-                Email = email,
-                Password = password
-            };
             var (model, error) = await Mediator.Send(request);
 
             return model switch
@@ -38,10 +33,9 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Проверить Refresh Token и получить новую пару значений JWT RT")]
         [SwaggerResponse(200, "Токен проверен успешно", typeof(TokenModel))]
         [SwaggerResponse(400, "Произошла ошибка", typeof(RestApiError))]
-        public async Task<IActionResult> CheckRefreshToken([Required] string refreshToken)
+        public async Task<IActionResult> CheckRefreshToken([FromQuery] UpdateTokenCommand command)
         {
-            var cmd = new UpdateTokenCommand { Token = refreshToken };
-            var (model, error) = await Mediator.Send(cmd);
+            var (model, error) = await Mediator.Send(command);
 
             return model switch
             {

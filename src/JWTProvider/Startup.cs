@@ -40,6 +40,7 @@ namespace JWTProvider
                         Version = "v1",
                         Description = "Authorization provider for [DaemonSharps](https://github.com/DaemonSharps) apps"
                     });
+                c.DescribeAllParametersInCamelCase();
             });
 
             services.AddMediatR(typeof(Startup));

@@ -47,16 +47,16 @@ namespace Infrastructure.Common.JWT
         {
             var claims = new List<Claim>
             {
-                new (JwtRegisteredClaimNames.Email, user.Email),
-                new (JwtRegisteredClaimNames.GivenName, user.FirstName),
-                new (JWTClaimKeys.MiddleName, user.MiddleName),
-                new (JwtRegisteredClaimNames.FamilyName, user.LastName)
+                new (JwtRegisteredClaimNames.Email, user.Email)
             };
+            if (!string.IsNullOrEmpty(user.MiddleName)) claims.Add(new(JWTClaimKeys.MiddleName, user.MiddleName));
+            if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
+            if (!string.IsNullOrEmpty(user.FirstName)) claims.Add(new(JwtRegisteredClaimNames.GivenName, user.FirstName));
 
             if (user is DataBase.User userDB)
             {
-                claims.Add(new(JWTClaimKeys.Role, userDB.Role?.Name));
-                claims.Add(new(JWTClaimKeys.Login, userDB.Login?.GetFullLogin()));
+                if (userDB.Role != null) claims.Add(new(JWTClaimKeys.Role, userDB.Role.Name));
+                if (userDB.Login != null) claims.Add(new(JWTClaimKeys.Login, userDB.Login.GetFullLogin()));
             }
 
             _acessToken = MakeStringToken(expiresAfter ?? _expiresDefault, claims.ToArray());
