@@ -81,7 +81,13 @@ namespace JWTProvider.Controllers
             });
         }
 
-        [HttpGet, Command]
+        [HttpGet("pwd"), Querry, Authorize]
+        public async Task<IActionResult> GetUpdatePasswordUrl()
+        {
+            return Ok();
+        }
+
+        [HttpPut("pwd"), Command, Authorize]
         public async Task<IActionResult> UpdatePassword()
         {
             return Ok();
