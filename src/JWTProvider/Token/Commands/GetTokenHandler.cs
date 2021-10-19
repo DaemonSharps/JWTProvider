@@ -42,7 +42,7 @@ namespace JWTProvider.Token.Commands
             if (!hashedPassword.Equals(user.Password.Hash)) return (null, new() { Code = RestErrorCodes.LoginFalied, Message = "Invalid email or password" });
 
             var generator = JWTGenerator
-                .GetGenerator(_config[ConfigurationKeys.TokenKey], _config[ConfigurationKeys.TokenIssuer])
+                .GetGenerator(_config[ConfigurationKeys.AccessKey], _config[ConfigurationKeys.RefreshKey], _config[ConfigurationKeys.TokenIssuer])
                 .CreateTokenPair(user);
 
             _cache.Set(user.Email, generator.RefteshToken, _defaultRTLifetime);

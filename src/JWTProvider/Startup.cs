@@ -1,7 +1,9 @@
 using Infrastructure.Common;
+using Infrastructure.Common.JWT;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.DataBase;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IO;
+using System.Text;
 
 namespace JWTProvider
 {
@@ -41,11 +45,48 @@ namespace JWTProvider
                         Description = "Authorization provider for [DaemonSharps](https://github.com/DaemonSharps) apps"
                     });
                 c.DescribeAllParametersInCamelCase();
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer",
+                    Description = "Please insert JWT token into field"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        System.Array.Empty<string>()
+                    }
+                });
             });
 
             services.AddMediatR(typeof(Startup));
 
             services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection]));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration[ConfigurationKeys.TokenIssuer],
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[ConfigurationKeys.AccessKey])),
+                        RoleClaimType = JWTClaimKeys.Role
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +107,7 @@ namespace JWTProvider
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
