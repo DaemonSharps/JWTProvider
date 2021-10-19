@@ -1,4 +1,5 @@
-﻿using Infrastructure.DataBase;
+﻿using Infrastructure.Common;
+using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
 using MediatR;
@@ -29,7 +30,7 @@ namespace JWTProvider.User.Commands
                 FirstName = request.FirstName,
                 MiddleName = request.MiddleName,
                 LastName = request.LastName,
-                Login = new() { DisplayLogin = request.Login ?? "NewUser" },
+                Login = new() { DisplayLogin = request.Login ?? new StringHasher(request.Email).Hash() },
                 RoleId = 2
             };
             var role = await _context.UserRoles.SingleOrDefaultAsync(r => r.Id == newUser.RoleId, cancellationToken);
