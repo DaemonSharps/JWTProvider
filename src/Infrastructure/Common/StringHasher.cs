@@ -10,7 +10,7 @@ namespace Infrastructure.Common
     public class StringHasher
     {
         private readonly int _saltSize = 16;
-        private readonly int _hashSize = 20;
+        private readonly int _hashSize = 32;
         private readonly int _iterations = 10000;
         private string _stringToHash;
 
