@@ -7,5 +7,7 @@
         public const string UserNF = "USER_NOT_FOUND";
 
         public const string LoginFalied = "LOGIN_FAILED";
+
+        public const string NoContent = "NO_CONTENT";
     }
 }
