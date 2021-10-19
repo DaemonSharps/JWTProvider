@@ -16,10 +16,19 @@ namespace Infrastructure.Common.JWT
         private readonly SecurityKey _accessKey;
         private readonly SecurityKey _refreshKey;
         private readonly string _issuer;
-        private readonly TimeSpan _expiresDefault = TimeSpan.FromMinutes(5);
-        private readonly TimeSpan _refreshExpiresDefault = TimeSpan.FromDays(7);
         private string _acessToken;
         private string _refreshToken;
+
+
+        /// <summary>
+        /// Стандартное время жизни Access Token
+        /// </summary>
+        public static TimeSpan ExpiresDefault => TimeSpan.FromMinutes(5);
+
+        /// <summary>
+        /// Стандартное время жизни Refresh Token
+        /// </summary>
+        public static TimeSpan RefreshExpiresDefault => TimeSpan.FromDays(7);
 
         public string AcessToken => _acessToken;
         public string RefteshToken => _refreshToken;
@@ -49,7 +58,7 @@ namespace Infrastructure.Common.JWT
         {
             var claims = new List<Claim>
             {
-                new (JwtRegisteredClaimNames.Email, user.Email)
+                new (JWTClaimKeys.Email, user.Email)
             };
             if (!string.IsNullOrEmpty(user.MiddleName)) claims.Add(new(JWTClaimKeys.MiddleName, user.MiddleName));
             if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
@@ -61,7 +70,7 @@ namespace Infrastructure.Common.JWT
                 if (userDB.Login != null) claims.Add(new(JWTClaimKeys.Login, userDB.Login.GetFullLogin()));
             }
 
-            _acessToken = MakeStringToken(_accessKey, expiresAfter ?? _expiresDefault, claims.ToArray());
+            _acessToken = MakeStringToken(_accessKey, expiresAfter ?? ExpiresDefault, claims.ToArray());
 
             return this;
         }
@@ -75,7 +84,7 @@ namespace Infrastructure.Common.JWT
         public JWTGenerator CreateRefreshToken(string email, TimeSpan? expiresAfter = null)
         {
             var claim = new Claim(JwtRegisteredClaimNames.Email, email);
-            _refreshToken = MakeStringToken(_refreshKey, expiresAfter ?? _expiresDefault, claim);
+            _refreshToken = MakeStringToken(_refreshKey, expiresAfter ?? ExpiresDefault, claim);
 
             return this;
         }
@@ -83,7 +92,7 @@ namespace Infrastructure.Common.JWT
         public JWTGenerator CreateTokenPair(User user)
         {
             CreateAcessToken(user);
-            CreateRefreshToken(user.Email, _refreshExpiresDefault);
+            CreateRefreshToken(user.Email, RefreshExpiresDefault);
             return this;
         }
 
