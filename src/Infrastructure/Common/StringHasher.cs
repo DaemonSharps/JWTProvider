@@ -32,7 +32,7 @@ namespace Infrastructure.Common
             if (string.IsNullOrEmpty(stringSalt))
                 throw new ArgumentNullException(stringSalt);
 
-            var salt = stringSalt.ToByteArray();
+            var salt = $"{stringSalt}{new byte[8]}".ToByteArray();
 
             if (!string.IsNullOrEmpty(pepper))
                 _stringToHash += pepper;
