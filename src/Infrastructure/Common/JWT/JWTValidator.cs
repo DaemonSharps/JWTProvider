@@ -27,7 +27,6 @@ namespace Infrastructure.Common.JWT
         {
             var validationParameters = new TokenValidationParameters
             {
-
                 ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
                 ValidateIssuer = true,
                 ValidIssuer = _issuer,

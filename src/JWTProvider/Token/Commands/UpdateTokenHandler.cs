@@ -34,13 +34,14 @@ namespace JWTProvider.Token.Commands
 
         public async Task<(TokenModel model, RestApiError error)> Handle(UpdateTokenCommand request, CancellationToken cancellationToken)
         {
-            var tokenKey = _config[ConfigurationKeys.TokenKey];
+            var accessKey = _config[ConfigurationKeys.AccessKey];
+            var refreshKey = _config[ConfigurationKeys.RefreshKey];
             var tokenIssuer = _config[ConfigurationKeys.TokenIssuer];
 
             JwtPayload payload = null;
             try
             {
-                payload = JWTValidator.GetValidator(tokenKey, tokenIssuer)
+                payload = JWTValidator.GetValidator(refreshKey, tokenIssuer)
                     .ValidateRefreshToken(request.Token)
                     .TokenPayload;
             }
@@ -62,7 +63,7 @@ namespace JWTProvider.Token.Commands
 
 
                     var generator = JWTGenerator
-                        .GetGenerator(tokenKey, tokenIssuer)
+                        .GetGenerator(accessKey, refreshKey, tokenIssuer)
                         .CreateTokenPair(user);
                     _cache.Set(email, generator.RefteshToken, _defaultRTLifetime);
 
