@@ -32,6 +32,7 @@ namespace JWTProvider
         {
             services.AddMemoryCache();
             services.AddControllers();
+            services.AddRouting(ops => ops.LowercaseUrls = true);
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<CommandAttributeFilter>();
@@ -72,7 +73,10 @@ namespace JWTProvider
 
             services.AddMediatR(typeof(Startup));
 
-            services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection]));
+            services.AddDbContext<UsersDBContext>(options => 
+            options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection],
+                b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg =>
                 {
@@ -101,7 +105,11 @@ namespace JWTProvider
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTProvider v1"));
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTProvider v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 
@@ -113,7 +121,6 @@ namespace JWTProvider
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapSwagger();
             });
         }
     }

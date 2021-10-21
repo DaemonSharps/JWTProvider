@@ -28,12 +28,6 @@ namespace JWTProvider.Controllers
             var (user, userError) = await Mediator.Send(command);
             if (userError != null) return BadRequest(userError);
 
-            var cmd = new GetTokenCommand
-            {
-                Password = command.Password,
-                Email = command.Email
-            };
-
             var generator = JWTGenerator
                 .GetGenerator(Config[ConfigurationKeys.AccessKey], Config[ConfigurationKeys.RefreshKey], Config[ConfigurationKeys.TokenIssuer])
                 .CreateTokenPair(user);
@@ -49,7 +43,7 @@ namespace JWTProvider.Controllers
 
         [HttpPut, Command, Authorize]
         [SwaggerOperation("Update user public parameters")]
-        [SwaggerResponse(200, "Update successfull", typeof(TokenModel))]
+        [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
         [SwaggerResponse(204, "No params to update")]
         [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
         public async Task<IActionResult> UpdateUser(string firstName, string middleName, string lastName, string login)
@@ -71,26 +65,21 @@ namespace JWTProvider.Controllers
 
             var generator = JWTGenerator
                 .GetGenerator(Config[ConfigurationKeys.AccessKey], Config[ConfigurationKeys.RefreshKey], Config[ConfigurationKeys.TokenIssuer])
-                .CreateTokenPair(user);
+                .CreateAcessToken(user);
 
-            Cache.Set(user.Email, generator.RefteshToken, JWTGenerator.RefreshExpiresDefault);
-            return Ok(new TokenModel
-            {
-                Token = generator.AcessToken,
-                RefreshToken = generator.RefteshToken
-            });
+            return Ok(generator.AcessToken);
         }
 
         [HttpGet("pwd"), Querry, Authorize]
         public async Task<IActionResult> GetUpdatePasswordUrl()
         {
-            return Ok();
+            return new StatusCodeResult(501);
         }
 
         [HttpPut("pwd"), Command, Authorize]
         public async Task<IActionResult> UpdatePassword()
         {
-            return Ok();
+            return new StatusCodeResult(501);
         }
     }
 }
