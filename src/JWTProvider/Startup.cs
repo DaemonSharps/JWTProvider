@@ -71,6 +71,7 @@ namespace JWTProvider
             });
 
             services.AddMediatR(typeof(Startup));
+            services.AddCors();
 
             services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -109,7 +110,13 @@ namespace JWTProvider
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseCors(options =>
+            {
+                options
+                .WithOrigins("https://vgarage.vercel.app", "http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
