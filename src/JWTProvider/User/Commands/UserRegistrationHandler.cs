@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Common;
+using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
@@ -22,7 +23,7 @@ namespace JWTProvider.User.Commands
         public async Task<(UserDB model, RestApiError error)> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
-            if (user != null) return (null, new() { Code = "", Message = "User is already exist" });
+            if (user != null) return (null, new() { Code = RestErrorCodes.RegistrationFailed, Message = "User is already exist" });
 
             var newUser = new UserDB
             {

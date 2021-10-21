@@ -9,5 +9,7 @@
         public const string LoginFalied = "LOGIN_FAILED";
 
         public const string NoContent = "NO_CONTENT";
+
+        public const string RegistrationFailed = "REGISTRATION_FAILED";
     }
 }
