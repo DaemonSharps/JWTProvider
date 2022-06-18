@@ -68,13 +68,13 @@ namespace JWTProvider.Controllers
         }
 
         [HttpGet("pwd"), Querry, Authorize]
-        public async Task<IActionResult> GetUpdatePasswordUrl()
+        public IActionResult GetUpdatePasswordUrl()
         {
             return new StatusCodeResult(501);
         }
 
         [HttpPut("pwd"), Command, Authorize]
-        public async Task<IActionResult> UpdatePassword()
+        public IActionResult UpdatePassword()
         {
             return new StatusCodeResult(501);
         }
