@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Constants
+﻿namespace Infrastructure.Common.JWT
 {
     public struct JWTClaimKeys
     {
