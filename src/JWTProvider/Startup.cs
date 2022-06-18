@@ -1,8 +1,7 @@
 using Infrastructure.Common;
-using Infrastructure.Common.JWT;
 using Infrastructure.Constants;
-using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.DataBase;
+using Infrastructure.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -13,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.IO;
 using System.Text;
 
@@ -34,43 +32,7 @@ namespace JWTProvider
             services.AddMemoryCache();
             services.AddControllers();
             services.AddRouting(ops => ops.LowercaseUrls = true);
-            services.AddSwaggerGen(c =>
-            {
-                c.OperationFilter<CommandAttributeFilter>();
-                c.OperationFilter<QuerryAttributeFilter>();
-                c.EnableAnnotations();
-                c.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = "JWTProvider",
-                        Version = "v1",
-                        Description = "Authorization provider for [DaemonSharps](https://github.com/DaemonSharps) apps"
-                    });
-                c.DescribeAllParametersInCamelCase();
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Description = "Please insert JWT token into field"
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        System.Array.Empty<string>()
-                    }
-                });
-            });
+            services.AddSwagger();
 
             services.AddMediatR(typeof(Startup));
             services.AddCors();
