@@ -5,14 +5,11 @@ using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
 using JWTProvider.Models;
-using JWTProvider.Token.Commands;
 using JWTProvider.User.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace JWTProvider.Controllers
@@ -34,7 +31,7 @@ namespace JWTProvider.Controllers
 
             Cache.Set(user.Email, generator.RefteshToken, JWTGenerator.RefreshExpiresDefault);
 
-            return Ok(new TokenModel 
+            return Ok(new TokenModel
             {
                 Token = generator.AcessToken,
                 RefreshToken = generator.RefteshToken

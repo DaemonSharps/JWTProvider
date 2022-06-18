@@ -20,9 +20,8 @@
     "JWTProvider": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development.local"
       },
       "dotnetRunMessages": "true",
       "applicationUrl": "http://localhost:5000"

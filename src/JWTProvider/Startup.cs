@@ -74,7 +74,7 @@ namespace JWTProvider
             services.AddMediatR(typeof(Startup));
             services.AddCors();
 
-            services.AddDbContext<UsersDBContext>(options => 
+            services.AddDbContext<UsersDBContext>(options =>
             options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection],
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 

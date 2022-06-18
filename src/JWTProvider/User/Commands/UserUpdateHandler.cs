@@ -4,8 +4,6 @@ using Infrastructure.Entities;
 using Infrastructure.Extentions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UserDB = Infrastructure.DataBase.User;
@@ -30,7 +28,7 @@ namespace JWTProvider.User.Commands
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
             if (user is null) return (null, new() { Code = RestErrorCodes.UserNF, Message = "User not found" });
-            if (new[] { command.FirstName, command.LastName, command.MiddleName, command.Login }.IsAllNullOrEmpty()) 
+            if (new[] { command.FirstName, command.LastName, command.MiddleName, command.Login }.IsAllNullOrEmpty())
                 return (null, new() { Code = RestErrorCodes.NoContent });
 
             user.FirstName = command.FirstName ?? user.FirstName;
