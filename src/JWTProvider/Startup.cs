@@ -1,5 +1,6 @@
 using Infrastructure.Common;
 using Infrastructure.Common.JWT;
+using Infrastructure.Constants;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.DataBase;
 using MediatR;
