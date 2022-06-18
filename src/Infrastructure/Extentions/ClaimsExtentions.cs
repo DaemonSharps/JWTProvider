@@ -1,4 +1,4 @@
-﻿using Infrastructure.Common.JWT;
+﻿using Infrastructure.Constants;
 using System.Security.Claims;
 
 namespace Infrastructure.Extentions
