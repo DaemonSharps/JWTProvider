@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using Infrastructure.Constants;
+﻿using Infrastructure.Constants;
+using System.Security.Claims;
 
 namespace Infrastructure.Extentions
 {
