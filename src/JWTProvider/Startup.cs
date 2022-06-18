@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+using Infrastructure.Common;
 using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Middleware;
@@ -13,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
+using System.Text;
 
 namespace JWTProvider
 {
@@ -32,26 +33,27 @@ namespace JWTProvider
             services.AddControllers();
             services.AddRouting(ops => ops.LowercaseUrls = true);
             services.AddSwagger();
-            services.AddConfigurationOptions(Configuration);
 
             services.AddMediatR(typeof(Startup));
             services.AddCors();
 
             services.AddDbContext<UsersDBContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection],
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
-            var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(cfg => cfg.TokenValidationParameters = new TokenValidationParameters()
+                .AddJwtBearer(cfg =>
                 {
-                    ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
-                    ValidateIssuer = true,
-                    ValidIssuer = tokenOptions.Issuer,
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey)),
-                    RoleClaimType = JWTClaimKeys.Role
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration[ConfigurationKeys.TokenIssuer],
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[ConfigurationKeys.AccessKey])),
+                        RoleClaimType = JWTClaimKeys.Role
+                    };
                 });
         }
 
@@ -66,7 +68,6 @@ namespace JWTProvider
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpResponseExceptionMiddleware();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -81,11 +82,16 @@ namespace JWTProvider
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(options =>
+            {
                 options
                 .WithOrigins("https://vgarage.vercel.app", "http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod());
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+                .AllowAnyMethod();
+            });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
