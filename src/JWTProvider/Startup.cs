@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+﻿using Infrastructure.Common;
 using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Middleware;
@@ -13,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
+using System.Text;
 
 namespace JWTProvider
 {
@@ -32,7 +33,6 @@ namespace JWTProvider
             services.AddControllers();
             services.AddRouting(ops => ops.LowercaseUrls = true);
             services.AddSwagger();
-            services.AddConfigurationOptions(Configuration);
 
             services.AddMediatR(typeof(Startup));
             services.AddCors();
