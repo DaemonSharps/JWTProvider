@@ -4,11 +4,13 @@ using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
+using Infrastructure.Middleware;
 using JWTProvider.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 
@@ -16,17 +18,17 @@ namespace JWTProvider.Token.Commands
 {
     public class GetTokenHandler : IRequestHandler<GetTokenCommand, (TokenModel model, RestApiError error)>
     {
-        private readonly IConfiguration _config;
         private readonly UsersDBContext _context;
         private readonly IMemoryCache _cache;
+        private readonly IOptions<TokenOptions> _options;
 
         private readonly TimeSpan _defaultRTLifetime = TimeSpan.FromDays(7);
 
-        public GetTokenHandler(IConfiguration configuration, UsersDBContext dBContext, IMemoryCache memoryCache)
+        public GetTokenHandler(UsersDBContext dBContext, IMemoryCache memoryCache, IOptions<TokenOptions> options)
         {
-            _config = configuration;
             _context = dBContext;
             _cache = memoryCache;
+            _options = options;
         }
 
         public async System.Threading.Tasks.Task<(TokenModel model, RestApiError error)> Handle(GetTokenCommand command, CancellationToken cancellationToken)
@@ -42,7 +44,7 @@ namespace JWTProvider.Token.Commands
             if (!hashedPassword.Equals(user.Password.Hash)) return (null, new() { Code = RestErrorCodes.LoginFalied, Message = "Invalid email or password" });
 
             var generator = JWTGenerator
-                .GetGenerator(_config[ConfigurationKeys.AccessKey], _config[ConfigurationKeys.RefreshKey], _config[ConfigurationKeys.TokenIssuer])
+                .GetGenerator(_options.Value)
                 .CreateTokenPair(user);
 
             _cache.Set(user.Email, generator.RefteshToken, _defaultRTLifetime);

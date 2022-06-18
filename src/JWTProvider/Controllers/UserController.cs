@@ -4,11 +4,13 @@ using Infrastructure.Constants;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
+using Infrastructure.Middleware;
 using JWTProvider.Models;
 using JWTProvider.User.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
@@ -20,13 +22,13 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("User registration")]
         [SwaggerResponse(200, "Registration completed successfully", typeof(TokenModel))]
         [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
-        public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command)
+        public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
         {
             var (user, userError) = await Mediator.Send(command);
             if (userError != null) return BadRequest(userError);
 
             var generator = JWTGenerator
-                .GetGenerator(Config[ConfigurationKeys.AccessKey], Config[ConfigurationKeys.RefreshKey], Config[ConfigurationKeys.TokenIssuer])
+                .GetGenerator(options.Value)
                 .CreateTokenPair(user);
 
             Cache.Set(user.Email, generator.RefteshToken, JWTGenerator.RefreshExpiresDefault);
@@ -43,7 +45,7 @@ namespace JWTProvider.Controllers
         [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
         [SwaggerResponse(204, "No params to update")]
         [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
-        public async Task<IActionResult> UpdateUser(string firstName, string middleName, string lastName, string login)
+        public async Task<IActionResult> UpdateUser(string firstName, string middleName, string lastName, string login, [FromServices] IOptions<TokenOptions> options)
         {
             var cmd = new UserUpdateCommand
             {
@@ -61,7 +63,7 @@ namespace JWTProvider.Controllers
             };
 
             var generator = JWTGenerator
-                .GetGenerator(Config[ConfigurationKeys.AccessKey], Config[ConfigurationKeys.RefreshKey], Config[ConfigurationKeys.TokenIssuer])
+                .GetGenerator(options.Value)
                 .CreateAcessToken(user);
 
             return Ok(generator.AcessToken);

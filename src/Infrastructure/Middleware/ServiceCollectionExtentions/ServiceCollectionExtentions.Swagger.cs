@@ -5,7 +5,7 @@ using System;
 
 namespace Infrastructure.Middleware
 {
-    public static class ServiceCollectionExtentions
+    public static partial class ServiceCollectionExtentions
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
