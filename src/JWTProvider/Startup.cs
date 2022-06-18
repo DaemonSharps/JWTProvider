@@ -33,14 +33,16 @@ namespace JWTProvider
             services.AddControllers();
             services.AddRouting(ops => ops.LowercaseUrls = true);
             services.AddSwagger();
+            services.AddConfigurationOptions(Configuration);
 
             services.AddMediatR(typeof(Startup));
             services.AddCors();
 
             services.AddDbContext<UsersDBContext>(options =>
-            options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection],
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
+            var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg =>
                 {
@@ -48,10 +50,10 @@ namespace JWTProvider
                     {
                         ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
                         ValidateIssuer = true,
-                        ValidIssuer = Configuration[ConfigurationKeys.TokenIssuer],
+                        ValidIssuer = tokenOptions.Issuer,
                         ValidateAudience = false,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[ConfigurationKeys.AccessKey])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey)),
                         RoleClaimType = JWTClaimKeys.Role
                     };
                 });

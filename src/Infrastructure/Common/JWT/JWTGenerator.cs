@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Entities;
+using Infrastructure.Middleware;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -43,10 +44,14 @@ namespace Infrastructure.Common.JWT
         /// <summary>
         /// Создать экземпляр генератора
         /// </summary>
-        /// <param name="secretKey"></param>
-        /// <returns></returns>
         public static JWTGenerator GetGenerator(string accessKey, string refreshKey, string issuer)
             => new(accessKey, refreshKey, issuer);
+
+        /// <summary>
+        /// Создать экземпляр генератора из класса конфигурации
+        /// </summary>
+        public static JWTGenerator GetGenerator(TokenOptions options)
+            => new(options?.AccessKey, options?.RefreshKey, options?.Issuer);
 
         /// <summary>
         /// Создать JWT из модели пользователя
