@@ -1,40 +1,41 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using Infrastructure.Common;
+using Infrastructure.Common.Exceptions;
+using Infrastructure.Constants;
 using Infrastructure.DataBase;
+using Infrastructure.Entities;
 using Infrastructure.Extentions;
-using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, UserDB>
+    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, (UserDB model, ApiError error)>
     {
         private readonly UsersDBContext _context;
-        private readonly ILogger<UserRegistrationHandler> _logger;
 
-        public UserRegistrationHandler(UsersDBContext context, ILogger<UserRegistrationHandler> logger)
+        public UserRegistrationHandler(UsersDBContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
-        public async Task<UserDB> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
+        public async Task<(UserDB model, ApiError error)> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
-
-            if (user != null) throw new UserExistsException();
+            if (user != null) return (null, new() { ErrorCode = RestErrorCodes.RegistrationFailed, ErrorMessage = "User is already exist" });
 
             var newUser = new UserDB
             {
                 Email = request.Email,
                 FirstName = request.FirstName,
                 MiddleName = request.MiddleName,
-                LastName = request.LastName
+                LastName = request.LastName,
+                Login = new() { DisplayLogin = request.Login ?? new StringHasher(request.Email).Hash() },
+                RoleId = 2
             };
-
+            var role = await _context.UserRoles.SingleOrDefaultAsync(r => r.Id == newUser.RoleId, cancellationToken);
             try
             {
                 _context.Add(newUser);
@@ -49,10 +50,10 @@ namespace JWTProvider.User.Commands
             }
             catch (DbUpdateException ex)
             {
-                _logger.LogError(ex, $"Register user {request.Email} failed", request);
+                return (null, new() { ErrorCode = nameof(DbUpdateException), ErrorMessage = ex.Message });
             }
 
-            return newUser;
+            return (newUser, null);
 
         }
     }
