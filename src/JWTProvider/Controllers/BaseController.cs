@@ -16,7 +16,5 @@ namespace JWTProvider.Controllers
         protected IMediator Mediator => HttpContext.RequestServices.GetService<IMediator>();
 
         protected IMemoryCache Cache => HttpContext.RequestServices.GetService<IMemoryCache>();
-
-        protected IConfiguration Config => HttpContext.RequestServices.GetService<IConfiguration>();
     }
 }
