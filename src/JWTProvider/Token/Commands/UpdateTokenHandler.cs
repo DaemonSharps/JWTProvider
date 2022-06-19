@@ -3,6 +3,7 @@ using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Middleware;
+using JWTProvider.Common.Exceptions;
 using JWTProvider.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace JWTProvider.Token.Commands
 {
-    public class UpdateTokenHandler : IRequestHandler<UpdateTokenCommand, (TokenModel model, RestApiError error)>
+    public class UpdateTokenHandler : IRequestHandler<UpdateTokenCommand, TokenModel>
     {
         private readonly UsersDBContext _context;
         private readonly IMemoryCache _cache;
@@ -32,7 +33,7 @@ namespace JWTProvider.Token.Commands
             _options = options;
         }
 
-        public async Task<(TokenModel model, RestApiError error)> Handle(UpdateTokenCommand request, CancellationToken cancellationToken)
+        public async Task<TokenModel> Handle(UpdateTokenCommand request, CancellationToken cancellationToken)
         {
             var accessKey = _options.Value?.AccessKey;
             var refreshKey = _options.Value?.RefreshKey;
@@ -47,7 +48,7 @@ namespace JWTProvider.Token.Commands
             }
             catch (SecurityTokenValidationException ex)
             {
-                return (null, new() { Code = RestErrorCodes.InvalidRT, Message = ex.Message });
+                throw new InvalidRefreshTokenException(ex.Message);
             }
 
             var email = payload.Claims?.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.Email).Value;
@@ -67,15 +68,15 @@ namespace JWTProvider.Token.Commands
                         .CreateTokenPair(user);
                     _cache.Set(email, generator.RefteshToken, _defaultRTLifetime);
 
-                    return (new()
+                    return new()
                     {
                         AccessToken = generator.AcessToken,
                         RefreshToken = generator.RefteshToken
-                    }, null);
+                    };
                 }
             }
 
-            return (null, new() { Code = RestErrorCodes.InvalidRT, Message = "Invalid token" });
+            throw new InvalidRefreshTokenException("Invalid token");
         }
     }
 }

@@ -69,6 +69,7 @@ namespace JWTProvider
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseLayerExceptionMiddleware();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

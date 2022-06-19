@@ -1,4 +1,5 @@
-﻿using Infrastructure.CustomAttributes.Swagger;
+﻿using Infrastructure.Common.Exceptions;
+using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Entities;
 using JWTProvider.Models;
 using JWTProvider.Token.Commands;
@@ -16,31 +17,21 @@ namespace JWTProvider.Controllers
         [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("Get JsonWebToken")]
         [SwaggerResponse(200, "Authorization successsful", typeof(TokenModel))]
-        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
+        [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> GetToken([FromQuery] GetTokenCommand request)
         {
-            var (model, error) = await Mediator.Send(request);
-
-            return model switch
-            {
-                null => NotFound(error),
-                _ => Ok(model)
-            };
+            var model = await Mediator.Send(request);
+            return Ok(model);
         }
 
         [HttpPut, Command, AllowAnonymous]
         [SwaggerOperation("Check the token and get a new pair of JWT and RT")]
         [SwaggerResponse(200, "Token verified", typeof(TokenModel))]
-        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
+        [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> CheckRefreshToken([FromQuery] UpdateTokenCommand command)
         {
-            var (model, error) = await Mediator.Send(command);
-
-            return model switch
-            {
-                null => BadRequest(error),
-                _ => Ok(model)
-            };
+            var model = await Mediator.Send(command);
+            return Ok(model);
         }
 
         #endregion

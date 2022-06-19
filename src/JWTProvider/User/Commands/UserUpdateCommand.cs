@@ -1,10 +1,11 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.Common.Exceptions;
+using Infrastructure.Entities;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserUpdateCommand : IRequest<(Infrastructure.DataBase.User user, RestApiError error)>
+    public class UserUpdateCommand : IRequest<(Infrastructure.DataBase.User user, ApiError error)>
     {
         [Required, EmailAddress]
         public string Email { get; set; }
