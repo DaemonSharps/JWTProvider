@@ -1,5 +1,4 @@
-﻿using Infrastructure.Common;
-using Infrastructure.Common.JWT;
+﻿using Infrastructure.Common.JWT;
 using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
@@ -9,7 +8,6 @@ using JWTProvider.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
