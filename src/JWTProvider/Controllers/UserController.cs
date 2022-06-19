@@ -1,4 +1,5 @@
-﻿using Infrastructure.Common.JWT;
+﻿using Infrastructure.Common.Exceptions;
+using Infrastructure.Common.JWT;
 using Infrastructure.Constants;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Entities;
@@ -20,7 +21,7 @@ namespace JWTProvider.Controllers
         [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("User registration")]
         [SwaggerResponse(200, "Registration completed successfully", typeof(TokenModel))]
-        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
+        [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
         {
             var (user, userError) = await Mediator.Send(command);
@@ -43,7 +44,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Update user public parameters")]
         [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
         [SwaggerResponse(204, "No params to update")]
-        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
+        [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> UpdateUser(string firstName, string middleName, string lastName, string login, [FromServices] IOptions<TokenOptions> options)
         {
             var cmd = new UserUpdateCommand
@@ -55,7 +56,7 @@ namespace JWTProvider.Controllers
                 Email = User.GetEmail()
             };
             var (user, error) = await Mediator.Send(cmd);
-            if (user is null) return error.Code switch
+            if (user is null) return error.ErrorCode switch
             {
                 RestErrorCodes.NoContent => NoContent(),
                 RestErrorCodes.UserNF => NotFound(error)

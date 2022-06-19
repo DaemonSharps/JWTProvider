@@ -1,4 +1,5 @@
-﻿using Infrastructure.Constants;
+﻿using Infrastructure.Common.Exceptions;
+using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
@@ -10,7 +11,7 @@ using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, (UserDB model, RestApiError error)>
+    public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, (UserDB model, ApiError error)>
     {
         private readonly UsersDBContext _context;
 
@@ -19,7 +20,7 @@ namespace JWTProvider.User.Commands
             _context = context;
         }
 
-        public async Task<(UserDB model, RestApiError error)> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
+        public async Task<(UserDB model, ApiError error)> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .Include(u => u.Login)
@@ -27,9 +28,9 @@ namespace JWTProvider.User.Commands
                 .Include(u => u.Role)
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
-            if (user is null) return (null, new() { Code = RestErrorCodes.UserNF, Message = "User not found" });
+            if (user is null) return (null, new() { ErrorCode = RestErrorCodes.UserNF, ErrorMessage = "User not found" });
             if (new[] { command.FirstName, command.LastName, command.MiddleName, command.Login }.IsAllNullOrEmpty())
-                return (null, new() { Code = RestErrorCodes.NoContent });
+                return (null, new() { ErrorMessage = RestErrorCodes.NoContent });
 
             user.FirstName = command.FirstName ?? user.FirstName;
             user.MiddleName = command.MiddleName ?? user.MiddleName;
@@ -42,7 +43,7 @@ namespace JWTProvider.User.Commands
             }
             catch (DbUpdateException ex)
             {
-                return (null, new() { Code = nameof(DbUpdateException), Message = ex.Message });
+                return (null, new() { ErrorCode = nameof(DbUpdateException), ErrorMessage = ex.Message });
             }
 
             return (user, null);

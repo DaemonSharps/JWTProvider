@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Common;
+using Infrastructure.Common.Exceptions;
 using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
@@ -11,7 +12,7 @@ using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, (UserDB model, RestApiError error)>
+    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, (UserDB model, ApiError error)>
     {
         private readonly UsersDBContext _context;
 
@@ -20,10 +21,10 @@ namespace JWTProvider.User.Commands
             _context = context;
         }
 
-        public async Task<(UserDB model, RestApiError error)> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
+        public async Task<(UserDB model, ApiError error)> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
-            if (user != null) return (null, new() { Code = RestErrorCodes.RegistrationFailed, Message = "User is already exist" });
+            if (user != null) return (null, new() { ErrorCode = RestErrorCodes.RegistrationFailed, ErrorMessage = "User is already exist" });
 
             var newUser = new UserDB
             {
@@ -49,7 +50,7 @@ namespace JWTProvider.User.Commands
             }
             catch (DbUpdateException ex)
             {
-                return (null, new() { Code = nameof(DbUpdateException), Message = ex.Message });
+                return (null, new() { ErrorCode = nameof(DbUpdateException), ErrorMessage = ex.Message });
             }
 
             return (newUser, null);
