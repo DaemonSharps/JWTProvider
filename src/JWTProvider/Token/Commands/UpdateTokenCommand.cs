@@ -8,6 +8,6 @@ namespace JWTProvider.Token.Commands
     public class UpdateTokenCommand : IRequest<(TokenModel model, RestApiError error)>
     {
         [Required]
-        public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

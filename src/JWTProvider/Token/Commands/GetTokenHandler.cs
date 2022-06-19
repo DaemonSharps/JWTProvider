@@ -51,7 +51,7 @@ namespace JWTProvider.Token.Commands
 
             return (new TokenModel
             {
-                Token = generator.AcessToken,
+                AccessToken = generator.AcessToken,
                 RefreshToken = generator.RefteshToken
             }, null);
         }
