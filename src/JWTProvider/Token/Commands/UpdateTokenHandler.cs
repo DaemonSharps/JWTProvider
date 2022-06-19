@@ -44,7 +44,7 @@ namespace JWTProvider.Token.Commands
             try
             {
                 payload = JWTValidator.GetValidator(refreshKey, tokenIssuer)
-                    .ValidateRefreshToken(request.Token)
+                    .ValidateRefreshToken(request.RefreshToken)
                     .TokenPayload;
             }
             catch (SecurityTokenValidationException ex)
@@ -55,7 +55,7 @@ namespace JWTProvider.Token.Commands
             var email = payload.Claims?.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.Email).Value;
             if (_cache.TryGetValue(email, out var cachedToken))
             {
-                if (request.Token.Equals(cachedToken))
+                if (request.RefreshToken.Equals(cachedToken))
                 {
                     var user = await _context.Users
                         .Include(u => u.Role)
@@ -71,7 +71,7 @@ namespace JWTProvider.Token.Commands
 
                     return (new()
                     {
-                        Token = generator.AcessToken,
+                        AccessToken = generator.AcessToken,
                         RefreshToken = generator.RefteshToken
                     }, null);
                 }
