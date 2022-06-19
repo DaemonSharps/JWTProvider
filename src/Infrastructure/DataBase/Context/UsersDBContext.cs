@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Infrastructure.DataBase
 {
@@ -17,6 +17,10 @@ namespace Infrastructure.DataBase
 
         public DbSet<Password> Passwords { get; set; }
 
+        public DbSet<Login> Logins { get; set; }
+
+        public DbSet<UserRole> UserRoles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>()
@@ -30,15 +34,39 @@ namespace Infrastructure.DataBase
                 Email = "test@mail.ru",
                 FirstName = "Денис",
                 MiddleName = "Смирнов",
-                LastName = "Алексеевич"
+                LastName = "Алексеевич",
+                RoleId = 1
             };
             var pwd = new Password
             {
                 UserId = user.Id,
                 Hash = "mRytDVsoZEPR+eMiMbl/xMAckvL5s+k70iboHYpSIlw=" //test
             };
+            var login = new Login
+            {
+                UserId = user.Id,
+                DisplayLogin = "Test"
+            };
 
+            builder.Entity<UserRole>()
+                .HasData(
+                    new()
+                    {
+                        Id = 1,
+                        Name = "Admin"
+                    },
+                    new()
+                    {
+                        Id = 2,
+                        Name = "User"
+                    },
+                    new()
+                    {
+                        Id = 3,
+                        Name = "App"
+                    });
             builder.Entity<User>().HasData(user);
+            builder.Entity<Login>().HasData(login);
             builder.Entity<Password>().HasData(pwd);
             #endregion
         }
