@@ -7,6 +7,10 @@ namespace Infrastructure.DataBase
     {
         public UsersDBContext(DbContextOptions options) : base(options)
         {
+#if DEBUG
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+#endif
         }
 
         public DbSet<User> Users { get; set; }
@@ -26,7 +30,7 @@ namespace Infrastructure.DataBase
             #region SeedData
             var user = new User
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
                 Email = "test@mail.ru",
                 FirstName = "Денис",
                 MiddleName = "Смирнов",
@@ -36,7 +40,7 @@ namespace Infrastructure.DataBase
             var pwd = new Password
             {
                 UserId = user.Id,
-                Hash = "I3UX9g/lL94qcF4CNNtRiGnhP0E="
+                Hash = "mRytDVsoZEPR+eMiMbl/xMAckvL5s+k70iboHYpSIlw=" //test
             };
             var login = new Login
             {
