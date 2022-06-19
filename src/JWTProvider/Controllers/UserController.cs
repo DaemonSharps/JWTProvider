@@ -35,7 +35,7 @@ namespace JWTProvider.Controllers
 
             return Ok(new TokenModel
             {
-                Token = generator.AcessToken,
+                AccessToken = generator.AcessToken,
                 RefreshToken = generator.RefteshToken
             });
         }
