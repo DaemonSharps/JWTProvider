@@ -3,24 +3,28 @@ using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Entities;
 using Infrastructure.Extentions;
+using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, (UserDB model, ApiError error)>
+    public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, UserDB>
     {
         private readonly UsersDBContext _context;
+        private readonly ILogger<UserUpdateHandler> _logger;
 
-        public UserUpdateHandler(UsersDBContext context)
+        public UserUpdateHandler(UsersDBContext context, ILogger<UserUpdateHandler> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        public async Task<(UserDB model, ApiError error)> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
+        public async Task<UserDB> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .Include(u => u.Login)
@@ -28,9 +32,7 @@ namespace JWTProvider.User.Commands
                 .Include(u => u.Role)
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
-            if (user is null) return (null, new() { ErrorCode = RestErrorCodes.UserNF, ErrorMessage = "User not found" });
-            if (new[] { command.FirstName, command.LastName, command.MiddleName, command.Login }.IsAllNullOrEmpty())
-                return (null, new() { ErrorMessage = RestErrorCodes.NoContent });
+            if (user is null) throw new UserNotFoundException();
 
             user.FirstName = command.FirstName ?? user.FirstName;
             user.MiddleName = command.MiddleName ?? user.MiddleName;
@@ -43,10 +45,10 @@ namespace JWTProvider.User.Commands
             }
             catch (DbUpdateException ex)
             {
-                return (null, new() { ErrorCode = nameof(DbUpdateException), ErrorMessage = ex.Message });
+                _logger.LogError(ex, $"Update user {command.Email} failed", command);
             }
 
-            return (user, null);
+            return user;
         }
     }
 }
