@@ -74,7 +74,7 @@ namespace JWTProvider.Token.Commands
                 }
             }
 
-            throw new InvalidRefreshTokenException("Invalid token");
+            throw new InvalidRefreshTokenException();
         }
     }
 }
