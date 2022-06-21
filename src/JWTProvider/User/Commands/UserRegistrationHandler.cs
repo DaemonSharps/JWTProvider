@@ -1,6 +1,4 @@
-﻿using Infrastructure.Common;
-using Infrastructure.Common.Exceptions;
-using Infrastructure.DataBase;
+﻿using Infrastructure.DataBase;
 using Infrastructure.Extentions;
 using JWTProvider.Common.Exceptions;
 using MediatR;

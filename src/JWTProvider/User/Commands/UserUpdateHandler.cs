@@ -1,8 +1,4 @@
-﻿using Infrastructure.Common.Exceptions;
-using Infrastructure.Constants;
-using Infrastructure.DataBase;
-using Infrastructure.Entities;
-using Infrastructure.Extentions;
+﻿using Infrastructure.DataBase;
 using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

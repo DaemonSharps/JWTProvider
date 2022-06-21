@@ -1,6 +1,4 @@
-﻿using Infrastructure.Common.Exceptions;
-using Infrastructure.Entities;
-using Infrastructure.Extentions;
+﻿using Infrastructure.Extentions;
 using MediatR;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

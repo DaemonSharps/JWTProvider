@@ -1,7 +1,5 @@
 ﻿using Infrastructure.Common.JWT;
-using Infrastructure.Constants;
 using Infrastructure.DataBase;
-using Infrastructure.Entities;
 using Infrastructure.Middleware;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Models;
