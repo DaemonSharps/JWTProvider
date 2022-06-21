@@ -17,7 +17,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Get JsonWebToken")]
         [SwaggerResponse(200, "Authorization successsful", typeof(TokenModel))]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> GetToken([FromQuery] GetTokenCommand request)
+        public async Task<IActionResult> GetToken(GetTokenCommand request)
         {
             var model = await Mediator.Send(request);
             return Ok(model);
@@ -27,7 +27,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Check the token and get a new pair of JWT and RT")]
         [SwaggerResponse(200, "Token verified", typeof(TokenModel))]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> CheckRefreshToken([FromQuery] UpdateTokenCommand command)
+        public async Task<IActionResult> CheckRefreshToken(UpdateTokenCommand command)
         {
             var model = await Mediator.Send(command);
             return Ok(model);
