@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Infrastructure.Entities
 {
     public class User
@@ -12,7 +14,8 @@ namespace Infrastructure.Entities
 
         public string LastName { get; set; }
 
-        public string GetFullName()
+        [NotMapped]
+        public string FullName
             => string.Join(' ', FirstName, MiddleName, LastName);
     }
 }

@@ -33,9 +33,7 @@ namespace JWTProvider.Token.Commands
         public async System.Threading.Tasks.Task<TokenModel> Handle(GetTokenCommand command, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .Include(u => u.Login)
                 .Include(u => u.Password)
-                .Include(u => u.Role)
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
             if (user is null) throw new LoginFailedException("User not found");
 

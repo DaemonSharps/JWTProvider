@@ -69,12 +69,6 @@ namespace Infrastructure.Common.JWT
             if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
             if (!string.IsNullOrEmpty(user.FirstName)) claims.Add(new(JwtRegisteredClaimNames.GivenName, user.FirstName));
 
-            if (user is DataBase.User userDB)
-            {
-                if (userDB.Role != null) claims.Add(new(JWTClaimKeys.Role, userDB.Role.Name));
-                if (userDB.Login != null) claims.Add(new(JWTClaimKeys.Login, userDB.Login.GetFullLogin()));
-            }
-
             _acessToken = MakeStringToken(_accessKey, expiresAfter ?? ExpiresDefault, claims.ToArray());
 
             return this;
