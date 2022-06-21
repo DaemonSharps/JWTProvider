@@ -34,12 +34,9 @@ namespace JWTProvider.User.Commands
                 Email = request.Email,
                 FirstName = request.FirstName,
                 MiddleName = request.MiddleName,
-                LastName = request.LastName,
-                Login = new() { DisplayLogin = request.Login ?? new StringHasher(request.Email).Hash() },
-                RoleId = 2
+                LastName = request.LastName
             };
 
-            var role = await _context.UserRoles.SingleOrDefaultAsync(r => r.Id == newUser.RoleId, cancellationToken);
             try
             {
                 _context.Add(newUser);

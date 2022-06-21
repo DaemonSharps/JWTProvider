@@ -57,9 +57,7 @@ namespace JWTProvider.Token.Commands
                 if (request.RefreshToken.Equals(cachedToken))
                 {
                     var user = await _context.Users
-                        .Include(u => u.Role)
                         .Include(u => u.Password)
-                        .Include(u => u.Login)
                         .SingleOrDefaultAsync(u => u.Email.Equals(email), cancellationToken);
 
 
