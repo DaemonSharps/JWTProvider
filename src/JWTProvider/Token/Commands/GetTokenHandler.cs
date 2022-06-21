@@ -1,4 +1,4 @@
-﻿using Infrastructure.Common.JWT;
+﻿using Infrastructure.Common;
 using Infrastructure.DataBase;
 using Infrastructure.Extentions;
 using Infrastructure.Middleware;
@@ -38,16 +38,17 @@ namespace JWTProvider.Token.Commands
             var hashedPassword = user?.HashPassword(command.Password);
             if (!hashedPassword.Equals(user.Password.Hash)) throw new LoginFailedException("Invalid email or password");
 
-            var generator = JWTGenerator
+            var accessToken = JWTGenerator
                 .GetGenerator(_options.Value)
-                .CreateTokenPair(user);
-
-            _cache.Set(user.Email, generator.RefteshToken, _defaultRTLifetime);
+                .CreateAcessToken(user)
+                .AcessToken;
+            var refreshToken = Guid.NewGuid();
+            _cache.Set(refreshToken, user.Email, _defaultRTLifetime);
 
             return new()
             {
-                AccessToken = generator.AcessToken,
-                RefreshToken = generator.RefteshToken
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
             };
         }
     }

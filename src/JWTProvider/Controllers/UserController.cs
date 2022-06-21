@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Common.Exceptions;
-using Infrastructure.Common.JWT;
+using Infrastructure.Common;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Extentions;
 using Infrastructure.Middleware;
@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Threading.Tasks;
+using RT = Infrastructure.Constants.RefreshToken;
 
 namespace JWTProvider.Controllers
 {
@@ -24,33 +26,31 @@ namespace JWTProvider.Controllers
         {
             var user = await Mediator.Send(command);
 
-            var generator = JWTGenerator
+            var accessToken = JWTGenerator
                 .GetGenerator(options.Value)
-                .CreateTokenPair(user);
+                .CreateAcessToken(user)
+                .AcessToken;
+            var refreshToken = Guid.NewGuid();
 
-            Cache.Set(user.Email, generator.RefteshToken, JWTGenerator.RefreshExpiresDefault);
+            Cache.Set(refreshToken, user.Email, RT.ExpiresDefault);
 
             return Ok(new TokenModel
             {
-                AccessToken = generator.AcessToken,
-                RefreshToken = generator.RefteshToken
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
             });
         }
 
         [HttpPut, Command, Authorize]
         [SwaggerOperation("Update user public parameters")]
-        [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
+        [SwaggerResponse(200, "Update successfull")]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> UpdateUser(UserUpdateCommand command, [FromServices] IOptions<TokenOptions> options)
         {
             command.Email = User.GetEmail();
-            var user = await Mediator.Send(command);
+            await Mediator.Send(command);
 
-            var generator = JWTGenerator
-                .GetGenerator(options.Value)
-                .CreateAcessToken(user);
-
-            return Ok(generator.AcessToken);
+            return Ok();
         }
 
         [HttpGet("pwd"), Querry, Authorize]
