@@ -22,7 +22,7 @@ namespace JWTProvider.Common.Exceptions
 
     public class InvalidRefreshTokenException : TokenException
     {
-        public InvalidRefreshTokenException(string errorMessage = null, Exception innerException = null)
+        public InvalidRefreshTokenException(string errorMessage = "Invalid token", Exception innerException = null)
             : base("INVALID_REFRESH_TOKEN", errorMessage, innerException)
         { }
     }
