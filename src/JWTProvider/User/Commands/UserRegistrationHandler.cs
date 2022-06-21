@@ -1,30 +1,33 @@
 ﻿using Infrastructure.Common;
 using Infrastructure.Common.Exceptions;
-using Infrastructure.Constants;
 using Infrastructure.DataBase;
-using Infrastructure.Entities;
 using Infrastructure.Extentions;
+using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, (UserDB model, ApiError error)>
+    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, UserDB>
     {
         private readonly UsersDBContext _context;
+        private readonly ILogger<UserRegistrationHandler> _logger;
 
-        public UserRegistrationHandler(UsersDBContext context)
+        public UserRegistrationHandler(UsersDBContext context, ILogger<UserRegistrationHandler> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        public async Task<(UserDB model, ApiError error)> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
+        public async Task<UserDB> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
-            if (user != null) return (null, new() { ErrorCode = RestErrorCodes.RegistrationFailed, ErrorMessage = "User is already exist" });
+
+            if (user != null) throw new UserExistsException();
 
             var newUser = new UserDB
             {
@@ -35,6 +38,7 @@ namespace JWTProvider.User.Commands
                 Login = new() { DisplayLogin = request.Login ?? new StringHasher(request.Email).Hash() },
                 RoleId = 2
             };
+
             var role = await _context.UserRoles.SingleOrDefaultAsync(r => r.Id == newUser.RoleId, cancellationToken);
             try
             {
@@ -50,10 +54,10 @@ namespace JWTProvider.User.Commands
             }
             catch (DbUpdateException ex)
             {
-                return (null, new() { ErrorCode = nameof(DbUpdateException), ErrorMessage = ex.Message });
+                _logger.LogError(ex, $"Register user {request.Email} failed", request);
             }
 
-            return (newUser, null);
+            return newUser;
 
         }
     }
