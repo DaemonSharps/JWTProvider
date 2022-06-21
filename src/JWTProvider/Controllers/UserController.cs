@@ -1,8 +1,6 @@
 ﻿using Infrastructure.Common.Exceptions;
 using Infrastructure.Common.JWT;
-using Infrastructure.Constants;
 using Infrastructure.CustomAttributes.Swagger;
-using Infrastructure.Entities;
 using Infrastructure.Extentions;
 using Infrastructure.Middleware;
 using JWTProvider.Models;
