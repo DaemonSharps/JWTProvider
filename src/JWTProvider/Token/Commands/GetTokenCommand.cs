@@ -1,5 +1,4 @@
-﻿using Infrastructure.Entities;
-using JWTProvider.Models;
+﻿using JWTProvider.Models;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
