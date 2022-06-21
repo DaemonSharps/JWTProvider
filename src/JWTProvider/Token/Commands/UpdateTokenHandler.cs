@@ -48,7 +48,7 @@ namespace JWTProvider.Token.Commands
             }
             catch (SecurityTokenValidationException ex)
             {
-                throw new InvalidRefreshTokenException(ex.Message);
+                throw new InvalidRefreshTokenException("Token validation failed", ex);
             }
 
             var email = payload.Claims?.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.Email).Value;
