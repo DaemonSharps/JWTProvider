@@ -24,8 +24,7 @@ namespace JWTProvider.Controllers
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
         {
-            var (user, userError) = await Mediator.Send(command);
-            if (userError != null) return BadRequest(userError);
+            var user = await Mediator.Send(command);
 
             var generator = JWTGenerator
                 .GetGenerator(options.Value)
@@ -43,24 +42,11 @@ namespace JWTProvider.Controllers
         [HttpPut, Command, Authorize]
         [SwaggerOperation("Update user public parameters")]
         [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
-        [SwaggerResponse(204, "No params to update")]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> UpdateUser(string firstName, string middleName, string lastName, string login, [FromServices] IOptions<TokenOptions> options)
+        public async Task<IActionResult> UpdateUser([FromQuery] UserUpdateCommand command, [FromServices] IOptions<TokenOptions> options)
         {
-            var cmd = new UserUpdateCommand
-            {
-                FirstName = firstName,
-                MiddleName = middleName,
-                LastName = lastName,
-                Login = login,
-                Email = User.GetEmail()
-            };
-            var (user, error) = await Mediator.Send(cmd);
-            if (user is null) return error.ErrorCode switch
-            {
-                RestErrorCodes.NoContent => NoContent(),
-                RestErrorCodes.UserNF => NotFound(error)
-            };
+            command.Email = User.GetEmail();
+            var user = await Mediator.Send(command);
 
             var generator = JWTGenerator
                 .GetGenerator(options.Value)
