@@ -11,8 +11,6 @@ namespace JWTProvider.Controllers
 {
     public class TokenController : BaseController
     {
-        #region Commands
-
         [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("Get JsonWebToken")]
         [SwaggerResponse(200, "Authorization successsful", typeof(TokenModel))]
@@ -32,7 +30,5 @@ namespace JWTProvider.Controllers
             var model = await Mediator.Send(command);
             return Ok(model);
         }
-
-        #endregion
     }
 }
