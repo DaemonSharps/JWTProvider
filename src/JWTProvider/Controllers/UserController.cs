@@ -20,7 +20,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("User registration")]
         [SwaggerResponse(200, "Registration completed successfully", typeof(TokenModel))]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
+        public async Task<IActionResult> Registration(UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
         {
             var user = await Mediator.Send(command);
 
@@ -41,7 +41,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Update user public parameters")]
         [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> UpdateUser([FromQuery] UserUpdateCommand command, [FromServices] IOptions<TokenOptions> options)
+        public async Task<IActionResult> UpdateUser(UserUpdateCommand command, [FromServices] IOptions<TokenOptions> options)
         {
             command.Email = User.GetEmail();
             var user = await Mediator.Send(command);
