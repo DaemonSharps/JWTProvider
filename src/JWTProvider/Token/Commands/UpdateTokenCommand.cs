@@ -1,5 +1,6 @@
 ﻿using JWTProvider.Models;
 using MediatR;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace JWTProvider.Token.Commands
@@ -7,6 +8,6 @@ namespace JWTProvider.Token.Commands
     public class UpdateTokenCommand : IRequest<TokenModel>
     {
         [Required]
-        public string RefreshToken { get; set; }
+        public Guid RefreshToken { get; set; }
     }
 }

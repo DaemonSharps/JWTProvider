@@ -13,11 +13,6 @@
         public string AccessKey { get; set; }
 
         /// <summary>
-        /// Ключ для генерации токена обновления
-        /// </summary>
-        public string RefreshKey { get; set; }
-
-        /// <summary>
         /// Униальный ключ издателя токена
         /// </summary>
         public string Issuer { get; set; }
