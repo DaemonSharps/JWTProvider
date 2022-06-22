@@ -1,8 +1,8 @@
-﻿using Infrastructure.Common.Exceptions;
+﻿using System.Threading.Tasks;
+using Infrastructure.Common.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Middleware
 {

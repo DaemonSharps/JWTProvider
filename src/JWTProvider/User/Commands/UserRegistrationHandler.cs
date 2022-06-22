@@ -1,11 +1,11 @@
-﻿using Infrastructure.DataBase;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Infrastructure.DataBase;
 using Infrastructure.Extentions;
 using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
