@@ -1,6 +1,6 @@
-﻿using Infrastructure.Extentions;
-using System;
+﻿using System;
 using System.Security.Cryptography;
+using Infrastructure.Extentions;
 
 namespace Infrastructure.Common
 {
@@ -70,7 +70,7 @@ namespace Infrastructure.Common
         /// <returns>Хэшированная строка</returns>
         public string Hash()
         {
-            byte[] salt = new byte[_saltSize];
+            var salt = new byte[_saltSize];
             using (var rngCsp = new RNGCryptoServiceProvider())
             {
                 rngCsp.GetNonZeroBytes(salt);

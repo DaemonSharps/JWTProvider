@@ -1,7 +1,7 @@
-﻿using Infrastructure.CustomAttributes.Swagger;
+﻿using System;
+using Infrastructure.CustomAttributes.Swagger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace Infrastructure.Middleware
 {

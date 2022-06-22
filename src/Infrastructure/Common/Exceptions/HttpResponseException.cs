@@ -18,17 +18,11 @@ namespace Infrastructure.Common.Exceptions
 
         public virtual string ContentType => @"text/plain";
 
-        public virtual object Error
+        public virtual object Error => new ApiError
         {
-            get
-            {
-                return new ApiError
-                {
-                    ErrorCode = _errorCode,
-                    ErrorMessage = Message
-                };
-            }
-        }
+            ErrorCode = _errorCode,
+            ErrorMessage = Message
+        };
     }
 
     public class ApiError

@@ -1,4 +1,7 @@
-﻿using Infrastructure.Common;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Infrastructure.Common;
 using Infrastructure.DataBase;
 using Infrastructure.Middleware;
 using JWTProvider.Common.Exceptions;
@@ -7,9 +10,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using RT = Infrastructure.Constants.RefreshToken;
 
 namespace JWTProvider.Token.Commands

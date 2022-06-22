@@ -1,7 +1,7 @@
-﻿using JWTProvider.Models;
-using MediatR;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using JWTProvider.Models;
+using MediatR;
 
 namespace JWTProvider.Token.Commands
 {
