@@ -1,5 +1,5 @@
-﻿using Infrastructure.Common.Exceptions;
-using Infrastructure.Common;
+﻿using Infrastructure.Common;
+using Infrastructure.Common.Exceptions;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Extentions;
 using Infrastructure.Middleware;
