@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Infrastructure.Constants;
 using Infrastructure.DataBase;
@@ -43,18 +43,15 @@ namespace JWTProvider
 
             var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(cfg =>
+                .AddJwtBearer(cfg => cfg.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    cfg.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
-                        ValidateIssuer = true,
-                        ValidIssuer = tokenOptions.Issuer,
-                        ValidateAudience = false,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey)),
-                        RoleClaimType = JWTClaimKeys.Role
-                    };
+                    ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
+                    ValidateIssuer = true,
+                    ValidIssuer = tokenOptions.Issuer,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey)),
+                    RoleClaimType = JWTClaimKeys.Role
                 });
         }
 
@@ -84,16 +81,11 @@ namespace JWTProvider
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(options =>
-            {
                 options
                 .WithOrigins("https://vgarage.vercel.app", "http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
-            });
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                .AllowAnyMethod());
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
