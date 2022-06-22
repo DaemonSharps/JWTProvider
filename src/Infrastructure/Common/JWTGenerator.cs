@@ -17,26 +17,19 @@ namespace Infrastructure.Common
     {
         private readonly SecurityKey _accessKey;
         private readonly string _issuer;
-        private string _acessToken;
 
         /// <summary>
         /// Стандартное время жизни Access Token
         /// </summary>
         public static TimeSpan ExpiresDefault => TimeSpan.FromMinutes(5);
 
-        public string AcessToken => _acessToken;
+        public string AcessToken { get; private set; }
 
         public JWTGenerator(string accessKey, string issuer)
         {
             _accessKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessKey));
             _issuer = issuer;
         }
-
-        /// <summary>
-        /// Создать экземпляр генератора
-        /// </summary>
-        public static JWTGenerator GetGenerator(string accessKey, string refreshKey, string issuer)
-            => new(accessKey, issuer);
 
         /// <summary>
         /// Создать экземпляр генератора из класса конфигурации
@@ -60,7 +53,7 @@ namespace Infrastructure.Common
             if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
             if (!string.IsNullOrEmpty(user.FirstName)) claims.Add(new(JwtRegisteredClaimNames.GivenName, user.FirstName));
 
-            _acessToken = MakeStringToken(_accessKey, expiresAfter ?? ExpiresDefault, claims.ToArray());
+            AcessToken = MakeStringToken(_accessKey, expiresAfter ?? ExpiresDefault, claims.ToArray());
 
             return this;
         }
