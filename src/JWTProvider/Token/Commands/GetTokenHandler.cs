@@ -1,4 +1,6 @@
-﻿using Infrastructure.Common;
+﻿using System;
+using System.Threading;
+using Infrastructure.Common;
 using Infrastructure.DataBase;
 using Infrastructure.Extentions;
 using Infrastructure.Middleware;
@@ -8,8 +10,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading;
 
 namespace JWTProvider.Token.Commands
 {

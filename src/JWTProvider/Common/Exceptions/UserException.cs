@@ -1,5 +1,5 @@
-﻿using Infrastructure.Common.Exceptions;
-using System;
+﻿using System;
+using Infrastructure.Common.Exceptions;
 
 namespace JWTProvider.Common.Exceptions
 {
