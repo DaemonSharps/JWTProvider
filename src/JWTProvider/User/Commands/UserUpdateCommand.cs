@@ -1,7 +1,7 @@
-﻿using Infrastructure.Extentions;
-using MediatR;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Extentions;
+using MediatR;
 
 namespace JWTProvider.User.Commands
 {

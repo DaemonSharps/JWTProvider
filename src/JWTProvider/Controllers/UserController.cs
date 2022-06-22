@@ -1,4 +1,6 @@
-﻿using Infrastructure.Common;
+﻿using System;
+using System.Threading.Tasks;
+using Infrastructure.Common;
 using Infrastructure.Common.Exceptions;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Extentions;
@@ -10,8 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Threading.Tasks;
 using RT = Infrastructure.Constants.RefreshToken;
 
 namespace JWTProvider.Controllers

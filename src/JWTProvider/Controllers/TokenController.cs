@@ -1,11 +1,11 @@
-﻿using Infrastructure.Common.Exceptions;
+﻿using System.Threading.Tasks;
+using Infrastructure.Common.Exceptions;
 using Infrastructure.CustomAttributes.Swagger;
 using JWTProvider.Models;
 using JWTProvider.Token.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
 
 namespace JWTProvider.Controllers
 {
