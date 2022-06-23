@@ -45,7 +45,7 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Update user public parameters")]
         [SwaggerResponse(200, "Update successfull")]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> UpdateUser(UserUpdateCommand command, [FromServices] IOptions<TokenOptions> options)
+        public async Task<IActionResult> UpdateUser(UserUpdateCommand command)
         {
             command.Email = User.GetEmail();
             await Mediator.Send(command);
