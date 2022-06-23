@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JWTProvider.Controllers
@@ -16,7 +15,5 @@ namespace JWTProvider.Controllers
         protected IMediator Mediator => HttpContext.RequestServices.GetService<IMediator>();
 
         protected IMemoryCache Cache => HttpContext.RequestServices.GetService<IMemoryCache>();
-
-        protected IConfiguration Config => HttpContext.RequestServices.GetService<IConfiguration>();
     }
 }

@@ -12,13 +12,5 @@ namespace Infrastructure.DataBase
 
         [Required]
         public Password Password { get; set; }
-
-        [Required]
-        public Login Login { get; set; }
-
-        [Required]
-        public long RoleId { get; set; }
-
-        public UserRole Role { get; set; }
     }
 }

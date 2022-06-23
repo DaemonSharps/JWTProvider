@@ -1,16 +1,18 @@
-﻿using Infrastructure.Common;
-using Infrastructure.Common.JWT;
-using Infrastructure.Constants;
+﻿using System;
+using System.Threading.Tasks;
+using Infrastructure.Common;
+using Infrastructure.Common.Exceptions;
 using Infrastructure.CustomAttributes.Swagger;
-using Infrastructure.Entities;
 using Infrastructure.Extentions;
+using Infrastructure.Middleware;
 using JWTProvider.Models;
 using JWTProvider.User.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
+using RT = Infrastructure.Constants.RefreshToken;
 
 namespace JWTProvider.Controllers
 {
@@ -19,52 +21,36 @@ namespace JWTProvider.Controllers
         [HttpPost, Command, AllowAnonymous]
         [SwaggerOperation("User registration")]
         [SwaggerResponse(200, "Registration completed successfully", typeof(TokenModel))]
-        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
-        public async Task<IActionResult> Registration([FromQuery] UserRegistrationCommand command)
+        [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
+        public async Task<IActionResult> Registration(UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
         {
-            var (user, userError) = await Mediator.Send(command);
-            if (userError != null) return BadRequest(userError);
+            var user = await Mediator.Send(command);
 
-            var generator = JWTGenerator
-                .GetGenerator(Config[ConfigurationKeys.AccessKey], Config[ConfigurationKeys.RefreshKey], Config[ConfigurationKeys.TokenIssuer])
-                .CreateTokenPair(user);
+            var accessToken = JWTGenerator
+                .GetGenerator(options.Value)
+                .CreateAcessToken(user)
+                .AcessToken;
+            var refreshToken = Guid.NewGuid();
 
-            Cache.Set(user.Email, generator.RefteshToken, JWTGenerator.RefreshExpiresDefault);
+            Cache.Set(refreshToken, user.Email, RT.ExpiresDefault);
 
             return Ok(new TokenModel
             {
-                Token = generator.AcessToken,
-                RefreshToken = generator.RefteshToken
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
             });
         }
 
         [HttpPut, Command, Authorize]
         [SwaggerOperation("Update user public parameters")]
-        [SwaggerResponse(200, "Update successfull, access token returned", typeof(string))]
-        [SwaggerResponse(204, "No params to update")]
-        [SwaggerResponse(400, "An error was occured", typeof(RestApiError))]
-        public async Task<IActionResult> UpdateUser(string firstName, string middleName, string lastName, string login)
+        [SwaggerResponse(200, "Update successfull")]
+        [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
+        public async Task<IActionResult> UpdateUser(UserUpdateCommand command)
         {
-            var cmd = new UserUpdateCommand
-            {
-                FirstName = firstName,
-                MiddleName = middleName,
-                LastName = lastName,
-                Login = login,
-                Email = User.GetEmail()
-            };
-            var (user, error) = await Mediator.Send(cmd);
-            if (user is null) return error.Code switch
-            {
-                RestErrorCodes.NoContent => NoContent(),
-                RestErrorCodes.UserNF => NotFound(error)
-            };
+            command.Email = User.GetEmail();
+            await Mediator.Send(command);
 
-            var generator = JWTGenerator
-                .GetGenerator(Config[ConfigurationKeys.AccessKey], Config[ConfigurationKeys.RefreshKey], Config[ConfigurationKeys.TokenIssuer])
-                .CreateAcessToken(user);
-
-            return Ok(generator.AcessToken);
+            return Ok();
         }
 
         [HttpGet("pwd"), Querry, Authorize]

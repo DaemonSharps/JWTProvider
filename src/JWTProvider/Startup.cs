@@ -1,7 +1,8 @@
-using Infrastructure.Common;
-using Infrastructure.Common.JWT;
-using Infrastructure.CustomAttributes.Swagger;
+﻿using System.IO;
+using System.Text;
+using Infrastructure.Constants;
 using Infrastructure.DataBase;
+using Infrastructure.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -12,9 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.IO;
-using System.Text;
 
 namespace JWTProvider
 {
@@ -33,64 +31,27 @@ namespace JWTProvider
             services.AddMemoryCache();
             services.AddControllers();
             services.AddRouting(ops => ops.LowercaseUrls = true);
-            services.AddSwaggerGen(c =>
-            {
-                c.OperationFilter<CommandAttributeFilter>();
-                c.OperationFilter<QuerryAttributeFilter>();
-                c.EnableAnnotations();
-                c.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = "JWTProvider",
-                        Version = "v1",
-                        Description = "Authorization provider for [DaemonSharps](https://github.com/DaemonSharps) apps"
-                    });
-                c.DescribeAllParametersInCamelCase();
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Description = "Please insert JWT token into field"
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        System.Array.Empty<string>()
-                    }
-                });
-            });
+            services.AddSwagger();
+            services.AddConfigurationOptions(Configuration);
 
             services.AddMediatR(typeof(Startup));
             services.AddCors();
 
             services.AddDbContext<UsersDBContext>(options =>
-            options.UseSqlServer(Configuration[ConfigurationKeys.DefaultConnection],
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
+            var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(cfg =>
+                .AddJwtBearer(cfg => cfg.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    cfg.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
-                        ValidateIssuer = true,
-                        ValidIssuer = Configuration[ConfigurationKeys.TokenIssuer],
-                        ValidateAudience = false,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[ConfigurationKeys.AccessKey])),
-                        RoleClaimType = JWTClaimKeys.Role
-                    };
+                    ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
+                    ValidateIssuer = true,
+                    ValidIssuer = tokenOptions.Issuer,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey)),
+                    RoleClaimType = JWTClaimKeys.Role
                 });
         }
 
@@ -105,6 +66,7 @@ namespace JWTProvider
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpResponseExceptionMiddleware();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -119,16 +81,11 @@ namespace JWTProvider
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(options =>
-            {
                 options
                 .WithOrigins("https://vgarage.vercel.app", "http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
-            });
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                .AllowAnyMethod());
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

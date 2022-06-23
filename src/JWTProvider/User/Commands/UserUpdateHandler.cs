@@ -1,40 +1,36 @@
-﻿using Infrastructure.Constants;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Infrastructure.DataBase;
-using Infrastructure.Entities;
-using Infrastructure.Extentions;
+using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using UserDB = Infrastructure.DataBase.User;
 
 namespace JWTProvider.User.Commands
 {
-    public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, (UserDB model, RestApiError error)>
+    public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, UserDB>
     {
         private readonly UsersDBContext _context;
+        private readonly ILogger<UserUpdateHandler> _logger;
 
-        public UserUpdateHandler(UsersDBContext context)
+        public UserUpdateHandler(UsersDBContext context, ILogger<UserUpdateHandler> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        public async Task<(UserDB model, RestApiError error)> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
+        public async Task<UserDB> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .Include(u => u.Login)
                 .Include(u => u.Password)
-                .Include(u => u.Role)
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
-            if (user is null) return (null, new() { Code = RestErrorCodes.UserNF, Message = "User not found" });
-            if (new[] { command.FirstName, command.LastName, command.MiddleName, command.Login }.IsAllNullOrEmpty())
-                return (null, new() { Code = RestErrorCodes.NoContent });
+            if (user is null) throw new UserNotFoundException();
 
             user.FirstName = command.FirstName ?? user.FirstName;
             user.MiddleName = command.MiddleName ?? user.MiddleName;
             user.LastName = command.LastName ?? user.LastName;
-            user.Login.DisplayLogin = command.Login ?? user.Login.DisplayLogin;
 
             try
             {
@@ -42,10 +38,10 @@ namespace JWTProvider.User.Commands
             }
             catch (DbUpdateException ex)
             {
-                return (null, new() { Code = nameof(DbUpdateException), Message = ex.Message });
+                _logger.LogError(ex, $"Update user {command.Email} failed", command);
             }
 
-            return (user, null);
+            return user;
         }
     }
 }

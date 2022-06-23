@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataBase
 {
@@ -7,15 +7,15 @@ namespace Infrastructure.DataBase
     {
         public UsersDBContext(DbContextOptions options) : base(options)
         {
+#if DEBUG
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+#endif
         }
 
         public DbSet<User> Users { get; set; }
 
         public DbSet<Password> Passwords { get; set; }
-
-        public DbSet<Login> Logins { get; set; }
-
-        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,43 +26,19 @@ namespace Infrastructure.DataBase
             #region SeedData
             var user = new User
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
                 Email = "test@mail.ru",
                 FirstName = "Денис",
                 MiddleName = "Смирнов",
-                LastName = "Алексеевич",
-                RoleId = 1
+                LastName = "Алексеевич"
             };
             var pwd = new Password
             {
                 UserId = user.Id,
-                Hash = "I3UX9g/lL94qcF4CNNtRiGnhP0E="
-            };
-            var login = new Login
-            {
-                UserId = user.Id,
-                DisplayLogin = "Test"
+                Hash = "mRytDVsoZEPR+eMiMbl/xMAckvL5s+k70iboHYpSIlw=" //test
             };
 
-            builder.Entity<UserRole>()
-                .HasData(
-                    new()
-                    {
-                        Id = 1,
-                        Name = "Admin"
-                    },
-                    new()
-                    {
-                        Id = 2,
-                        Name = "User"
-                    },
-                    new()
-                    {
-                        Id = 3,
-                        Name = "App"
-                    });
             builder.Entity<User>().HasData(user);
-            builder.Entity<Login>().HasData(login);
             builder.Entity<Password>().HasData(pwd);
             #endregion
         }
