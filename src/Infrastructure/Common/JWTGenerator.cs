@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -27,6 +28,8 @@ namespace Infrastructure.Common
 
         public JWTGenerator(string accessKey, string issuer)
         {
+            ArgumentNullException.ThrowIfNull(accessKey);
+            ArgumentNullException.ThrowIfNull(issuer);
             _accessKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessKey));
             _issuer = issuer;
         }
@@ -36,6 +39,9 @@ namespace Infrastructure.Common
         /// </summary>
         public static JWTGenerator GetGenerator(TokenOptions options)
             => new(options?.AccessKey, options?.Issuer);
+
+        public static JWTGenerator GetGenerator(string accessKey, string issuer)
+            => new(accessKey, issuer);
 
         /// <summary>
         /// Создать JWT из модели пользователя
@@ -47,7 +53,7 @@ namespace Infrastructure.Common
         {
             var claims = new List<Claim>
             {
-                new (JWTClaimKeys.Email, user.Email)
+                new (JwtRegisteredClaimNames.Email, user.Email)
             };
             if (!string.IsNullOrEmpty(user.MiddleName)) claims.Add(new(JWTClaimKeys.MiddleName, user.MiddleName));
             if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
