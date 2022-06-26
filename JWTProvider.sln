@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfrastructureUnit", "Test\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTProviderUnit", "Test\Unit\JWTProviderUnit\JWTProviderUnit.csproj", "{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{AAF976CF-6911-403F-A7D8-80B611752B5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTProviderIntegration", "Test\Integration\JWTProviderIntegration\JWTProviderIntegration.csproj", "{B7F83259-D279-4AD4-A869-7CB97181231D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F83259-D279-4AD4-A869-7CB97181231D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F83259-D279-4AD4-A869-7CB97181231D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F83259-D279-4AD4-A869-7CB97181231D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F83259-D279-4AD4-A869-7CB97181231D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,8 @@ Global
 		{8876D0EC-A753-4047-9C3A-4D63294CC608} = {F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}
 		{F1A260DF-16B3-4D9E-8748-EFDCFEB7B573} = {8876D0EC-A753-4047-9C3A-4D63294CC608}
 		{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B} = {8876D0EC-A753-4047-9C3A-4D63294CC608}
+		{AAF976CF-6911-403F-A7D8-80B611752B5B} = {F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}
+		{B7F83259-D279-4AD4-A869-7CB97181231D} = {AAF976CF-6911-403F-A7D8-80B611752B5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EC8FC17-7281-4E83-9021-72D9A9FBFBFF}
