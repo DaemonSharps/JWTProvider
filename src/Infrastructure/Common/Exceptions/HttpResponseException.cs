@@ -16,7 +16,7 @@ namespace Infrastructure.Common.Exceptions
 
         public HttpStatusCode StatusCode { get; set; }
 
-        public virtual string ContentType => @"text/plain";
+        public virtual string ContentType => @"application/json; charset=utf-8";
 
         public virtual object Error => new ApiError
         {
