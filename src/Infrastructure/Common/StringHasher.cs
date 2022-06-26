@@ -29,8 +29,7 @@ namespace Infrastructure.Common
         /// <returns>Хэшированная строка</returns>
         public string Hash(string stringSalt, string pepper, int iterations, int hashSize)
         {
-            if (string.IsNullOrEmpty(stringSalt))
-                throw new ArgumentNullException(stringSalt);
+            ArgumentNullException.ThrowIfNull(stringSalt);
 
             var salt = $"{stringSalt}{new byte[8]}".ToByteArray();
 
@@ -71,9 +70,10 @@ namespace Infrastructure.Common
         public string Hash()
         {
             var salt = new byte[_saltSize];
-            using (var rngCsp = new RNGCryptoServiceProvider())
+            
+            using (var rng = RandomNumberGenerator.Create())
             {
-                rngCsp.GetNonZeroBytes(salt);
+                rng.GetNonZeroBytes(salt);
             }
 
             var stringSalt = Convert.ToString(salt);
