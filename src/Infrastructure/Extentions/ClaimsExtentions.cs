@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Infrastructure.Constants;
 
 namespace Infrastructure.Extentions
 {
