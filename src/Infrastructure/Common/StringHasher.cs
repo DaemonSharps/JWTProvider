@@ -61,7 +61,7 @@ namespace Infrastructure.Common
         public string Hash()
         {
             var salt = new byte[_saltSize];
-            
+
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetNonZeroBytes(salt);
