@@ -3,12 +3,13 @@ using System.Text;
 using Infrastructure.Constants;
 using Infrastructure.Entities;
 using Microsoft.IdentityModel.Tokens;
+using Xunit;
 
-namespace InfrastructureUnit;
+namespace JWTUnit;
 
-internal static class JWTAssert
+public static class JWTAssert
 {
-    internal static JwtSecurityToken IsJWT(string token, string accessKey, string issuer)
+    public static JwtSecurityToken IsJWT(string token, string accessKey, string issuer)
     {
         var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessKey));
         var validationParameters = new TokenValidationParameters
@@ -26,7 +27,7 @@ internal static class JWTAssert
         return Assert.IsType<JwtSecurityToken>(securityToken);
     }
 
-    internal static void IsValidHeader(JwtSecurityToken token, string alg = "HS512", string typ = "JWT")
+    public static void IsValidHeader(JwtSecurityToken token, string alg = "HS512", string typ = "JWT")
     {
         var header = token.Header;
         Assert.NotNull(header);
@@ -34,7 +35,7 @@ internal static class JWTAssert
         Assert.Equal(typ, header.Typ);
     }
 
-    internal static void IsValidPayload(JwtSecurityToken token, User user, string issuer)
+    public static void IsValidPayload(JwtSecurityToken token, User user, string issuer)
     {
         var payload = token.Payload;
         Assert.NotNull(payload);
