@@ -2,7 +2,7 @@
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Token.Commands;
 using Mocks;
-using UserEntity =  Infrastructure.Entities.User;
+using UserEntity = Infrastructure.Entities.User;
 
 namespace Handlers.Token;
 

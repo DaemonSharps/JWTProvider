@@ -1,3 +1,3 @@
-﻿global using Xunit;
+﻿global using JWTUnit;
 global using Moq;
-global using JWTUnit;
+global using Xunit;

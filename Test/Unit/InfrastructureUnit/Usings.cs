@@ -1,2 +1,2 @@
-﻿global using Xunit;
-global using JWTUnit;
+﻿global using JWTUnit;
+global using Xunit;
