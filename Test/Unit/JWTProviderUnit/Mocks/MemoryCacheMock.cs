@@ -38,4 +38,7 @@ internal class MemoryCacheMock
 
         return (TKey)_keyPayload;
     }
+
+    public Moq.Language.Flow.ISetup<IMemoryCache, TResult> Setup<TResult>(System.Linq.Expressions.Expression<Func<IMemoryCache, TResult>> expression)
+        => _memoryCache.Setup(expression);
 }
