@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\JWTUnit.Common\JWTUnit.Common.csproj" />
   </ItemGroup>
 
 </Project>

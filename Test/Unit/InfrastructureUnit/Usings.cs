@@ -1,2 +1,2 @@
-﻿global using InfrastructureUnit;
-global using Xunit;
+﻿global using Xunit;
+global using JWTUnit;
