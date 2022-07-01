@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Text;
-using Infrastructure.Constants;
 using Infrastructure.DataBase;
 using Infrastructure.Middleware;
 using MediatR;
@@ -41,6 +41,7 @@ namespace JWTProvider
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg => cfg.TokenValidationParameters = new TokenValidationParameters()
@@ -50,8 +51,7 @@ namespace JWTProvider
                     ValidIssuer = tokenOptions.Issuer,
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey)),
-                    RoleClaimType = JWTClaimKeys.Role
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey))
                 });
         }
 

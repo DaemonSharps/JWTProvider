@@ -23,7 +23,6 @@ namespace JWTProvider.User.Commands
         public async Task<UserDB> Handle(UserUpdateCommand command, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .Include(u => u.Password)
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
             if (user is null) throw new UserNotFoundException();
@@ -39,6 +38,7 @@ namespace JWTProvider.User.Commands
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, $"Update user {command.Email} failed", command);
+                throw new UserUpdateException("DB error", ex);
             }
 
             return user;

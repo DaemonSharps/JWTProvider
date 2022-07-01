@@ -2,12 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using Infrastructure.Extentions;
 using MediatR;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace JWTProvider.User.Commands
 {
     public class UserUpdateCommand : IRequest<Infrastructure.DataBase.User>, IValidatableObject
     {
-        internal string Email { get; set; }
+        [SwaggerSchema(ReadOnly = true)]
+        public virtual string Email { get; set; }
 
         public string FirstName { get; set; }
 

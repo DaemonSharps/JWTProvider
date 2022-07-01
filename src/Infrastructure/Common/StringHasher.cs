@@ -14,9 +14,10 @@ namespace Infrastructure.Common
         private readonly int _iterations = 10000;
         private string _stringToHash;
 
-        public StringHasher(string value)
+        public StringHasher(string stringToHash)
         {
-            _stringToHash = value;
+            ArgumentNullException.ThrowIfNull(stringToHash);
+            _stringToHash = stringToHash;
         }
 
         /// <summary>
@@ -27,10 +28,9 @@ namespace Infrastructure.Common
         /// <param name="iterations">Количество инераций для хэширования</param>
         /// <param name="hashSize">Размер получаемого хэша</param>
         /// <returns>Хэшированная строка</returns>
-        public string Hash(string stringSalt, string pepper, int iterations, int hashSize)
+        public string Hash(string stringSalt, int iterations, int hashSize, string pepper = null)
         {
-            if (string.IsNullOrEmpty(stringSalt))
-                throw new ArgumentNullException(stringSalt);
+            ArgumentNullException.ThrowIfNull(stringSalt);
 
             var salt = $"{stringSalt}{new byte[8]}".ToByteArray();
 
@@ -49,19 +49,9 @@ namespace Infrastructure.Common
         /// <param name="salt">Строковое представление значения перед хэшированным паролем</param>
         /// <param name="pepper">Строка добавляемая к паролю перед хэшированием</param>
         /// <returns>Хэшированная строка</returns>
-        public string Hash(string salt, string pepper)
+        public string Hash(string salt, string pepper = null)
         {
-            return Hash(salt, pepper, _iterations, _hashSize);
-        }
-
-        /// <summary>
-        /// Хэшировать строку
-        /// </summary>
-        /// <param name="salt">Строковое представление значения перед хэшированным паролем</param>
-        /// <returns>Хэшированная строка</returns>
-        public string Hash(string salt)
-        {
-            return Hash(salt, null);
+            return Hash(salt, _iterations, _hashSize, pepper);
         }
 
         /// <summary>
@@ -71,9 +61,10 @@ namespace Infrastructure.Common
         public string Hash()
         {
             var salt = new byte[_saltSize];
-            using (var rngCsp = new RNGCryptoServiceProvider())
+
+            using (var rng = RandomNumberGenerator.Create())
             {
-                rngCsp.GetNonZeroBytes(salt);
+                rng.GetNonZeroBytes(salt);
             }
 
             var stringSalt = Convert.ToString(salt);

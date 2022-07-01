@@ -35,8 +35,16 @@ namespace JWTProvider.Token.Commands
                 .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
             if (user is null) throw new LoginFailedException("User not found");
 
-            var hashedPassword = user?.HashPassword(command.Password);
-            if (!hashedPassword.Equals(user.Password.Hash)) throw new LoginFailedException("Invalid email or password");
+            string hashedPassword;
+            try
+            {
+                hashedPassword = user?.HashPassword(command.Password);
+                if (!hashedPassword.Equals(user.Password.Hash)) throw new LoginFailedException("Invalid email or password");
+            }
+            catch (ArgumentException ex)
+            {
+                throw new LoginFailedException("Invalid email or password", ex);
+            }
 
             var accessToken = JWTGenerator
                 .GetGenerator(_options.Value)
