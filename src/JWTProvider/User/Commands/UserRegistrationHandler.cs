@@ -50,6 +50,7 @@ namespace JWTProvider.User.Commands
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, $"Register user {request.Email} failed", request);
+                throw new UserRegistrationException("DB error" ,ex);
             }
 
             return newUser;

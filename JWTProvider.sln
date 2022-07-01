@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProviderIntegration", "Test\Integration\JWTProviderIntegration\JWTProviderIntegration.csproj", "{B7F83259-D279-4AD4-A869-7CB97181231D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTUnit.Common", "Test\Unit\JWTUnit.Common\JWTUnit.Common.csproj", "{83147552-4B42-4E63-87D5-84EA890CDD78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTUnit.Common", "Test\Unit\JWTUnit.Common\JWTUnit.Common.csproj", "{83147552-4B42-4E63-87D5-84EA890CDD78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

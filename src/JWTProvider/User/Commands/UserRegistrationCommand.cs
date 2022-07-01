@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace JWTProvider.User.Commands
 {
@@ -6,5 +7,8 @@ namespace JWTProvider.User.Commands
     {
         [Required]
         public string Password { get; set; }
+
+        [SwaggerSchema(ReadOnly = false)]
+        public override string Email { get; set; }
     }
 }

@@ -12,7 +12,7 @@ public class GetTokenHandlerTests
     {
         //Arrange
         var memoryCache = new MemoryCacheMock();
-        var handler = new GetTokenHandler(TestDBContext.CreateContext(), memoryCache.Object, new TestTokenOptions());
+        var handler = new GetTokenHandler(TestDBContext.CreateInMemoryContext(), memoryCache.Object, new TestTokenOptions());
         var command = new GetTokenCommand
         {
             Email = "test@mail.ru",
@@ -42,7 +42,7 @@ public class GetTokenHandlerTests
         const string ExpectedCode = "LOGIN_FAILED";
         const System.Net.HttpStatusCode ExpectedStatusCode = System.Net.HttpStatusCode.BadRequest;
         var memoryCache = new MemoryCacheMock();
-        var handler = new GetTokenHandler(TestDBContext.CreateContext(), memoryCache.Object, new TestTokenOptions());
+        var handler = new GetTokenHandler(TestDBContext.CreateInMemoryContext(), memoryCache.Object, new TestTokenOptions());
         var command = new GetTokenCommand
         {
             Email = "test@mail.ru",
@@ -53,10 +53,7 @@ public class GetTokenHandlerTests
         var result = handler.Handle(command, default);
         //Assert
         var exception = await Assert.ThrowsAsync<LoginFailedException>(() => result);
-        Assert.Equal(ExpectedStatusCode, exception.StatusCode);
-        var apiError = Assert.IsType<ApiError>(exception.Error);
-        Assert.Equal(ExpectedMessage, apiError.ErrorMessage);
-        Assert.Equal(ExpectedCode, apiError.ErrorCode);
+        HttpExceptionAssert.IsValidHttpException(exception, ExpectedStatusCode, ExpectedCode, ExpectedMessage);
         if (password == null)
         {
             Assert.IsType<ArgumentNullException>(exception.InnerException);
@@ -73,7 +70,7 @@ public class GetTokenHandlerTests
         const string ExpectedCode = "LOGIN_FAILED";
         const System.Net.HttpStatusCode ExpectedStatusCode = System.Net.HttpStatusCode.BadRequest;
         var memoryCache = new MemoryCacheMock();
-        var handler = new GetTokenHandler(TestDBContext.CreateContext(), memoryCache.Object, new TestTokenOptions());
+        var handler = new GetTokenHandler(TestDBContext.CreateInMemoryContext(), memoryCache.Object, new TestTokenOptions());
         var command = new GetTokenCommand
         {
             Email = email
@@ -83,10 +80,7 @@ public class GetTokenHandlerTests
         var result = handler.Handle(command, default);
         //Assert
         var exception = await Assert.ThrowsAsync<LoginFailedException>(() => result);
-        Assert.Equal(ExpectedStatusCode, exception.StatusCode);
-        var apiError = Assert.IsType<ApiError>(exception.Error);
-        Assert.Equal(ExpectedMessage, apiError.ErrorMessage);
-        Assert.Equal(ExpectedCode, apiError.ErrorCode);
+        HttpExceptionAssert.IsValidHttpException(exception, ExpectedStatusCode, ExpectedCode, ExpectedMessage);
     }
 }
 
