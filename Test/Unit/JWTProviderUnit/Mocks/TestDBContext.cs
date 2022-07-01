@@ -5,12 +5,21 @@ namespace Mocks;
 
 internal static class TestDBContext
 {
-    public static UsersDBContext CreateContext()
+    public static UsersDBContext CreateInMemoryContext()
     {
-        var options = new DbContextOptionsBuilder<UsersDBContext>()
+        var context = new UsersDBContext(CreateOptions());
+        context.Database.EnsureCreated();
+        return context;
+    }
+
+    public static Mock<UsersDBContext> CreateContextMock()
+    {
+        return new Mock<UsersDBContext>(new object[] { CreateOptions() });
+    }
+
+    private static DbContextOptions CreateOptions()
+        => new DbContextOptionsBuilder<UsersDBContext>()
                       .UseInMemoryDatabase(Guid.NewGuid().ToString())
                       .Options;
-        return new UsersDBContext(options);
-    }
 }
 

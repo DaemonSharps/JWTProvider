@@ -72,9 +72,7 @@ public class HttpResponseExceptionMiddlwareTests
         await AssertResponse(response, expectedApiError, exception.ContentType);
 
         var invocation = loggerMock.Invocations.Single();
-        Assert.Equal(LogLevel.Error, invocation.Arguments[0]);
-        Assert.Contains(invocation.Arguments[2].ToString(), $"{exception.Message} because of {innerException.Message}");
-        Assert.Equal(innerException, invocation.Arguments[3]);
+        LoggerAssert.HasLogError(invocation, $"{exception.Message} because of {innerException.Message}", innerException);
     }
 
     private static async Task AssertResponse<TBody>(HttpResponse response, TBody expected, string contentType)
