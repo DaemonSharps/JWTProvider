@@ -44,6 +44,7 @@ namespace JWTProvider.Controllers
         [HttpPut, Command, Authorize]
         [SwaggerOperation("Update user public parameters")]
         [SwaggerResponse(200, "Update successfull")]
+        [SwaggerResponse(401, "Unauthorized")]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> UpdateUser(UserUpdateCommand command)
         {
