@@ -8,14 +8,18 @@ namespace Infrastructure.DataBase
         public UsersDBContext(DbContextOptions options) : base(options)
         {
 #if DEBUG
-           //Database.EnsureDeleted();
-           //Database.EnsureCreated();
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
 #endif
         }
 
-        public virtual DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public virtual DbSet<Password> Passwords { get; set; }
+        public DbSet<Password> Passwords { get; set; }
+
+        public DbSet<Login> Logins { get; set; }
+
+        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
