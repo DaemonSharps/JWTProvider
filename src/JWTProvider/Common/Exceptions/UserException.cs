@@ -23,4 +23,11 @@ namespace JWTProvider.Common.Exceptions
             : base(System.Net.HttpStatusCode.BadRequest, "USER_EXISTS", errorMesage, innerException)
         { }
     }
+
+    public class UserUpdateException : HttpResponseException
+    {
+        public UserUpdateException(string errorMesage, Exception innerException = null)
+            : base(System.Net.HttpStatusCode.BadRequest, "USER_UPDATE_FAILED", errorMesage, innerException)
+        { }
+    }
 }

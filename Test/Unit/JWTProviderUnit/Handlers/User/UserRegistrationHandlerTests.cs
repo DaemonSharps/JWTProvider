@@ -13,7 +13,7 @@ namespace Handlers.User;
 public class UserRegistrationHandlerTests
 {
     [Fact]
-    public async Task UserExists()
+    public async Task UserExists_Throw()
     {
         //Arrange
         const string ExpectedErrorCode = "USER_EXISTS";
