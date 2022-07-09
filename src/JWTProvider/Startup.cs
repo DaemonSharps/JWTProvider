@@ -38,8 +38,8 @@ namespace JWTProvider
             services.AddCors();
 
             services.AddDbContext<UsersDBContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);

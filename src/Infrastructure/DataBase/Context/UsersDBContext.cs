@@ -8,8 +8,8 @@ namespace Infrastructure.DataBase
         public UsersDBContext(DbContextOptions options) : base(options)
         {
 #if DEBUG
-           //Database.EnsureDeleted();
-           //Database.EnsureCreated();
+           Database.EnsureDeleted();
+           Database.EnsureCreated();
 #endif
         }
 
@@ -19,6 +19,7 @@ namespace Infrastructure.DataBase
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+#if DEBUG
             builder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -41,6 +42,7 @@ namespace Infrastructure.DataBase
             builder.Entity<User>().HasData(user);
             builder.Entity<Password>().HasData(pwd);
             #endregion
+#endif
         }
     }
 }
