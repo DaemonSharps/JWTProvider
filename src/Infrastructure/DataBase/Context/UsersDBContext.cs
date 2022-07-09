@@ -8,8 +8,8 @@ namespace Infrastructure.DataBase
         public UsersDBContext(DbContextOptions options) : base(options)
         {
 #if DEBUG
-           Database.EnsureDeleted();
-           Database.EnsureCreated();
+            Database?.EnsureDeleted();
+            Database?.EnsureCreated();
 #endif
         }
 
