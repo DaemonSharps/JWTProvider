@@ -67,6 +67,11 @@ namespace JWTProvider
             {
                 app.UseDeveloperExceptionPage();
             }
+#if DEBUG
+            using (var scope = app.ApplicationServices.CreateScope())
+            using (var context = scope.ServiceProvider.GetRequiredService<UsersDBContext>())
+                context.Database.EnsureCreated();
+#endif
 
             app.UseHttpResponseExceptionMiddleware();
             app.UseSwagger();
