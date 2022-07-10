@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using JWTProvider.User.Commands;
 using JWTProvider.Token.Commands;
 using JWTProviderIntegration.Common;
+using JWTProvider.Models;
 
 namespace Token;
 
@@ -23,7 +24,8 @@ public class AuthTest : ApiTestBase
         };
         var result = await Client.PostAsJsonAsync("/user", regCommand);
         result.EnsureSuccessStatusCode();
-        Assert.NotNull(result);
+        var token = await result.Content.ReadFromJsonAsync<TokenModel>();
+        Assert.NotNull(token);
 
         var getToken = new GetTokenCommand
         {
@@ -33,7 +35,8 @@ public class AuthTest : ApiTestBase
 
         var res = await Client.PostAsJsonAsync("/token", getToken);
         res.EnsureSuccessStatusCode();
-        Assert.NotNull(res);
+        var token2 = await res.Content.ReadFromJsonAsync<TokenModel>();
+        Assert.NotNull(token2);
     }
 }
 
