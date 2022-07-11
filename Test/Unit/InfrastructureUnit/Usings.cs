@@ -1,2 +1,2 @@
-﻿global using JWTUnit;
+﻿global using JwtTest.Common;
 global using Xunit;
