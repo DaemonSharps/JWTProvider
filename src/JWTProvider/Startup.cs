@@ -36,11 +36,13 @@ namespace JWTProvider
 
             services.AddMediatR(typeof(Startup));
             services.AddCors();
-
+#if DEBUG
+            services.AddDbContext<UsersDBContext>(options => options.UseInMemoryDatabase("Debug_User_DB"));
+#else
             services.AddDbContext<UsersDBContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
-
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
+#endif
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -65,6 +67,11 @@ namespace JWTProvider
             {
                 app.UseDeveloperExceptionPage();
             }
+#if DEBUG
+            using (var scope = app.ApplicationServices.CreateScope())
+            using (var context = scope.ServiceProvider.GetRequiredService<UsersDBContext>())
+                context.Database.EnsureCreated();
+#endif
 
             app.UseHttpResponseExceptionMiddleware();
             app.UseSwagger();

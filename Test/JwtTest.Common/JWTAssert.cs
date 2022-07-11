@@ -5,7 +5,7 @@ using Infrastructure.Entities;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
-namespace JWTUnit;
+namespace JwtTest.Common;
 
 public static class JWTAssert
 {
