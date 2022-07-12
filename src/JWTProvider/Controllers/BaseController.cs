@@ -13,7 +13,5 @@ namespace JWTProvider.Controllers
     public abstract class BaseController : ControllerBase
     {
         protected IMediator Mediator => HttpContext.RequestServices.GetService<IMediator>();
-
-        protected IMemoryCache Cache => HttpContext.RequestServices.GetService<IMemoryCache>();
     }
 }

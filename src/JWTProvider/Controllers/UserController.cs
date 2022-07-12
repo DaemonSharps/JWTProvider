@@ -22,7 +22,10 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("User registration")]
         [SwaggerResponse(200, "Registration completed successfully", typeof(TokenModel))]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> Registration(UserRegistrationCommand command, [FromServices] IOptions<TokenOptions> options)
+        public async Task<IActionResult> Registration(
+            UserRegistrationCommand command,
+            [FromServices] IOptions<TokenOptions> options,
+            [FromServices] IMemoryCache cache)
         {
             var user = await Mediator.Send(command);
 
@@ -32,7 +35,7 @@ namespace JWTProvider.Controllers
                 .AcessToken;
             var refreshToken = Guid.NewGuid();
 
-            Cache.Set(refreshToken, user.Email, RT.ExpiresDefault);
+            cache.Set(refreshToken, user.Email, RT.ExpiresDefault);
 
             return Ok(new TokenModel
             {
