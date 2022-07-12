@@ -10,6 +10,7 @@ namespace JWTProvider.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public abstract class BaseController : ControllerBase
     {
         protected IMediator Mediator => HttpContext.RequestServices.GetService<IMediator>();
