@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Infrastructure.DataBase.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,12 @@ namespace Infrastructure.DataBase.Context
         public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<Password> Passwords { get; set; }
+
+        public virtual DbSet<AppType> AppTypes { get; set; }
+
+        public virtual DbSet<App> Apps { get; set; }
+
+        public virtual DbSet<Session> Sessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -36,8 +43,23 @@ namespace Infrastructure.DataBase.Context
                 Hash = "mRytDVsoZEPR+eMiMbl/xMAckvL5s+k70iboHYpSIlw=" //test
             };
 
+            var appType = new AppType
+            {
+                Id = new Guid("4c175cf1-67a7-4b35-a978-9b79acf39743"),
+                Code = "Browser"
+            };
+
+            var app = new App
+            {
+                Id = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d"),
+                AppTypeId = appType.Id,
+                Name = "Yandex"
+            };
+
             builder.Entity<User>().HasData(user);
             builder.Entity<Password>().HasData(pwd);
+            builder.Entity<AppType>().HasData(appType);
+            builder.Entity<App>().HasData(app);
 #endif
             #endregion
         }
