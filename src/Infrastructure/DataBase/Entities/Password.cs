@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Infrastructure.DataBase
+namespace Infrastructure.DataBase.Entities
 {
     public class Password
     {

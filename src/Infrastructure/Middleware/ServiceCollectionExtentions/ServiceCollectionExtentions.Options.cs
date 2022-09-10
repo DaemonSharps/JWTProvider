@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.Middleware.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Middleware
+namespace Infrastructure.Middleware.ServiceCollectionExtentions
 {
     public static partial class ServiceCollectionExtentions
     {

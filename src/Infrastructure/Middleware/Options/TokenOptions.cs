@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Middleware
+﻿namespace Infrastructure.Middleware.Options
 {
     public class TokenOptions
     {

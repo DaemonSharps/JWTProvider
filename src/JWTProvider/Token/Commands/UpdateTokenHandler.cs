@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Common;
 using Infrastructure.DataBase;
+using Infrastructure.DataBase.Context;
 using Infrastructure.Middleware;
+using Infrastructure.Middleware.Options;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Models;
 using MediatR;
@@ -12,45 +14,44 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using RT = Infrastructure.Constants.RefreshToken;
 
-namespace JWTProvider.Token.Commands
+namespace JWTProvider.Token.Commands;
+
+public class UpdateTokenHandler : IRequestHandler<UpdateTokenCommand, TokenModel>
 {
-    public class UpdateTokenHandler : IRequestHandler<UpdateTokenCommand, TokenModel>
+    private readonly UsersDBContext _context;
+    private readonly IMemoryCache _cache;
+    private readonly IOptions<TokenOptions> _options;
+
+    public UpdateTokenHandler(UsersDBContext dBContext, IMemoryCache memoryCache, IOptions<TokenOptions> options)
     {
-        private readonly UsersDBContext _context;
-        private readonly IMemoryCache _cache;
-        private readonly IOptions<TokenOptions> _options;
+        _context = dBContext;
+        _cache = memoryCache;
+        _options = options;
+    }
 
-        public UpdateTokenHandler(UsersDBContext dBContext, IMemoryCache memoryCache, IOptions<TokenOptions> options)
+    public async Task<TokenModel> Handle(UpdateTokenCommand request, CancellationToken cancellationToken)
+    {
+        if (_cache.TryGetValue(request.RefreshToken, out var cachedEmail))
         {
-            _context = dBContext;
-            _cache = memoryCache;
-            _options = options;
-        }
+            var user = await _context.Users
+                    .Include(u => u.Password)
+                    .SingleOrDefaultAsync(u => u.Email.Equals(cachedEmail), cancellationToken);
 
-        public async Task<TokenModel> Handle(UpdateTokenCommand request, CancellationToken cancellationToken)
-        {
-            if (_cache.TryGetValue(request.RefreshToken, out var cachedEmail))
+            var accessToken = JWTGenerator
+                .GetGenerator(_options.Value)
+                .CreateAcessToken(user)
+                .AcessToken;
+            var refreshToken = Guid.NewGuid();
+
+            _cache.Set(refreshToken, cachedEmail, RT.ExpiresDefault);
+
+            return new()
             {
-                var user = await _context.Users
-                        .Include(u => u.Password)
-                        .SingleOrDefaultAsync(u => u.Email.Equals(cachedEmail), cancellationToken);
-
-                var accessToken = JWTGenerator
-                    .GetGenerator(_options.Value)
-                    .CreateAcessToken(user)
-                    .AcessToken;
-                var refreshToken = Guid.NewGuid();
-
-                _cache.Set(refreshToken, cachedEmail, RT.ExpiresDefault);
-
-                return new()
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
-                };
-            }
-
-            throw new InvalidRefreshTokenException();
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
         }
+
+        throw new InvalidRefreshTokenException();
     }
 }

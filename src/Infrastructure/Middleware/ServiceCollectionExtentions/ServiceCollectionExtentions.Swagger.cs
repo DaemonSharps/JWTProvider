@@ -3,7 +3,7 @@ using Infrastructure.CustomAttributes.Swagger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Infrastructure.Middleware
+namespace Infrastructure.Middleware.ServiceCollectionExtentions
 {
     public static partial class ServiceCollectionExtentions
     {

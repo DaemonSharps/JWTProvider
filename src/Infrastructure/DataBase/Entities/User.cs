@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Infrastructure.DataBase
+namespace Infrastructure.DataBase.Entities
 {
-    public class User : Entities.User
+    public class User : Infrastructure.Entities.User
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

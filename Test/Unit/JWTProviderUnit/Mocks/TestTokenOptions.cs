@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Middleware;
+using Infrastructure.Middleware.Options;
 using Microsoft.Extensions.Options;
 
 namespace Mocks;

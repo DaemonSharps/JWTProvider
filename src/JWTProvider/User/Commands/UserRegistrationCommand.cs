@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace JWTProvider.User.Commands
-{
-    public class UserRegistrationCommand : UserUpdateCommand
-    {
-        [Required]
-        public string Password { get; set; }
+namespace JWTProvider.User.Commands;
 
-        [SwaggerSchema(ReadOnly = false)]
-        public override string Email { get; set; }
-    }
+public class UserRegistrationCommand : UserUpdateCommand
+{
+    [Required]
+    public string Password { get; set; }
+
+    [SwaggerSchema(ReadOnly = false)]
+    public override string Email { get; set; }
 }

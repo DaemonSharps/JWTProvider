@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Constants
+﻿namespace Infrastructure.Constants.Swagger
 {
     public struct SwaggerTagNames
     {
