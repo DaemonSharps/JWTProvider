@@ -88,6 +88,10 @@ namespace Handlers.User
                 .IgnoreSourceProperty(u => u.Password)
                 .IgnoreSourceProperty(u => u.FullName)
                 .IgnoreSourceProperty(u => u.Id)
+                .IgnoreSourceProperty(u => u.Sessions)
+                .IgnoreSourceProperty(u => u.LastUpdate)
+                .IgnoreSourceProperty(u => u.CreationDate)
+                .IgnoreSourceProperty(u => u.FinishDate)
                 .Assert();
 
             var fullName = string.Join(" ", command.FirstName, command.MiddleName, command.LastName);
@@ -98,6 +102,10 @@ namespace Handlers.User
                 .IgnoreSourceProperty(u => u.Password)
                 .IgnoreSourceProperty(u => u.FullName)
                 .IgnoreSourceProperty(u => u.Id)
+                .IgnoreSourceProperty(u => u.Sessions)
+                .IgnoreSourceProperty(u => u.LastUpdate)
+                .IgnoreSourceProperty(u => u.CreationDate)
+                .IgnoreSourceProperty(u => u.FinishDate)
                 .Assert();
 
             Assert.Equal(fullName, dbUser.FullName);
