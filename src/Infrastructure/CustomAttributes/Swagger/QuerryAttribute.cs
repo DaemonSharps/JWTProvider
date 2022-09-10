@@ -7,7 +7,7 @@
     {
         public QuerryAttribute()
         {
-            Name = Constants.SwaggerTagNames.Queries;
+            Name = Constants.Swagger.SwaggerTagNames.Queries;
         }
     }
 

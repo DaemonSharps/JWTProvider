@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Common;
 using Infrastructure.DataBase;
+using Infrastructure.DataBase.Entities;
 
 namespace Infrastructure.Extentions
 {

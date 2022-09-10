@@ -7,7 +7,7 @@
     {
         public CommandAttribute()
         {
-            Name = Constants.SwaggerTagNames.Commands;
+            Name = Constants.Swagger.SwaggerTagNames.Commands;
         }
     }
 

@@ -1,60 +1,60 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.DataBase;
+using Infrastructure.DataBase.Context;
 using Infrastructure.Extentions;
 using JWTProvider.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using UserDB = Infrastructure.DataBase.User;
+using DB = Infrastructure.DataBase.Entities;
 
-namespace JWTProvider.User.Commands
+namespace JWTProvider.User.Commands;
+
+public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, DB.User>
 {
-    public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, UserDB>
+    private readonly UsersDBContext _context;
+    private readonly ILogger<UserRegistrationHandler> _logger;
+
+    public UserRegistrationHandler(UsersDBContext context, ILogger<UserRegistrationHandler> logger)
     {
-        private readonly UsersDBContext _context;
-        private readonly ILogger<UserRegistrationHandler> _logger;
+        _context = context;
+        _logger = logger;
+    }
 
-        public UserRegistrationHandler(UsersDBContext context, ILogger<UserRegistrationHandler> logger)
+    public async Task<DB.User> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+
+        if (user != null) throw new UserExistsException();
+
+        var newUser = new DB.User
         {
-            _context = context;
-            _logger = logger;
-        }
+            Email = request.Email,
+            FirstName = request.FirstName,
+            MiddleName = request.MiddleName,
+            LastName = request.LastName
+        };
 
-        public async Task<UserDB> Handle(UserRegistrationCommand request, CancellationToken cancellationToken)
+        try
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
-
-            if (user != null) throw new UserExistsException();
-
-            var newUser = new UserDB
+            _context.Add(newUser);
+            var password = new DB.Password
             {
-                Email = request.Email,
-                FirstName = request.FirstName,
-                MiddleName = request.MiddleName,
-                LastName = request.LastName
+                Hash = newUser.HashPassword(request.Password),
+                UserId = newUser.Id
             };
+            _context.Add(password);
 
-            try
-            {
-                _context.Add(newUser);
-                var password = new Password
-                {
-                    Hash = newUser.HashPassword(request.Password),
-                    UserId = newUser.Id
-                };
-                _context.Add(password);
-
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger.LogError(ex, $"Register user {request.Email} failed", request);
-                throw new UserRegistrationException("DB error" ,ex);
-            }
-
-            return newUser;
-
+            await _context.SaveChangesAsync(cancellationToken);
         }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, $"Register user {request.Email} failed", request);
+            throw new UserRegistrationException("DB error", ex);
+        }
+
+        return newUser;
+
     }
 }

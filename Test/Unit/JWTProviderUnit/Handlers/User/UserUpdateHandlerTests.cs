@@ -4,7 +4,7 @@ using JWTProvider.User.Commands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq.EntityFrameworkCore;
-using DBUser = Infrastructure.DataBase.User;
+using DB = Infrastructure.DataBase.Entities;
 
 namespace Handlers.User
 {
@@ -44,7 +44,7 @@ namespace Handlers.User
             var innerException = new DbUpdateException(DBUpdateExceptionMessage);
             dbContext.Setup(c => c.SaveChangesAsync(default))
                 .Throws(innerException);
-            dbContext.Setup(c => c.Users).ReturnsDbSet(new[] { new DBUser { Email = TestEmail } });
+            dbContext.Setup(c => c.Users).ReturnsDbSet(new[] { new DB.User { Email = TestEmail } });
 
             var handler = new UserUpdateHandler(dbContext.Object, loggerMock.Object);
             var command = new UserUpdateCommand

@@ -4,9 +4,9 @@ using DeepEqual.Syntax;
 using Infrastructure.Common.Exceptions;
 using Infrastructure.Extentions;
 using Microsoft.EntityFrameworkCore;
-using DBUser = Infrastructure.DataBase.User;
 using Microsoft.Extensions.Logging;
 using Moq.EntityFrameworkCore;
+using DB = Infrastructure.DataBase.Entities;
 
 namespace Handlers.User;
 
@@ -85,7 +85,7 @@ public class UserRegistrationHandlerTests
         var innerException = new DbUpdateException(DBUpdateExceptionMessage);
         dbContext.Setup(c => c.SaveChangesAsync(default))
             .Throws(innerException);
-        dbContext.Setup(c => c.Users).ReturnsDbSet(new[] { new DBUser() });
+        dbContext.Setup(c => c.Users).ReturnsDbSet(new[] { new DB.User() });
 
         var loggerMock = new Mock<ILogger<UserRegistrationHandler>>();
         var handler = new UserRegistrationHandler(dbContext.Object, loggerMock.Object);

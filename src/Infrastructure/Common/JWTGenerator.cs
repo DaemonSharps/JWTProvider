@@ -6,6 +6,7 @@ using System.Text;
 using Infrastructure.Constants;
 using Infrastructure.Entities;
 using Infrastructure.Middleware;
+using Infrastructure.Middleware.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Common

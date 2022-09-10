@@ -2,7 +2,10 @@
 using System.IO;
 using System.Text;
 using Infrastructure.DataBase;
+using Infrastructure.DataBase.Context;
 using Infrastructure.Middleware;
+using Infrastructure.Middleware.Options;
+using Infrastructure.Middleware.ServiceCollectionExtentions;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -14,85 +17,84 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JWTProvider
+namespace JWTProvider;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        Configuration = configuration;
+    }
 
-        public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMemoryCache();
-            services.AddControllers();
-            services.AddRouting(ops => ops.LowercaseUrls = true);
-            services.AddSwagger();
-            services.AddConfigurationOptions(Configuration);
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMemoryCache();
+        services.AddControllers();
+        services.AddRouting(ops => ops.LowercaseUrls = true);
+        services.AddSwagger();
+        services.AddConfigurationOptions(Configuration);
 
-            services.AddMediatR(typeof(Startup));
-            services.AddCors();
+        services.AddMediatR(typeof(Startup));
+        services.AddCors();
 #if DEBUG
-            services.AddDbContext<UsersDBContext>(options => options.UseInMemoryDatabase("Debug_User_DB"));
+        services.AddDbContext<UsersDBContext>(options => options.UseInMemoryDatabase("Debug_User_DB"));
 #else
-            services.AddDbContext<UsersDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
+        services.AddDbContext<UsersDBContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 #endif
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(cfg => cfg.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
-                    ValidateIssuer = true,
-                    ValidIssuer = tokenOptions.Issuer,
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey))
-                });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-        {
-            var path = Directory.GetCurrentDirectory();
-            loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
-
-            if (env.IsDevelopment())
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        var tokenOptions = Configuration.GetOptions<TokenOptions>(TokenOptions.Section);
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(cfg => cfg.TokenValidationParameters = new TokenValidationParameters()
             {
-                app.UseDeveloperExceptionPage();
-            }
-#if DEBUG
-            using (var scope = app.ApplicationServices.CreateScope())
-            using (var context = scope.ServiceProvider.GetRequiredService<UsersDBContext>())
-                context.Database.EnsureCreated();
-#endif
-
-            app.UseHttpResponseExceptionMiddleware();
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTProvider v1");
-                c.RoutePrefix = string.Empty;
+                ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 },
+                ValidateIssuer = true,
+                ValidIssuer = tokenOptions.Issuer,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.AccessKey))
             });
+    }
 
-            app.UseHttpsRedirection();
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+    {
+        var path = Directory.GetCurrentDirectory();
+        loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
 
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseCors(options =>
-                options
-                .WithOrigins(Configuration.GetSection("Cors:Origins").Get<string[]>())
-                .AllowAnyHeader()
-                .AllowAnyMethod());
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
+#if DEBUG
+        using (var scope = app.ApplicationServices.CreateScope())
+        using (var context = scope.ServiceProvider.GetRequiredService<UsersDBContext>())
+            context.Database.EnsureCreated();
+#endif
+
+        app.UseHttpResponseExceptionMiddleware();
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTProvider v1");
+            c.RoutePrefix = string.Empty;
+        });
+
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseCors(options =>
+            options
+            .WithOrigins(Configuration.GetSection("Cors:Origins").Get<string[]>())
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }

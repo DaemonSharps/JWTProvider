@@ -5,6 +5,7 @@ using Infrastructure.Common.Exceptions;
 using Infrastructure.CustomAttributes.Swagger;
 using Infrastructure.Extentions;
 using Infrastructure.Middleware;
+using Infrastructure.Middleware.Options;
 using JWTProvider.Models;
 using JWTProvider.User.Commands;
 using Microsoft.AspNetCore.Authorization;

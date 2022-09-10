@@ -1,7 +1,8 @@
 ﻿using System;
+using Infrastructure.DataBase.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.DataBase
+namespace Infrastructure.DataBase.Context
 {
     public class UsersDBContext : DbContext
     {
