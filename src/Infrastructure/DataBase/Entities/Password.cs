@@ -2,17 +2,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Infrastructure.DataBase.Entities
+namespace Infrastructure.DataBase.Entities;
+
+public class Password
 {
-    public class Password
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Guid UserId { get; set; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public Guid UserId { get; set; }
 
-        [Required]
-        public string Hash { get; set; }
+    [Required]
+    public string Hash { get; set; }
 
-        public User User { get; set; }
-    }
+    public User User { get; set; }
 }

@@ -60,6 +60,10 @@ public class UserRegistrationHandlerTests
             .IgnoreDestinationProperty(u => u.Id)
             .IgnoreDestinationProperty(u => u.Password)
             .IgnoreDestinationProperty(u => u.FullName)
+            .IgnoreDestinationProperty(u => u.Sessions)
+            .IgnoreDestinationProperty(u => u.LastUpdate)
+            .IgnoreDestinationProperty(u => u.CreationDate)
+            .IgnoreDestinationProperty(u => u.FinishDate)
             .Assert();
 
         Assert.Equal(result.FullName, string.Join(' ', command.FirstName, command.MiddleName, command.LastName));
