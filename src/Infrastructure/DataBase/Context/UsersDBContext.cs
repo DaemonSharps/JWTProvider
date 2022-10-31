@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Infrastructure.DataBase.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.DataBase.Context
 {
@@ -22,6 +26,41 @@ namespace Infrastructure.DataBase.Context
         public virtual DbSet<Session> Sessions { get; set; }
 
         public virtual DbSet<OperatingSystemType> OperatingSystemTypes { get; set; }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var changedEntries = this.ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is Timestamp)
+                .Select(e => (e.State, e.Entity as Timestamp))
+                .ToArray<(EntityState State, Timestamp Timestamp)>();
+
+            foreach (var entry in changedEntries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Timestamp.CreationDate
+                        = entry.Timestamp.LastUpdate
+                        = DateTimeOffset.UtcNow;
+                }
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Timestamp.LastUpdate = DateTimeOffset.UtcNow;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public EntityEntry Remove(Timestamp entity)
+        {
+            entity.FinishDate = DateTimeOffset.UtcNow;
+            this.Attach(entity);
+            var entry = this.Entry(entity);
+            entry.State = EntityState.Modified;
+
+            return entry;
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
