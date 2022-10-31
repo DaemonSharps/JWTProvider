@@ -65,7 +65,7 @@ public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, 
         catch (DbUpdateException ex)
         {
             var jsonRequest = JsonSerializer.Serialize(request);
-            _logger.LogError(ex, "Register user {Email} failed. DB request: {JsonRequest}", request.Email, jsonRequest);
+            _logger.LogError(ex, "Register user {Email} failed. Handler request: {JsonRequest}", request.Email, jsonRequest);
             throw new UserRegistrationException("DB error", ex);
         }
 

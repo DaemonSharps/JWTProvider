@@ -21,6 +21,8 @@ namespace Infrastructure.DataBase.Context
 
         public virtual DbSet<Session> Sessions { get; set; }
 
+        public virtual DbSet<OperatingSystemType> OperatingSystemTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>()
@@ -57,10 +59,17 @@ namespace Infrastructure.DataBase.Context
                 Name = "Yandex"
             };
 
+            var operatingSystemType = new OperatingSystemType
+            {
+                Id = new Guid("7486becb-b36c-4e79-9b1a-a0e49240ae3c"),
+                Code = "Windows"
+            };
+
             builder.Entity<User>().HasData(user);
             builder.Entity<Password>().HasData(pwd);
             builder.Entity<AppType>().HasData(appType);
             builder.Entity<App>().HasData(app);
+            builder.Entity<OperatingSystemType>().HasData(operatingSystemType);
 #endif
             #endregion
         }

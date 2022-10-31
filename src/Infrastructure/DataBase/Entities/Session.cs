@@ -10,9 +10,11 @@ public class Session
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
+    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid RefreshToken { get; set; }
 
+    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid UserId { get; set; }
 
@@ -26,15 +28,15 @@ public class Session
     public string IP { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public Guid OperationSystemTypeId { get; set; }
+    public Guid OperatingSystemTypeId { get; set; }
 
-    public OperationSystemType OperationSystemType { get; set; }
+    public OperatingSystemType OperatingSystemType { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTimeOffset CreationDate { get; set; }
+    public DateTimeOffset CreationDate { get; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTimeOffset LastUpdate { get; set; }
+    public DateTimeOffset LastUpdate { get; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public DateTimeOffset FinishDate { get; } = DateTimeOffset.UtcNow.AddDays(5);
