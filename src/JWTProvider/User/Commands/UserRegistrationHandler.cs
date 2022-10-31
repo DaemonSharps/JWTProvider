@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.DataBase;
 using Infrastructure.DataBase.Context;
@@ -26,35 +27,48 @@ public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, 
     {
         var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
 
-        if (user != null) throw new UserExistsException();
-
-        var newUser = new DB.User
+        if (user == null)
         {
-            Email = request.Email,
-            FirstName = request.FirstName,
-            MiddleName = request.MiddleName,
-            LastName = request.LastName
+            user = new DB.User
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                MiddleName = request.MiddleName,
+                LastName = request.LastName
+            };
+
+            _context.Add(user);
+        }
+        else if (user.FinishDate != null)
+        {
+            user.FinishDate = null;
+            user.FirstName = request.FirstName;
+            user.MiddleName = request.MiddleName;
+            user.LastName = request.LastName;
+
+            _context.Update(user);
+        }
+        else if (user.FinishDate == null) throw new UserExistsException();
+
+
+        var password = new DB.Password
+        {
+            Hash = user.HashPassword(request.Password),
+            UserId = user.Id
         };
+        _context.Add(password);
 
         try
         {
-            _context.Add(newUser);
-            var password = new DB.Password
-            {
-                Hash = newUser.HashPassword(request.Password),
-                UserId = newUser.Id
-            };
-            _context.Add(password);
-
             await _context.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, $"Register user {request.Email} failed", request);
+            var jsonRequest = JsonSerializer.Serialize(request);
+            _logger.LogError(ex, "Register user {Email} failed. DB request: {JsonRequest}", request.Email, jsonRequest);
             throw new UserRegistrationException("DB error", ex);
         }
 
-        return newUser;
-
+        return user;
     }
 }

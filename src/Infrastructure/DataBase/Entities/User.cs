@@ -22,5 +22,5 @@ public class User : Infrastructure.Entities.User
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTimeOffset LastUpdate { get; set; }
 
-    public DateTimeOffset FinishDate { get; set; }
+    public DateTimeOffset? FinishDate { get; set; }
 }

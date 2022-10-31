@@ -35,7 +35,8 @@ namespace Infrastructure.DataBase.Context
                 Email = "test@mail.ru",
                 FirstName = "Денис",
                 MiddleName = "Смирнов",
-                LastName = "Алексеевич"
+                LastName = "Алексеевич",
+                FinishDate = null
             };
             var pwd = new Password
             {
