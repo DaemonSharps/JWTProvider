@@ -10,7 +10,7 @@ public class Session
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid RefreshToken { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
