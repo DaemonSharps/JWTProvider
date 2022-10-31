@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Common.Exceptions;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Token.Commands;
-using UserEntity = Infrastructure.Entities.User;
+using DBUser = Infrastructure.DataBase.Entities.User;
 
 namespace Handlers.Token;
 
@@ -28,7 +28,7 @@ public class GetTokenHandlerTests
         Assert.Equal(result.RefreshToken, key);
         var token = JWTAssert.IsJWT(result.AccessToken, TestTokenOptions.TestAccesKey, TestTokenOptions.TestIssuer);
         JWTAssert.IsValidHeader(token);
-        var user = new UserEntity { Email = command.Email };
+        var user = new DBUser { Email = command.Email };
         JWTAssert.IsValidPayload(token, user, TestTokenOptions.TestIssuer);
     }
 

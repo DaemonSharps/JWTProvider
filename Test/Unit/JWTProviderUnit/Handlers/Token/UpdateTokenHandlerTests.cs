@@ -30,7 +30,7 @@ public class UpdateTokenHandlerTests
         Assert.Equal(result.RefreshToken, key);
         var token = JWTAssert.IsJWT(result.AccessToken, TestTokenOptions.TestAccesKey, TestTokenOptions.TestIssuer);
         JWTAssert.IsValidHeader(token);
-        var user = new Infrastructure.Entities.User { Email = (string)expectedCacheValue };
+        var user = new Infrastructure.DataBase.Entities.User { Email = (string)expectedCacheValue };
         JWTAssert.IsValidPayload(token, user, TestTokenOptions.TestIssuer);
     }
 

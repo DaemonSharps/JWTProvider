@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.DataBase.Entities;
 
-public class Session
+public class Session : Timestamp
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,13 +31,4 @@ public class Session
     public Guid OperatingSystemTypeId { get; set; }
 
     public OperatingSystemType OperatingSystemType { get; set; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTimeOffset CreationDate { get; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTimeOffset LastUpdate { get; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public DateTimeOffset FinishDate { get; } = DateTimeOffset.UtcNow.AddDays(5);
 }

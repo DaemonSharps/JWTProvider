@@ -1,6 +1,6 @@
-﻿using JWTProvider;
+﻿using Infrastructure.DataBase.Entities;
+using JWTProvider;
 using JWTProviderIntegration.Common;
-using Infrastructure.Entities;
 using JWTProviderIntegration.Extentions;
 
 namespace BusinessLogicTests;
