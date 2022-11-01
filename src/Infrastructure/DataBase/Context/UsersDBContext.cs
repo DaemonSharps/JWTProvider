@@ -57,9 +57,21 @@ namespace Infrastructure.DataBase.Context
             entity.FinishDate = DateTimeOffset.UtcNow;
             this.Attach(entity);
             var entry = this.Entry(entity);
-            entry.State = EntityState.Modified;
+            //из-за тестов
+            if (entry != null)
+            {
+                entry.State = EntityState.Modified;
+            }
 
             return entry;
+        }
+
+        public void RemoveRange(IEnumerable<Timestamp> entities)
+        {
+            foreach (var entity in entities)
+            {
+                Remove(entity);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -27,7 +27,7 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, DB.User>
         var user = await _context.Users
             .Include(u => u.Password)
             .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
-        if (user is null) throw new LoginFailedException("User not found");
+        if (user is null || user.FinishDate < DateTimeOffset.UtcNow) throw new LoginFailedException("User not found");
 
         string hashedPassword;
         try

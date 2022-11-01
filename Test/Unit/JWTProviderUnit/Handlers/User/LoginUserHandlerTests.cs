@@ -80,5 +80,32 @@ public class LoginUserHandlerTests
         var exception = await Assert.ThrowsAsync<LoginFailedException>(() => result);
         HttpExceptionAssert.IsValidHttpException(exception, ExpectedStatusCode, ExpectedCode, ExpectedMessage);
     }
+
+    [Fact]
+    public async Task UserClosed_Throw()
+    {
+        //Arrange
+        const string ExpectedMessage = "User not found";
+        const string ExpectedCode = "LOGIN_FAILED";
+        const System.Net.HttpStatusCode ExpectedStatusCode = System.Net.HttpStatusCode.BadRequest;
+        const string Email = "test@mail.ru";
+
+        var dbContext = TestDBContext.CreateInMemoryContext();
+        var user = dbContext.Users.First(u => u.Email == Email);
+        user.FinishDate = DateTimeOffset.UtcNow.AddDays(-10);
+        dbContext.SaveChanges();
+
+        var handler = new LoginUserHandler(dbContext);
+        var command = new LoginUserCommand
+        {
+            Email = Email
+        };
+
+        //Act
+        var result = handler.Handle(command, default);
+        //Assert
+        var exception = await Assert.ThrowsAsync<LoginFailedException>(() => result);
+        HttpExceptionAssert.IsValidHttpException(exception, ExpectedStatusCode, ExpectedCode, ExpectedMessage);
+    }
 }
 
