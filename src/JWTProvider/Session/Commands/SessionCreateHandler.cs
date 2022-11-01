@@ -29,7 +29,10 @@ public class SessionCreateHandler : IRequestHandler<SessionCreateCommand, DB.Ses
     {
         var app = await _context.Apps.FirstOrDefaultAsync(cancellationToken);
         var operatingSystemType = await _context.OperatingSystemTypes.FirstOrDefaultAsync(cancellationToken);
-        var sessions = await _context.Sessions.Where(s => s.UserId == request.UserId && s.AppId == app.Id).ToArrayAsync(cancellationToken);
+        var sessions = await _context
+            .Sessions
+            .Where(s => s.UserId == request.UserId && s.AppId == app.Id)
+            .ToArrayAsync(cancellationToken);
 
         if (sessions.Length >= 5)
         {
