@@ -14,18 +14,18 @@ using DB = Infrastructure.DataBase.Entities;
 
 namespace JWTProvider.Session.Commands;
 
-public class SessionCreateHandler : IRequestHandler<SessionCreateCommand, DB.Session>
+public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Session>
 {
     private readonly UsersDBContext _context;
-    private readonly ILogger<SessionCreateHandler> _logger;
+    private readonly ILogger<CreateSessionHandler> _logger;
 
-    public SessionCreateHandler(UsersDBContext context, ILogger<SessionCreateHandler> logger)
+    public CreateSessionHandler(UsersDBContext context, ILogger<CreateSessionHandler> logger)
     {
         _context = context;
         _logger = logger;
     }
 
-    public async Task<DB.Session> Handle(SessionCreateCommand request, CancellationToken cancellationToken)
+    public async Task<DB.Session> Handle(CreateSessionCommand request, CancellationToken cancellationToken)
     {
         var app = await _context.Apps.FirstOrDefaultAsync(cancellationToken);
         var operatingSystemType = await _context.OperatingSystemTypes.FirstOrDefaultAsync(cancellationToken);

@@ -36,7 +36,7 @@ namespace JWTProvider.Controllers
                 .CreateAcessToken(user)
                 .AcessToken;
 
-            var createSessionCommand = new SessionCreateCommand
+            var createSessionCommand = new CreateSessionCommand
             {
                 UserId = user.Id
             };

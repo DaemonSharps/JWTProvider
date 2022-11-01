@@ -9,7 +9,7 @@ using DB = Infrastructure.DataBase.Entities;
 
 namespace Handlers.Session;
 
-public class SessionCreateHandlerTests
+public class CreateSessionHandlerTests
 {
     [Fact]
     public async Task CreateNewSession()
@@ -17,8 +17,8 @@ public class SessionCreateHandlerTests
         //Arrange
         var dbContext = TestDBContext.CreateInMemoryContext();
         var dateBefore = DateTimeOffset.UtcNow;
-        var handler = new SessionCreateHandler(dbContext, null);
-        var command = new SessionCreateCommand
+        var handler = new CreateSessionHandler(dbContext, null);
+        var command = new CreateSessionCommand
         {
             UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f")
         };
@@ -60,8 +60,8 @@ public class SessionCreateHandlerTests
 
         dbContext.SaveChanges();
         var dateBefore = DateTimeOffset.UtcNow;
-        var handler = new SessionCreateHandler(dbContext, null);
-        var command = new SessionCreateCommand
+        var handler = new CreateSessionHandler(dbContext, null);
+        var command = new CreateSessionCommand
         {
             UserId = userId
         };
@@ -91,9 +91,9 @@ public class SessionCreateHandlerTests
         dbContext.Setup(d => d.OperatingSystemTypes).ReturnsDbSet(new[] { new DB.OperatingSystemType { } });
         dbContext.Setup(d => d.Sessions).ReturnsDbSet(new[] { new DB.Session { } });
 
-        var loggerMock = new Mock<ILogger<SessionCreateHandler>>();
-        var handler = new SessionCreateHandler(dbContext.Object, loggerMock.Object);
-        var command = new SessionCreateCommand
+        var loggerMock = new Mock<ILogger<CreateSessionHandler>>();
+        var handler = new CreateSessionHandler(dbContext.Object, loggerMock.Object);
+        var command = new CreateSessionCommand
         {
             UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f")
         };
