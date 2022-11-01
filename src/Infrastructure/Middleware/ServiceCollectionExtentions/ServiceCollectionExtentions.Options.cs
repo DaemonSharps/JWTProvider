@@ -9,6 +9,7 @@ namespace Infrastructure.Middleware.ServiceCollectionExtentions
         public static IServiceCollection AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddConfigurationOption<TokenOptions>(configuration, TokenOptions.Section);
+            services.AddConfigurationOption<SessionOptions>(configuration, SessionOptions.Section);
 
             return services;
         }

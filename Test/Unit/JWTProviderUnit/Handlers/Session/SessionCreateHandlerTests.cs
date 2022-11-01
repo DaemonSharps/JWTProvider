@@ -17,7 +17,7 @@ public class CreateSessionHandlerTests
         //Arrange
         var dbContext = TestDBContext.CreateInMemoryContext();
         var dateBefore = DateTimeOffset.UtcNow;
-        var handler = new CreateSessionHandler(dbContext, null);
+        var handler = new CreateSessionHandler(dbContext, null, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
             UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f")
@@ -60,7 +60,7 @@ public class CreateSessionHandlerTests
 
         dbContext.SaveChanges();
         var dateBefore = DateTimeOffset.UtcNow;
-        var handler = new CreateSessionHandler(dbContext, null);
+        var handler = new CreateSessionHandler(dbContext, null, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
             UserId = userId
@@ -92,7 +92,7 @@ public class CreateSessionHandlerTests
         dbContext.Setup(d => d.Sessions).ReturnsDbSet(new[] { new DB.Session { } });
 
         var loggerMock = new Mock<ILogger<CreateSessionHandler>>();
-        var handler = new CreateSessionHandler(dbContext.Object, loggerMock.Object);
+        var handler = new CreateSessionHandler(dbContext.Object, loggerMock.Object, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
             UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f")
