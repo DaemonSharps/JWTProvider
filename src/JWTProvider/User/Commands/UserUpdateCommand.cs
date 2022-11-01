@@ -8,6 +8,7 @@ namespace JWTProvider.User.Commands;
 
 public class UserUpdateCommand : IRequest<Infrastructure.DataBase.Entities.User>, IValidatableObject
 {
+    [EmailAddress]
     [SwaggerSchema(ReadOnly = true)]
     public virtual string Email { get; set; }
 

@@ -62,6 +62,23 @@ public class UsersController : BaseController
         return Ok();
     }
 
+    [HttpDelete, Command, Authorize]
+    [SwaggerOperation("Close user account")]
+    [SwaggerResponse(200, "Account close successfull")]
+    [SwaggerResponse(401, "Unauthorized")]
+    [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
+    public async Task<IActionResult> DeleteUser()
+    {
+        var command = new UserDeleteCommand
+        {
+            Email = User.GetEmail()
+        };
+
+        var result = await Mediator.Send(command);
+
+        return Ok();
+    }
+
     [HttpGet("pwd"), Querry, Authorize]
     public IActionResult GetUpdatePasswordUrl()
     {
