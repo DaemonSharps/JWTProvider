@@ -35,7 +35,7 @@ public class CreateSessionHandlerTests
         Assert.True(dateBefore < result.LastUpdate);
         Assert.True(dateAfter > result.CreationDate);
         Assert.True(dateAfter > result.LastUpdate);
-        Assert.Null(result.FinishDate);
+        Assert.NotNull(result.FinishDate);
     }
 
     [Fact]

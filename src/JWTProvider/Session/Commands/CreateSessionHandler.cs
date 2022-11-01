@@ -45,7 +45,8 @@ public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Ses
             UserId = request.UserId,
             IP = "0.0.0.0",
             AppId = app.Id,
-            OperatingSystemTypeId = operatingSystemType.Id
+            OperatingSystemTypeId = operatingSystemType.Id,
+            FinishDate = DateTimeOffset.UtcNow.AddDays(10)
         };
 
         _context.Add(session);
