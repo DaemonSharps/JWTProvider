@@ -7,7 +7,6 @@ using Infrastructure.DataBase.Entities;
 using Infrastructure.Middleware.Options;
 using JWTProvider.Models;
 using JWTProvider.Session.Commands;
-using JWTProvider.Token.Commands;
 using JWTProvider.User.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace JWTProvider.Controllers
 {
     [AllowAnonymous]
-    public class TokenController : BaseController
+    public class SessionController : BaseController
     {
         [HttpPost, Command]
         [SwaggerOperation("Get JsonWebToken")]

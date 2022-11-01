@@ -3,8 +3,9 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Infrastructure.DataBase.Entities;
 using JWTProvider.Models;
-using JWTProvider.Token.Commands;
+using JWTProvider.Session.Commands;
 using JWTProvider.User.Commands;
+using JWTProvider.User.Queries;
 using JWTProviderIntegration.Common;
 using JwtTest.Common;
 
@@ -14,13 +15,13 @@ namespace JWTProviderIntegration.Extentions
     {
         public static async Task<TokenModel> GetToken(this HttpClient client, User user, string password)
         {
-            var command = new GetTokenCommand
+            var command = new LoginUserCommand
             {
                 Email = user.Email,
                 Password = password
             };
 
-            var result = await client.PostAsJsonAsync("/token", command);
+            var result = await client.PostAsJsonAsync("/session", command);
             result.EnsureSuccessStatusCode();
 
             var tokenModel = await result.Content.ReadFromJsonAsync<TokenModel>();
@@ -36,12 +37,12 @@ namespace JWTProviderIntegration.Extentions
 
         public static async Task<TokenModel> CheckRefreshToken(this HttpClient client, User user, Guid refreshToken)
         {
-            var command = new UpdateTokenCommand
+            var command = new UpdateSessionCommand
             {
                 RefreshToken = refreshToken
             };
 
-            var result = await client.PutAsJsonAsync("/token", command);
+            var result = await client.PutAsJsonAsync("/session", command);
             result.EnsureSuccessStatusCode();
 
             var tokenModel = await result.Content.ReadFromJsonAsync<TokenModel>();

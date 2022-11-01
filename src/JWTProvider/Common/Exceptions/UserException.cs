@@ -30,4 +30,12 @@ namespace JWTProvider.Common.Exceptions
             : base(System.Net.HttpStatusCode.BadRequest, "USER_UPDATE_FAILED", errorMesage, innerException)
         { }
     }
+
+
+    public class LoginFailedException : HttpResponseException
+    {
+        public LoginFailedException(string errorMessage = null, Exception innerException = null)
+            : base(System.Net.HttpStatusCode.BadRequest, "LOGIN_FAILED", errorMessage, innerException)
+        { }
+    }
 }

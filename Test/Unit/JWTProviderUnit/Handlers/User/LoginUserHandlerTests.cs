@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Common.Exceptions;
 using JWTProvider.Common.Exceptions;
-using JWTProvider.Token.Commands;
 using JWTProvider.User.Queries;
 using DBUser = Infrastructure.DataBase.Entities.User;
 
