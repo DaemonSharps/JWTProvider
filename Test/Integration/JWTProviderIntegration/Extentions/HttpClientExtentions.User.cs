@@ -7,50 +7,49 @@ using JWTProvider.User.Commands;
 using JWTProviderIntegration.Common;
 using JwtTest.Common;
 
-namespace JWTProviderIntegration.Extentions
+namespace JWTProviderIntegration.Extentions;
+
+internal static partial class HttpClientExtentions
 {
-    internal static partial class HttpClientExtentions
+    public static async Task<TokenModel> UserRegistration(this HttpClient client, User user, string password)
     {
-        public static async Task<TokenModel> UserRegistration(this HttpClient client, User user, string password)
+        var command = new UserRegistrationCommand
         {
-            var command = new UserRegistrationCommand
-            {
-                Email = user.Email,
-                Password = password,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                MiddleName = user.MiddleName
-            };
-            var result = await client.PostAsJsonAsync("/user", command);
-            result.EnsureSuccessStatusCode();
-            var tokenModel = await result.Content.ReadFromJsonAsync<TokenModel>();
+            Email = user.Email,
+            Password = password,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            MiddleName = user.MiddleName
+        };
+        var result = await client.PostAsJsonAsync("/users", command);
+        result.EnsureSuccessStatusCode();
+        var tokenModel = await result.Content.ReadFromJsonAsync<TokenModel>();
 
-            Assert.NotNull(tokenModel);
-            var jsonWebToken = JWTAssert.IsJWT(tokenModel.AccessToken, TestTokenOptions.AccessKey, TestTokenOptions.Issuer);
-            JWTAssert.IsValidHeader(jsonWebToken);
-            JWTAssert.IsValidPayload(jsonWebToken, user, TestTokenOptions.Issuer);
-            Assert.NotNull(tokenModel.RefreshToken.ToString());
+        Assert.NotNull(tokenModel);
+        var jsonWebToken = JWTAssert.IsJWT(tokenModel.AccessToken, TestTokenOptions.AccessKey, TestTokenOptions.Issuer);
+        JWTAssert.IsValidHeader(jsonWebToken);
+        JWTAssert.IsValidPayload(jsonWebToken, user, TestTokenOptions.Issuer);
+        Assert.NotNull(tokenModel.RefreshToken.ToString());
 
-            return tokenModel;
-        }
+        return tokenModel;
+    }
 
-        public static async Task UpdateUser(this HttpClient client, User user, string accessToken)
+    public static async Task UpdateUser(this HttpClient client, User user, string accessToken)
+    {
+        var command = new UserUpdateCommand
         {
-            var command = new UserUpdateCommand
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                MiddleName = user.MiddleName
-            };
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            MiddleName = user.MiddleName
+        };
 
-            using var message = new HttpRequestMessage(HttpMethod.Put, new Uri("http://localhost/user"));
-            message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            message.Content = JsonContent.Create(command);
+        using var message = new HttpRequestMessage(HttpMethod.Put, new Uri("http://localhost/users"));
+        message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        message.Content = JsonContent.Create(command);
 
-            var result = await client.SendAsync(message);
-            result.EnsureSuccessStatusCode();
-        }
+        var result = await client.SendAsync(message);
+        result.EnsureSuccessStatusCode();
     }
 }
 
