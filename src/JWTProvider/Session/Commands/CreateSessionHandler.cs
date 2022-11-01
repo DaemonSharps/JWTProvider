@@ -5,11 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Common.Exceptions;
 using Infrastructure.DataBase.Context;
+using Infrastructure.Middleware.Options;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.User.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using DB = Infrastructure.DataBase.Entities;
 
 namespace JWTProvider.Session.Commands;
@@ -18,11 +20,16 @@ public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Ses
 {
     private readonly UsersDBContext _context;
     private readonly ILogger<CreateSessionHandler> _logger;
+    private readonly IOptions<SessionOptions> _options;
 
-    public CreateSessionHandler(UsersDBContext context, ILogger<CreateSessionHandler> logger)
+    public CreateSessionHandler(
+        UsersDBContext context,
+        ILogger<CreateSessionHandler> logger,
+        IOptions<SessionOptions> options)
     {
         _context = context;
         _logger = logger;
+        _options = options;
     }
 
     public async Task<DB.Session> Handle(CreateSessionCommand request, CancellationToken cancellationToken)
@@ -34,9 +41,10 @@ public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Ses
             .Where(s => s.UserId == request.UserId && s.AppId == app.Id)
             .ToArrayAsync(cancellationToken);
 
-        if (sessions.Length >= 5)
+        var maxSessionsCount = _options.Value.MaxSessionsCount;
+        if (sessions.Length >= maxSessionsCount)
         {
-            throw new CreateSessionException($"Max session count is limited: Max = 5, App = {app.Name}");
+            throw new CreateSessionException($"Max session count is limited: Max = {maxSessionsCount}, App = {app.Name}");
         }
 
         var session = new DB.Session
@@ -46,7 +54,7 @@ public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Ses
             IP = "0.0.0.0",
             AppId = app.Id,
             OperatingSystemTypeId = operatingSystemType.Id,
-            FinishDate = DateTimeOffset.UtcNow.AddDays(10)
+            FinishDate = DateTimeOffset.UtcNow.Add(_options.Value.Lifetime)
         };
 
         _context.Add(session);
