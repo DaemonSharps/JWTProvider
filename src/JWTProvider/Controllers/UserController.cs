@@ -42,9 +42,6 @@ namespace JWTProvider.Controllers
             };
             var session = await Mediator.Send(createSessionCommand);
 
-            //TODO: убрать использование кеша и перейти на сессии
-            cache.Set(session.RefreshToken, user.Email, RT.ExpiresDefault);
-
             return Ok(new TokenModel
             {
                 AccessToken = accessToken,
