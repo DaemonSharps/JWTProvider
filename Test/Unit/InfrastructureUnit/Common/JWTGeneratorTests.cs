@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Common;
-using Infrastructure.Entities;
+using Infrastructure.DataBase.Entities;
 using Infrastructure.Middleware;
 using Infrastructure.Middleware.Options;
 

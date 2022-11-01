@@ -13,7 +13,7 @@ namespace Handlers.User;
 public class UserRegistrationHandlerTests
 {
     [Fact]
-    public async Task UserExists_Throw()
+    public async Task UserExists_WithFinishDate_Throw()
     {
         //Arrange
         const string ExpectedErrorCode = "USER_EXISTS";
@@ -29,6 +29,60 @@ public class UserRegistrationHandlerTests
         //Assert
         var exception = await Assert.ThrowsAsync<UserExistsException>(() => result);
         HttpExceptionAssert.IsValidHttpException(exception, expectedStatusCode, ExpectedErrorCode, ExpectedErrorMessage);
+    }
+
+    [Theory]
+    [InlineData("fn", "mn", "ln")]
+    [InlineData(null, "mn", "ln")]
+    [InlineData("fn", null, "ln")]
+    [InlineData("fn", "mn", null)]
+    [InlineData(null, null, null)]
+    public async Task UserExists_WithFinishDate(string firstName, string middleName, string lastName)
+    {
+        //Arrange
+        const string Email = "t@mail.ru";
+        const string Password = "pw";
+        var dbContext = TestDBContext.CreateInMemoryContext();
+
+        var finishedUser = new DB.User
+        {
+            Email = Email,
+            FinishDate = DateTime.Now.AddDays(2)
+        };
+        dbContext.Users.Add(finishedUser);
+        await dbContext.SaveChangesAsync();
+
+        var handler = new UserRegistrationHandler(dbContext, null);
+        var command = new UserRegistrationCommand
+        {
+            Email = Email,
+            FirstName = firstName,
+            MiddleName = middleName,
+            LastName = lastName,
+            Password = Password
+        };
+        //Act
+        var result = await handler.Handle(command, default);
+        //Assert
+
+        command.WithDeepEqual(result)
+            .IgnoreDestinationProperty(u => u.Id)
+            .IgnoreDestinationProperty(u => u.Password)
+            .IgnoreDestinationProperty(u => u.FullName)
+            .IgnoreDestinationProperty(u => u.Sessions)
+            .IgnoreDestinationProperty(u => u.LastUpdate)
+            .IgnoreDestinationProperty(u => u.CreationDate)
+            .IgnoreDestinationProperty(u => u.FinishDate)
+            .Assert();
+
+        Assert.Equal(result.FullName, string.Join(' ', command.FirstName, command.MiddleName, command.LastName));
+        Assert.True(dbContext.Users.Contains(result));
+
+        var passwordDB = result.Password;
+        Assert.True(dbContext.Passwords.Contains(passwordDB));
+        Assert.Equal(result.Id, passwordDB.UserId);
+        var expectedHash = result.HashPassword(command.Password);
+        Assert.Equal(expectedHash, passwordDB.Hash);
     }
 
     [Theory]

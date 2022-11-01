@@ -4,15 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.DataBase.Entities;
 
-public class Session
+public class Session : Timestamp
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid RefreshToken { get; set; }
 
+    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid UserId { get; set; }
 
@@ -26,16 +28,7 @@ public class Session
     public string IP { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public Guid OperationSystemTypeId { get; set; }
+    public Guid OperatingSystemTypeId { get; set; }
 
-    public OperationSystemType OperationSystemType { get; set; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTimeOffset CreationDate { get; set; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTimeOffset LastUpdate { get; set; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public DateTimeOffset FinishDate { get; } = DateTimeOffset.UtcNow.AddDays(5);
+    public OperatingSystemType OperatingSystemType { get; set; }
 }

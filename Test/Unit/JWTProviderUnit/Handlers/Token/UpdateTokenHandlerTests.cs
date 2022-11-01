@@ -30,7 +30,7 @@ public class UpdateTokenHandlerTests
         Assert.Equal(result.RefreshToken, key);
         var token = JWTAssert.IsJWT(result.AccessToken, TestTokenOptions.TestAccesKey, TestTokenOptions.TestIssuer);
         JWTAssert.IsValidHeader(token);
-        var user = new Infrastructure.Entities.User { Email = (string)expectedCacheValue };
+        var user = new Infrastructure.DataBase.Entities.User { Email = (string)expectedCacheValue };
         JWTAssert.IsValidPayload(token, user, TestTokenOptions.TestIssuer);
     }
 
@@ -38,7 +38,7 @@ public class UpdateTokenHandlerTests
     public async Task UnknownToken()
     {
         //Arrange
-        const System.Net.HttpStatusCode expectedStatusCode = System.Net.HttpStatusCode.BadRequest;
+        const System.Net.HttpStatusCode ExpectedStatusCode = System.Net.HttpStatusCode.BadRequest;
         const string ExpectedErrorCode = "INVALID_REFRESH_TOKEN";
         const string ExpectedErrorMessage = "Invalid token";
         var expectedCacheKey = Guid.NewGuid();
@@ -56,6 +56,6 @@ public class UpdateTokenHandlerTests
         var result = handler.Handle(command, default);
         //Assert
         var exception = await Assert.ThrowsAsync<InvalidRefreshTokenException>(() => result);
-        HttpExceptionAssert.IsValidHttpException(exception, expectedStatusCode, ExpectedErrorCode, ExpectedErrorMessage);
+        HttpExceptionAssert.IsValidHttpException(exception, ExpectedStatusCode, ExpectedErrorCode, ExpectedErrorMessage);
     }
 }

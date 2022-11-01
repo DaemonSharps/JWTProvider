@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.DataBase.Entities;
 
-public class OperationSystemType
+public class OperatingSystemType
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

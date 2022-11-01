@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Infrastructure.Constants;
-using Infrastructure.Entities;
+using Infrastructure.DataBase.Entities;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 

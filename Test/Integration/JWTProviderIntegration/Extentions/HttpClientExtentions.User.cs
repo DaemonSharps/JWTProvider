@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using Infrastructure.Entities;
+using Infrastructure.DataBase.Entities;
 using JWTProvider.Models;
 using JWTProvider.User.Commands;
 using JWTProviderIntegration.Common;

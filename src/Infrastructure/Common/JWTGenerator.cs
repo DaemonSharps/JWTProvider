@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Infrastructure.Constants;
-using Infrastructure.Entities;
+using Infrastructure.DataBase.Entities;
 using Infrastructure.Middleware;
 using Infrastructure.Middleware.Options;
 using Microsoft.IdentityModel.Tokens;
