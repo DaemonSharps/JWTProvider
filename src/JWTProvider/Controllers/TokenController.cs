@@ -8,6 +8,7 @@ using Infrastructure.Middleware.Options;
 using JWTProvider.Models;
 using JWTProvider.Session.Commands;
 using JWTProvider.Token.Commands;
+using JWTProvider.User.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -22,9 +23,28 @@ namespace JWTProvider.Controllers
         [SwaggerOperation("Get JsonWebToken")]
         [SwaggerResponse(200, "Authorization successsful", typeof(TokenModel))]
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
-        public async Task<IActionResult> GetToken(GetTokenCommand request)
+        public async Task<IActionResult> GetToken(LoginUserCommand command, [FromServices] IOptions<TokenOptions> options)
         {
-            var model = await Mediator.Send(request);
+            var loggedUser = await Mediator.Send(command);
+
+            var createSessionCommand = new CreateSessionCommand
+            {
+                UserId = loggedUser.Id
+            };
+
+            var session = await Mediator.Send(createSessionCommand);
+
+            var accessToken = JWTGenerator
+                    .GetGenerator(options.Value)
+                    .CreateAcessToken(session.User)
+                    .AcessToken;
+
+            var model = new TokenModel
+            {
+                RefreshToken = session.RefreshToken,
+                AccessToken = accessToken
+            };
+
             return Ok(model);
         }
 
@@ -34,29 +54,18 @@ namespace JWTProvider.Controllers
         [SwaggerResponse(400, "An error was occured", typeof(ApiError))]
         public async Task<IActionResult> CheckRefreshToken(UpdateSessionCommand command, [FromServices] IOptions<TokenOptions> options)
         {
-            string accessToken = null;
-            Guid? refreshToken = null;
-            try
-            {
-                var session = await Mediator.Send(command);
+            var session = await Mediator.Send(command);
 
-                refreshToken = session.RefreshToken;
-                accessToken = JWTGenerator
-                    .GetGenerator(options.Value)
-                    .CreateAcessToken(session.User)
-                    .AcessToken;
-            }
-            catch (System.Exception ex)
-            {
+            var refreshToken = session.RefreshToken;
+            var accessToken = JWTGenerator
+                .GetGenerator(options.Value)
+                .CreateAcessToken(session.User)
+                .AcessToken;
 
-            }
-
-            //TODO: избавиться от использования UpdateTokenHandler
-            var tokenModel = await Mediator.Send(new UpdateTokenCommand { RefreshToken = command.RefreshToken });
             var model = new TokenModel
             {
-                RefreshToken = tokenModel.RefreshToken,
-                AccessToken = accessToken ?? tokenModel.AccessToken
+                RefreshToken = session.RefreshToken,
+                AccessToken = accessToken
             };
             return Ok(model);
         }
