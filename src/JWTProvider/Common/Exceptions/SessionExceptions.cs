@@ -18,3 +18,10 @@ public class CreateSessionException : SessionException
     { }
 }
 
+public class UpdateSessionException : SessionException
+{
+    public UpdateSessionException(string errorMessage = null, Exception innerException = null)
+        : base("UPDATE_SESSION_FAILED", errorMessage, innerException)
+    { }
+}
+
