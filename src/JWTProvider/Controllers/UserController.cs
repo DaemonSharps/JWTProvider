@@ -7,6 +7,7 @@ using Infrastructure.Extentions;
 using Infrastructure.Middleware;
 using Infrastructure.Middleware.Options;
 using JWTProvider.Models;
+using JWTProvider.Session.Commands;
 using JWTProvider.User.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,14 +35,20 @@ namespace JWTProvider.Controllers
                 .GetGenerator(options.Value)
                 .CreateAcessToken(user)
                 .AcessToken;
-            var refreshToken = Guid.NewGuid();
 
-            cache.Set(refreshToken, user.Email, RT.ExpiresDefault);
+            var createSessionCommand = new SessionCreateCommand
+            {
+                UserId = user.Id
+            };
+            var session = await Mediator.Send(createSessionCommand);
+
+            //TODO: убрать использование кеша и перейти на сессии
+            cache.Set(session.RefreshToken, user.Email, RT.ExpiresDefault);
 
             return Ok(new TokenModel
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken
+                RefreshToken = session.RefreshToken
             });
         }
 
