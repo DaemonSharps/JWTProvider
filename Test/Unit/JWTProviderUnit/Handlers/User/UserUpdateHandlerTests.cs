@@ -66,7 +66,7 @@ namespace Handlers.User
         [InlineData("fn", null, "ln")]
         [InlineData("fn", "mn", null)]
         [InlineData(null, null, null)]
-        public async void ExistingUser(string firstName, string middleName, string lastName)
+        public async void ExistingUser(string firstName, string patronymic, string lastName)
         {
             //Arrange
             var dbContext = TestDBContext.CreateInMemoryContext();
@@ -75,15 +75,15 @@ namespace Handlers.User
             {
                 Email = "test@mail.ru",
                 FirstName = firstName,
-                MiddleName = middleName,
-                LastName = lastName
+                LastName = lastName,
+                Patronymic = patronymic,
             };
             //Act
             var result = await handler.Handle(command, default);
             //Assert
             command.FirstName ??= "Денис";
-            command.MiddleName ??= "Смирнов";
-            command.LastName ??= "Алексеевич";
+            command.LastName ??= "Смирнов";
+            command.Patronymic ??= "Алексеевич";
             result.WithDeepEqual(command)
                 .IgnoreSourceProperty(u => u.Password)
                 .IgnoreSourceProperty(u => u.FullName)
@@ -94,7 +94,7 @@ namespace Handlers.User
                 .IgnoreSourceProperty(u => u.FinishDate)
                 .Assert();
 
-            var fullName = string.Join(" ", command.FirstName, command.MiddleName, command.LastName);
+            var fullName = string.Join(" ", command.FirstName, command.LastName, command.Patronymic);
             Assert.Equal(fullName, result.FullName);
 
             var dbUser = dbContext.Users.Single();

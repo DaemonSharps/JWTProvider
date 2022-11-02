@@ -15,7 +15,7 @@ public class JWTGeneratorTests
     [InlineData("test@mail.ru", null, null, "middleName")]
     [InlineData("test@mail.ru", null, "lastName", null)]
     [InlineData("test@mail.ru", null, null, null)]
-    public void GenerateFromUser(string email, string fName, string lName, string mName)
+    public void GenerateFromUser(string email, string fName, string lName, string patronymic)
     {
         //Arrange
         const string AccessKey = "test_access_key_numbers_0001119990019910199110110";
@@ -27,7 +27,7 @@ public class JWTGeneratorTests
             Email = email,
             FirstName = fName,
             LastName = lName,
-            MiddleName = mName
+            Patronymic = patronymic
         };
         //Act
         generator.CreateAcessToken(user);

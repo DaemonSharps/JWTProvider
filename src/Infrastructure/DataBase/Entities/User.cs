@@ -14,15 +14,18 @@ public class User : Timestamp
     [Required, EmailAddress]
     public string Email { get; set; }
 
+    /// <summary> Имя </summary>
     public string FirstName { get; set; }
 
-    public string MiddleName { get; set; }
-
+    /// <summary> Фамилия </summary>
     public string LastName { get; set; }
+
+    /// <summary> Отчество </summary>
+    public string Patronymic { get; set; }
 
     [NotMapped]
     public string FullName
-        => string.Join(' ', FirstName, MiddleName, LastName);
+        => string.Join(' ', FirstName, LastName, Patronymic);
 
     [Required]
     public Password Password { get; set; }

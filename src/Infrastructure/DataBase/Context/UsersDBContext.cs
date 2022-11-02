@@ -87,8 +87,8 @@ namespace Infrastructure.DataBase.Context
                 Id = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
                 Email = "test@mail.ru",
                 FirstName = "Денис",
-                MiddleName = "Смирнов",
-                LastName = "Алексеевич",
+                LastName = "Смирнов",
+                Patronymic = "Алексеевич",
                 FinishDate = null
             };
             var pwd = new Password

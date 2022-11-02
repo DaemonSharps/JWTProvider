@@ -19,7 +19,7 @@ public class BusinessLogicTests : ApiTestBase
             Email = "t@mail.ru",
             FirstName = "fn",
             LastName = "ln",
-            MiddleName = "mn"
+            Patronymic = "mn"
         };
         const string ExpectedPassword = "t";
         var registrationResult = await Client.UserRegistration(expectedUser, ExpectedPassword);
@@ -36,8 +36,8 @@ public class BusinessLogicTests : ApiTestBase
         {
             Email = "test@mail.ru",
             FirstName = "Денис",
-            MiddleName = "Смирнов",
-            LastName = "Алексеевич"
+            LastName = "Смирнов",
+            Patronymic = "Алексеевич"
         };
 
         const string ExpectedPassword = "test";
@@ -57,16 +57,16 @@ public class BusinessLogicTests : ApiTestBase
             Email = "t2@mail.ru",
             FirstName = "fn",
             LastName = "ln",
-            MiddleName = "mn"
+            Patronymic = "mn"
         };
         const string ExpectedPassword = "t";
         var registrationResult = await Client.UserRegistration(expectedUser, ExpectedPassword);
 
         var updateTokenResult = await Client.CheckRefreshToken(expectedUser, registrationResult.RefreshToken);
 
-        expectedUser.LastName = "different_ln";
-        expectedUser.MiddleName = "different_mn";
         expectedUser.FirstName = "different_fn";
+        expectedUser.LastName = "different_ln";
+        expectedUser.Patronymic = "different_mn";
         await Client.UpdateUser(expectedUser, updateTokenResult.AccessToken);
 
         Thread.Sleep(TimeSpan.FromSeconds(3));
@@ -81,8 +81,8 @@ public class BusinessLogicTests : ApiTestBase
         {
             Email = "test@mail.ru",
             FirstName = "Денис",
-            MiddleName = "Смирнов",
-            LastName = "Алексеевич"
+            LastName = "Смирнов",
+            Patronymic = "Алексеевич"
         };
 
         const string ExpectedPassword = "test";
@@ -90,9 +90,9 @@ public class BusinessLogicTests : ApiTestBase
 
         var updateTokenResult = await Client.CheckRefreshToken(expectedUser, loginResult.RefreshToken);
 
-        expectedUser.LastName = "different_ln";
-        expectedUser.MiddleName = "different_mn";
         expectedUser.FirstName = "different_fn";
+        expectedUser.LastName = "different_ln";
+        expectedUser.Patronymic = "different_mn";
         await Client.UpdateUser(expectedUser, updateTokenResult.AccessToken);
 
         Thread.Sleep(TimeSpan.FromSeconds(3));
@@ -106,9 +106,9 @@ public class BusinessLogicTests : ApiTestBase
         var expectedUser = new User
         {
             Email = "t1@mail.ru",
-            FirstName = "t1",
-            MiddleName = "t1",
-            LastName = "t1"
+            FirstName = "fn",
+            LastName = "ln",
+            Patronymic = "mn"
         };
         const string ExpectedPassword = "test";
 
@@ -128,8 +128,8 @@ public class BusinessLogicTests : ApiTestBase
         {
             Email = "test@mail.ru",
             FirstName = "Денис",
-            MiddleName = "Смирнов",
-            LastName = "Алексеевич"
+            LastName = "Смирнов",
+            Patronymic = "Алексеевич"
         };
 
         const string ExpectedPassword = "test";

@@ -37,7 +37,7 @@ public class UserRegistrationHandlerTests
     [InlineData("fn", null, "ln")]
     [InlineData("fn", "mn", null)]
     [InlineData(null, null, null)]
-    public async Task UserExists_WithFinishDate(string firstName, string middleName, string lastName)
+    public async Task UserExists_WithFinishDate(string firstName, string patronymic, string lastName)
     {
         //Arrange
         const string Email = "t@mail.ru";
@@ -57,8 +57,8 @@ public class UserRegistrationHandlerTests
         {
             Email = Email,
             FirstName = firstName,
-            MiddleName = middleName,
             LastName = lastName,
+            Patronymic = patronymic,
             Password = Password
         };
         //Act
@@ -75,7 +75,7 @@ public class UserRegistrationHandlerTests
             .IgnoreDestinationProperty(u => u.FinishDate)
             .Assert();
 
-        Assert.Equal(result.FullName, string.Join(' ', command.FirstName, command.MiddleName, command.LastName));
+        Assert.Equal(result.FullName, string.Join(' ', command.FirstName, command.LastName, command.Patronymic));
         Assert.True(dbContext.Users.Contains(result));
 
         var passwordDB = result.Password;
@@ -91,7 +91,7 @@ public class UserRegistrationHandlerTests
     [InlineData("fn", null, "ln")]
     [InlineData("fn", "mn", null)]
     [InlineData(null, null, null)]
-    public async Task NewUser(string firstName, string middleName, string lastName)
+    public async Task NewUser(string firstName, string patronymic, string lastName)
     {
         //Arrange
         const string Email = "t@mail.ru";
@@ -102,8 +102,8 @@ public class UserRegistrationHandlerTests
         {
             Email = Email,
             FirstName = firstName,
-            MiddleName = middleName,
             LastName = lastName,
+            Patronymic = patronymic,
             Password = Password
         };
         //Act
@@ -120,7 +120,7 @@ public class UserRegistrationHandlerTests
             .IgnoreDestinationProperty(u => u.FinishDate)
             .Assert();
 
-        Assert.Equal(result.FullName, string.Join(' ', command.FirstName, command.MiddleName, command.LastName));
+        Assert.Equal(result.FullName, string.Join(' ', command.FirstName, command.LastName, command.Patronymic));
         Assert.True(dbContext.Users.Contains(result));
 
         var passwordDB = result.Password;

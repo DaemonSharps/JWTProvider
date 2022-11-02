@@ -52,7 +52,7 @@ public class JWTGenerator
         {
             new (JwtRegisteredClaimNames.Email, user.Email)
         };
-        if (!string.IsNullOrEmpty(user.MiddleName)) claims.Add(new(JWTClaimKeys.MiddleName, user.MiddleName));
+        if (!string.IsNullOrEmpty(user.Patronymic)) claims.Add(new(JWTClaimKeys.Patronymic, user.Patronymic));
         if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
         if (!string.IsNullOrEmpty(user.FirstName)) claims.Add(new(JwtRegisteredClaimNames.GivenName, user.FirstName));
 
