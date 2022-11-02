@@ -34,26 +34,26 @@ public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Ses
 
     public async Task<DB.Session> Handle(CreateSessionCommand request, CancellationToken cancellationToken)
     {
-        var app = await _context.Apps.FirstOrDefaultAsync(cancellationToken);
-        var operatingSystemType = await _context.OperatingSystemTypes.FirstOrDefaultAsync(cancellationToken);
         var sessions = await _context
             .Sessions
-            .Where(s => s.UserId == request.UserId && s.AppId == app.Id)
+            .Include(s => s.App)
+            .Where(s => s.UserId == request.UserId && s.AppId == request.UserAgentInfo.AppId)
             .ToArrayAsync(cancellationToken);
 
         var maxSessionsCount = _options.Value.MaxSessionsCount;
         if (sessions.Length >= maxSessionsCount)
         {
-            throw new CreateSessionException($"Max session count is limited: Max = {maxSessionsCount}, App = {app.Name}");
+            var appCode = sessions.First().App.Code;
+            throw new CreateSessionException($"Max session count is limited: Max = {maxSessionsCount}, App = {appCode}");
         }
 
         var session = new DB.Session
         {
             RefreshToken = Guid.NewGuid(),
             UserId = request.UserId,
-            IP = "0.0.0.0",
-            AppId = app.Id,
-            OperatingSystemTypeId = operatingSystemType.Id,
+            IP = request.UserAgentInfo.IpAddress,
+            AppId = request.UserAgentInfo.AppId,
+            OperatingSystemTypeId = request.UserAgentInfo.OperatingSystemTypeId,
             FinishDate = DateTimeOffset.UtcNow.Add(_options.Value.Lifetime)
         };
 
@@ -65,7 +65,7 @@ public class CreateSessionHandler : IRequestHandler<CreateSessionCommand, DB.Ses
         catch (DbUpdateException ex)
         {
             var jsonRequest = JsonSerializer.Serialize(request);
-            _logger.LogError(ex, "Create session failed. Handler request: {JsonRequest}", request);
+            _logger.LogError(ex, "Create session failed. Handler request: {JsonRequest}", jsonRequest);
             throw new CreateSessionException("DB error", ex);
         }
 

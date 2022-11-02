@@ -57,7 +57,7 @@ namespace Handlers.User
             var exception = await Assert.ThrowsAsync<UserUpdateException>(() => action);
             HttpExceptionAssert.IsValidHttpException(exception, expectedStatusCode, ExpectedErrorCode, ExpectedErrorMessage);
             var invocation = loggerMock.Invocations.Single();
-            LoggerAssert.HasLogError(invocation, $"Update user {TestEmail} failed", innerException);
+            LoggerAssert.HasLogError(invocation, "Update user failed. Handler request:", innerException);
         }
 
         [Theory]

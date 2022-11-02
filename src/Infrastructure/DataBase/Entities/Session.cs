@@ -21,14 +21,14 @@ public class Session : Timestamp
     public User User { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public Guid AppId { get; set; }
+    public Guid? AppId { get; set; }
 
     public App App { get; set; }
 
     public string IP { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public Guid OperatingSystemTypeId { get; set; }
+    public Guid? OperatingSystemTypeId { get; set; }
 
     public OperatingSystemType OperatingSystemType { get; set; }
 }
