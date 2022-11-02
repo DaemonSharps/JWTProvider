@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.DataBase;
 using Infrastructure.DataBase.Context;
@@ -38,7 +39,8 @@ public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, DB.User>
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, $"Update user {command.Email} failed", command);
+            var jsonRequest = JsonSerializer.Serialize(command);
+            _logger.LogError(ex, "Update user failed. Handler request: {jsonRequest}", jsonRequest);
             throw new UserUpdateException("DB error", ex);
         }
 

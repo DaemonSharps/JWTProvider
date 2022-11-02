@@ -26,9 +26,16 @@ public class SessionsController : BaseController
     {
         var loggedUser = await Mediator.Send(command);
 
+        var getAgentInfoCommand = new UploadUserAgentInfoCommand
+        {
+            HttpContext = Request.HttpContext
+        };
+
+        var userAgentInfoDB = await Mediator.Send(getAgentInfoCommand);
         var createSessionCommand = new CreateSessionCommand
         {
-            UserId = loggedUser.Id
+            UserId = loggedUser.Id,
+            UserAgentInfo = userAgentInfoDB
         };
 
         var session = await Mediator.Send(createSessionCommand);

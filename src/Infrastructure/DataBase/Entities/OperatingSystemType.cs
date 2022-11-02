@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Infrastructure.DataBase.Interfaces;
 
 namespace Infrastructure.DataBase.Entities;
 
-public class OperatingSystemType
+public class OperatingSystemType : ITypeEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

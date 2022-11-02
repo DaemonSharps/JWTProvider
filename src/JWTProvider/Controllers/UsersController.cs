@@ -31,16 +31,24 @@ public class UsersController : BaseController
     {
         var user = await Mediator.Send(command);
 
+        var getAgentInfoCommand = new UploadUserAgentInfoCommand
+        {
+            HttpContext = Request.HttpContext
+        };
+
+        var userAgentInfoDB = await Mediator.Send(getAgentInfoCommand);
+        var createSessionCommand = new CreateSessionCommand
+        {
+            UserId = user.Id,
+            UserAgentInfo = userAgentInfoDB
+        };
+
+        var session = await Mediator.Send(createSessionCommand);
+
         var accessToken = JWTGenerator
             .GetGenerator(options.Value)
             .CreateAcessToken(user)
             .AcessToken;
-
-        var createSessionCommand = new CreateSessionCommand
-        {
-            UserId = user.Id
-        };
-        var session = await Mediator.Send(createSessionCommand);
 
         return Ok(new TokenModel
         {

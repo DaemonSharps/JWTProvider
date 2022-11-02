@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MyCSharp.HttpUserAgentParser.AspNetCore.DependencyInjection;
+using MyCSharp.HttpUserAgentParser.MemoryCache.DependencyInjection;
 
 namespace JWTProvider;
 
@@ -36,6 +38,10 @@ public class Startup
         services.AddRouting(ops => ops.LowercaseUrls = true);
         services.AddSwagger();
         services.AddConfigurationOptions(Configuration);
+
+        services
+            .AddHttpUserAgentMemoryCachedParser()
+            .AddHttpUserAgentParserAccessor();
 
         services.AddMediatR(typeof(Startup));
         services.AddCors();

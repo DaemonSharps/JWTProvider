@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.DataBase.Entities;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Session.Commands;
 using JWTProvider.User.Commands;
@@ -20,7 +21,13 @@ public class CreateSessionHandlerTests
         var handler = new CreateSessionHandler(dbContext, null, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f")
+            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserAgentInfo = new UserAgentDBEntries
+            {
+                AppId = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d"),
+                IpAddress = "0.0.0.0",
+                OperatingSystemTypeId = new Guid("7486becb-b36c-4e79-9b1a-a0e49240ae3c")
+            }
         };
         //Act
         var result = await handler.Handle(command, default);
@@ -29,8 +36,8 @@ public class CreateSessionHandlerTests
         var dateAfter = DateTimeOffset.UtcNow;
         Assert.Equal(command.UserId, result.UserId);
         Assert.NotEmpty(result.RefreshToken.ToString());
-        Assert.NotEmpty(result.OperatingSystemTypeId.ToString());
-        Assert.NotEmpty(result.AppId.ToString());
+        Assert.Equal(command.UserAgentInfo.OperatingSystemTypeId, result.OperatingSystemTypeId);
+        Assert.Equal(command.UserAgentInfo.AppId, result.AppId);
         Assert.True(dateBefore < result.CreationDate);
         Assert.True(dateBefore < result.LastUpdate);
         Assert.True(dateAfter > result.CreationDate);
@@ -63,7 +70,14 @@ public class CreateSessionHandlerTests
         var handler = new CreateSessionHandler(dbContext, null, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
-            UserId = userId
+            UserId = userId,
+            UserAgentInfo = new UserAgentDBEntries
+            {
+                AppId = appId,
+                AppTypeId = Guid.NewGuid(),
+                IpAddress = "0.0.0.0",
+                OperatingSystemTypeId = Guid.NewGuid()
+            }
         };
         //Act
         var resultTask = handler.Handle(command, default);
@@ -95,7 +109,14 @@ public class CreateSessionHandlerTests
         var handler = new CreateSessionHandler(dbContext.Object, loggerMock.Object, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f")
+            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserAgentInfo = new UserAgentDBEntries
+            {
+                AppId = Guid.NewGuid(),
+                AppTypeId = Guid.NewGuid(),
+                IpAddress = "0.0.0.0",
+                OperatingSystemTypeId = Guid.NewGuid()
+            }
         };
         //Act
         var result = handler.Handle(command, default);
