@@ -62,7 +62,6 @@ public class SessionsController : BaseController
     {
         var session = await Mediator.Send(command);
 
-        var refreshToken = session.RefreshToken;
         var accessToken = JWTGenerator
             .GetGenerator(options.Value)
             .CreateAcessToken(session.User)
