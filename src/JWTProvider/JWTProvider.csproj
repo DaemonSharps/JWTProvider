@@ -15,8 +15,16 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.10" />
+		<PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="2.0.1" />
+		<PackageReference Include="MyCSharp.HttpUserAgentParser" Version="2.0.1" />
+		<PackageReference Include="MyCSharp.HttpUserAgentParser.MemoryCache" Version="2.0.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="MyCSharp.HttpUserAgentParser.AspNetCore" />
+	  <None Remove="MyCSharp.HttpUserAgentParser" />
+	  <None Remove="MyCSharp.HttpUserAgentParser.MemoryCache" />
 	</ItemGroup>
 </Project>
