@@ -51,5 +51,20 @@ internal static partial class HttpClientExtentions
         var result = await client.SendAsync(message);
         result.EnsureSuccessStatusCode();
     }
+
+    public static async Task DeleteUser(this HttpClient client, string email, string accessToken)
+    {
+        var command = new UserDeleteCommand
+        {
+            Email = email
+        };
+
+        using var message = new HttpRequestMessage(HttpMethod.Delete, new Uri("http://localhost/users"));
+        message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        message.Content = JsonContent.Create(command);
+
+        var result = await client.SendAsync(message);
+        result.EnsureSuccessStatusCode();
+    }
 }
 

@@ -99,5 +99,48 @@ public class BusinessLogicTests : ApiTestBase
         var updateTokenResultAfterUserUpdate = await Client.CheckRefreshToken(expectedUser, updateTokenResult.RefreshToken);
         Assert.NotEqual(updateTokenResult.AccessToken, updateTokenResultAfterUserUpdate.AccessToken);
     }
+
+    [Fact]
+    public async Task DeleteExistingUser()
+    {
+        var expectedUser = new User
+        {
+            Email = "t1@mail.ru",
+            FirstName = "t1",
+            MiddleName = "t1",
+            LastName = "t1"
+        };
+        const string ExpectedPassword = "test";
+
+        var loginResult = await Client.UserRegistration(expectedUser, ExpectedPassword);
+
+        await Client.DeleteUser(expectedUser.Email, loginResult.AccessToken);
+
+        Thread.Sleep(TimeSpan.FromSeconds(3));
+        var checkRefreshTokenTask = Client.CheckRefreshToken(expectedUser, loginResult.RefreshToken);
+        await Assert.ThrowsAsync<HttpRequestException>(() => checkRefreshTokenTask);
+    }
+
+    [Fact]
+    public async Task DeleteExistingUser_AndRegister()
+    {
+        var expectedUser = new User
+        {
+            Email = "test@mail.ru",
+            FirstName = "Денис",
+            MiddleName = "Смирнов",
+            LastName = "Алексеевич"
+        };
+
+        const string ExpectedPassword = "test";
+
+        var loginResult = await Client.GetToken(expectedUser, ExpectedPassword);
+
+        await Client.DeleteUser(expectedUser.Email, loginResult.AccessToken);
+
+        var userRegistrationResult = await Client.UserRegistration(expectedUser, ExpectedPassword);
+
+        await Client.CheckRefreshToken(expectedUser, userRegistrationResult.RefreshToken);
+    }
 }
 
