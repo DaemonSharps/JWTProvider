@@ -47,7 +47,7 @@ public class UserDeleteHandler : IRequestHandler<UserDeleteCommand, DB.User>
         catch (DbUpdateException ex)
         {
             var jsonRequest = JsonSerializer.Serialize(request);
-            _logger.LogError(ex, "Close user failed. Handler request: {JsonRequest}", request);
+            _logger.LogError(ex, "Close user failed. Handler request: {JsonRequest}", jsonRequest);
             throw new UserUpdateException("DB error", ex);
         }
 

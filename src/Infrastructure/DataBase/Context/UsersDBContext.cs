@@ -107,7 +107,7 @@ namespace Infrastructure.DataBase.Context
             {
                 Id = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d"),
                 AppTypeId = appType.Id,
-                Name = "Yandex"
+                Code = "Yandex"
             };
 
             var operatingSystemType = new OperatingSystemType

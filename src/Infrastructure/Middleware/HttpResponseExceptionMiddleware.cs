@@ -28,8 +28,8 @@ namespace Infrastructure.Middleware
             {
                 context.Response.Clear();
                 context.Response.StatusCode = (int)ex.StatusCode;
-                await context.Response.WriteAsJsonAsync(ex.Error);
                 context.Response.ContentType = ex.ContentType;
+                await context.Response.WriteAsJsonAsync(ex.Error);
 
                 if (ex.InnerException != null)
                 {

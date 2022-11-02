@@ -43,7 +43,7 @@ public class UpdateSessionHandler : IRequestHandler<UpdateSessionCommand, DB.Ses
         catch (DbUpdateException ex)
         {
             var jsonRequest = JsonSerializer.Serialize(request);
-            _logger.LogError(ex, "Update session failed. Handler request: {JsonRequest}", request);
+            _logger.LogError(ex, "Update session failed. Handler request: {JsonRequest}", jsonRequest);
             throw new UpdateSessionException("DB error", ex);
         }
         return currentSession;
