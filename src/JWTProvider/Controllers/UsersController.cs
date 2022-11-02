@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
-using RT = Infrastructure.Constants.RefreshToken;
 
 namespace JWTProvider.Controllers;
 

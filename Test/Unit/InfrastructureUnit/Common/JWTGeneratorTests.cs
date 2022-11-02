@@ -20,7 +20,8 @@ public class JWTGeneratorTests
         //Arrange
         const string AccessKey = "test_access_key_numbers_0001119990019910199110110";
         const string Issuer = "tokenIssuer";
-        var generator = JWTGenerator.GetGenerator(AccessKey, Issuer);
+        var lifetime = TimeSpan.Parse("00:05:00");
+        var generator = JWTGenerator.GetGenerator(AccessKey, Issuer, lifetime);
         var user = new User
         {
             Email = email,
@@ -51,7 +52,8 @@ public class JWTGeneratorTests
         var options = new TokenOptions
         {
             AccessKey = accessKey,
-            Issuer = issuer
+            Issuer = issuer,
+            Lifetime = TimeSpan.Parse("00:05:00")
         };
         var callConstructor = () => JWTGenerator.GetGenerator(options);
         //Act
