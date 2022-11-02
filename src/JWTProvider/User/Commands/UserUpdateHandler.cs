@@ -30,8 +30,8 @@ public class UserUpdateHandler : IRequestHandler<UserUpdateCommand, DB.User>
         if (user is null) throw new UserNotFoundException();
 
         user.FirstName = command.FirstName ?? user.FirstName;
-        user.MiddleName = command.MiddleName ?? user.MiddleName;
         user.LastName = command.LastName ?? user.LastName;
+        user.Patronymic = command.Patronymic ?? user.Patronymic;
 
         try
         {

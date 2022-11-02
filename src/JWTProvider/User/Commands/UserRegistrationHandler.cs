@@ -33,8 +33,8 @@ public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, 
             {
                 Email = request.Email,
                 FirstName = request.FirstName,
-                MiddleName = request.MiddleName,
-                LastName = request.LastName
+                LastName = request.LastName,
+                Patronymic = request.Patronymic,
             };
 
             _context.Add(user);
@@ -43,8 +43,8 @@ public class UserRegistrationHandler : IRequestHandler<UserRegistrationCommand, 
         {
             user.FinishDate = null;
             user.FirstName = request.FirstName;
-            user.MiddleName = request.MiddleName;
             user.LastName = request.LastName;
+            user.Patronymic = request.Patronymic;
 
             _context.Update(user);
         }

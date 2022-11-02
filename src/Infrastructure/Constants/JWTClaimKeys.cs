@@ -2,6 +2,6 @@
 {
     public struct JWTClaimKeys
     {
-        public const string MiddleName = "middle_name";
+        public const string Patronymic = "patronymic";
     }
 }

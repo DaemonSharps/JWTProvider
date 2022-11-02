@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.DataBase.Context;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Session.Commands;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class UpdateSessionHandlerTests
         var existingSession = new DB.Session
         {
             RefreshToken = expectedRefreshToken,
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserId = UsersDBContext.UserId,
             FinishDate = existingSessionFinishDate,
             CreationDate = DateTimeOffset.UtcNow,
             LastUpdate = DateTimeOffset.UtcNow
@@ -60,7 +61,7 @@ public class UpdateSessionHandlerTests
         var existingSession = new DB.Session
         {
             RefreshToken = expectedRefreshToken,
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserId = UsersDBContext.UserId,
             FinishDate = existingSessionFinishDate,
             CreationDate = DateTimeOffset.UtcNow,
             LastUpdate = DateTimeOffset.UtcNow

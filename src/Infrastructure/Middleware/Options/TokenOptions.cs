@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Middleware.Options;
+﻿using System;
+
+namespace Infrastructure.Middleware.Options;
 
 public class TokenOptions
 {
@@ -16,4 +18,9 @@ public class TokenOptions
     /// Униальный ключ издателя токена
     /// </summary>
     public string Issuer { get; set; }
+
+    /// <summary>
+    /// время жизни токена
+    /// </summary>
+    public TimeSpan Lifetime { get; set; }
 }

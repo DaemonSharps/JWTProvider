@@ -19,7 +19,7 @@ internal static partial class HttpClientExtentions
             Password = password,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            MiddleName = user.MiddleName
+            Patronymic = user.Patronymic
         };
         var result = await client.PostAsJsonAsync("/users", command);
         result.EnsureSuccessStatusCode();
@@ -41,7 +41,7 @@ internal static partial class HttpClientExtentions
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            MiddleName = user.MiddleName
+            Patronymic = user.Patronymic
         };
 
         using var message = new HttpRequestMessage(HttpMethod.Put, new Uri("http://localhost/users"));

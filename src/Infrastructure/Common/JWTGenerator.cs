@@ -18,30 +18,27 @@ public class JWTGenerator
 {
     private readonly SecurityKey _accessKey;
     private readonly string _issuer;
-
-    /// <summary>
-    /// Стандартное время жизни Access Token
-    /// </summary>
-    public static TimeSpan ExpiresDefault => TimeSpan.FromMinutes(5);
+    private readonly TimeSpan _lifetime;
 
     public string AcessToken { get; private set; }
 
-    public JWTGenerator(string accessKey, string issuer)
+    public JWTGenerator(string accessKey, string issuer, TimeSpan? lifetime)
     {
         ArgumentNullException.ThrowIfNull(accessKey);
         ArgumentNullException.ThrowIfNull(issuer);
         _accessKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessKey));
         _issuer = issuer;
+        _lifetime = lifetime.Value;
     }
 
     /// <summary>
     /// Создать экземпляр генератора из класса конфигурации
     /// </summary>
     public static JWTGenerator GetGenerator(TokenOptions options)
-        => new(options?.AccessKey, options?.Issuer);
+        => new(options?.AccessKey, options?.Issuer, options?.Lifetime);
 
-    public static JWTGenerator GetGenerator(string accessKey, string issuer)
-        => new(accessKey, issuer);
+    public static JWTGenerator GetGenerator(string accessKey, string issuer, TimeSpan lifetime)
+        => new(accessKey, issuer, lifetime);
 
     /// <summary>
     /// Создать JWT из модели пользователя
@@ -55,11 +52,11 @@ public class JWTGenerator
         {
             new (JwtRegisteredClaimNames.Email, user.Email)
         };
-        if (!string.IsNullOrEmpty(user.MiddleName)) claims.Add(new(JWTClaimKeys.MiddleName, user.MiddleName));
+        if (!string.IsNullOrEmpty(user.Patronymic)) claims.Add(new(JWTClaimKeys.Patronymic, user.Patronymic));
         if (!string.IsNullOrEmpty(user.LastName)) claims.Add(new(JwtRegisteredClaimNames.FamilyName, user.LastName));
         if (!string.IsNullOrEmpty(user.FirstName)) claims.Add(new(JwtRegisteredClaimNames.GivenName, user.FirstName));
 
-        AcessToken = MakeStringToken(_accessKey, expiresAfter ?? ExpiresDefault, claims.ToArray());
+        AcessToken = MakeStringToken(_accessKey, expiresAfter ?? _lifetime, claims.ToArray());
 
         return this;
     }

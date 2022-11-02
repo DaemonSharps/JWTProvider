@@ -43,7 +43,7 @@ public static class JWTAssert
         EqualIfNotNull(payload, user.Email, JwtRegisteredClaimNames.Email);
         EqualIfNotNull(payload, user.FirstName, JwtRegisteredClaimNames.GivenName);
         EqualIfNotNull(payload, user.LastName, JwtRegisteredClaimNames.FamilyName);
-        EqualIfNotNull(payload, user.MiddleName, JWTClaimKeys.MiddleName);
+        EqualIfNotNull(payload, user.Patronymic, JWTClaimKeys.Patronymic);
     }
 
     private static void EqualIfNotNull(JwtPayload payload, string value, string key)
