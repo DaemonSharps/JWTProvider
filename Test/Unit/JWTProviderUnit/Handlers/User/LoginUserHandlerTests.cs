@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Common.Exceptions;
+using Infrastructure.DataBase.Context;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.User.Queries;
 using DBUser = Infrastructure.DataBase.Entities.User;
@@ -27,7 +28,7 @@ public class LoginUserHandlerTests
         Assert.Equal("Алексеевич", result.Patronymic);
         Assert.Equal("Смирнов", result.LastName);
         Assert.Equal("Денис", result.FirstName);
-        Assert.Equal(new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"), result.Id);
+        Assert.Equal(UsersDBContext.UserId, result.Id);
     }
 
     [Theory]

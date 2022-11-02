@@ -11,6 +11,11 @@ namespace Infrastructure.DataBase.Context
 {
     public class UsersDBContext : DbContext
     {
+        public static readonly Guid UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f");
+        public static readonly Guid AppId = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d");
+        public static readonly Guid AppTypeId = new Guid("4c175cf1-67a7-4b35-a978-9b79acf39743");
+        public static readonly Guid OperationSystemTypeId = new Guid("7486becb-b36c-4e79-9b1a-a0e49240ae3c");
+
         public UsersDBContext(DbContextOptions options) : base(options)
         {
         }
@@ -84,7 +89,7 @@ namespace Infrastructure.DataBase.Context
 #if DEBUG
             var user = new User
             {
-                Id = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+                Id = UserId,
                 Email = "test@mail.ru",
                 FirstName = "Денис",
                 LastName = "Смирнов",
@@ -99,20 +104,20 @@ namespace Infrastructure.DataBase.Context
 
             var appType = new AppType
             {
-                Id = new Guid("4c175cf1-67a7-4b35-a978-9b79acf39743"),
+                Id = AppTypeId,
                 Code = "Browser"
             };
 
             var app = new App
             {
-                Id = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d"),
+                Id = AppId,
                 AppTypeId = appType.Id,
                 Code = "Yandex"
             };
 
             var operatingSystemType = new OperatingSystemType
             {
-                Id = new Guid("7486becb-b36c-4e79-9b1a-a0e49240ae3c"),
+                Id = OperationSystemTypeId,
                 Code = "Windows"
             };
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.DataBase.Context;
 using Infrastructure.DataBase.Entities;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.Session.Commands;
@@ -21,12 +22,12 @@ public class CreateSessionHandlerTests
         var handler = new CreateSessionHandler(dbContext, null, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserId = UsersDBContext.UserId,
             UserAgentInfo = new UserAgentDBEntries
             {
-                AppId = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d"),
+                AppId = UsersDBContext.AppId,
                 IpAddress = "0.0.0.0",
-                OperatingSystemTypeId = new Guid("7486becb-b36c-4e79-9b1a-a0e49240ae3c")
+                OperatingSystemTypeId = UsersDBContext.OperationSystemTypeId
             }
         };
         //Act
@@ -53,8 +54,8 @@ public class CreateSessionHandlerTests
         const string ExpectedErrorCode = "CREATE_SESSION_FAILED";
         const string ExpectedErrorMessage = "Max session count is limited: Max = 5, App = Yandex";
         var dbContext = TestDBContext.CreateInMemoryContext();
-        var userId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f");
-        var appId = new Guid("6544598e-f174-41dd-a938-a0ecc5244c4d");
+        var userId = UsersDBContext.UserId;
+        var appId = UsersDBContext.AppId;
         for (int i = 0; i < 5; i++)
         {
             var oldSession = new DB.Session
@@ -109,7 +110,7 @@ public class CreateSessionHandlerTests
         var handler = new CreateSessionHandler(dbContext.Object, loggerMock.Object, new TestSessionOptions());
         var command = new CreateSessionCommand
         {
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserId = UsersDBContext.UserId,
             UserAgentInfo = new UserAgentDBEntries
             {
                 AppId = Guid.NewGuid(),

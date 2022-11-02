@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.DataBase.Context;
 using JWTProvider.Common.Exceptions;
 using JWTProvider.User.Commands;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ public class UserDeleteHandlerTests
         var dbContext = TestDBContext.CreateInMemoryContext();
         var existingSession = new DB.Session
         {
-            UserId = new Guid("f2408735-baf9-4b7a-b133-33050bc2e86f"),
+            UserId = UsersDBContext.UserId,
             RefreshToken = Guid.NewGuid(),
             CreationDate = DateTimeOffset.UtcNow,
             LastUpdate = DateTimeOffset.UtcNow,
