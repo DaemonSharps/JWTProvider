@@ -1,10 +1,17 @@
-name: Build
+name: CI
 
 on:
-  push:
+  pull_request:
     branches: [ master ]
-    
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: show ENV
+    run: echo ${{ secrets.DOCKER_HUB_URL }}, ${{ secrets.DOCKER_USER_LOGIN }}, ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+
   build:
 
     runs-on: ubuntu-latest
