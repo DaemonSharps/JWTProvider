@@ -10,8 +10,7 @@ jobs:
 
     steps:
     - name: show ENV
-    uses: actions/checkout@v3
-    run: echo ${{ secrets.DOCKER_HUB_URL }}, ${{ secrets.DOCKER_USER_LOGIN }}, ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+      run: echo ${{ secrets.DOCKER_HUB_URL }}, ${{ secrets.DOCKER_USER_LOGIN }}, ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
 
   build:
 
