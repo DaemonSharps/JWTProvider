@@ -2,7 +2,7 @@
 
 # сборка docker build -t daemonsharps/jwt-auth-api:dev .
 
-# запуск docker run-d -p 3000:80 --rm --name test daemonsharps/jwt-auth-api:dev
+# запуск docker run -d -p 3000:80 --rm --name test -e DOTNET_ENVIRONMENT='Development' daemonsharps/jwt-auth-api:dev
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
