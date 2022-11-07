@@ -51,4 +51,4 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: user/app:dev
+        tags: daemonsharps/jwt-auth-api:dev
