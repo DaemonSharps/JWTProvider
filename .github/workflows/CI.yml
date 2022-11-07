@@ -27,7 +27,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    needs: build
+    #needs: build
     steps:
 
     - name: Checkout
@@ -52,4 +52,4 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev
+        tags: ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api2:latest
