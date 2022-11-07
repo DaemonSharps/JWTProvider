@@ -29,6 +29,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProviderIntegration", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtTest.Common", "Test\JwtTest.Common\JwtTest.Common.csproj", "{45345074-07ED-4041-8E41-26418D09300B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{F07586AD-040A-4E69-9A43-12904B7C6666}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\Build_PR.yml = .github\workflows\Build_PR.yml
+		.github\workflows\Build.yml = .github\workflows\Build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +76,7 @@ Global
 		{AAF976CF-6911-403F-A7D8-80B611752B5B} = {F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}
 		{B7F83259-D279-4AD4-A869-7CB97181231D} = {AAF976CF-6911-403F-A7D8-80B611752B5B}
 		{45345074-07ED-4041-8E41-26418D09300B} = {F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}
+		{F07586AD-040A-4E69-9A43-12904B7C6666} = {B22DA2A4-5217-40FC-8A08-806ABC9352A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EC8FC17-7281-4E83-9021-72D9A9FBFBFF}
