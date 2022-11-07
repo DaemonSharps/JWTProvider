@@ -5,8 +5,10 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B22DA2A4-5217-40FC-8A08-806ABC9352A9}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProvider", "src\JWTProvider\JWTProvider.csproj", "{7ABC3A32-7C5E-4C97-9FFB-274508831CAB}"
@@ -17,15 +19,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{F72C14B3-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{8876D0EC-A753-4047-9C3A-4D63294CC608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureUnit", "Test\Unit\InfrastructureUnit\InfrastructureUnit.csproj", "{F1A260DF-16B3-4D9E-8748-EFDCFEB7B573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfrastructureUnit", "Test\Unit\InfrastructureUnit\InfrastructureUnit.csproj", "{F1A260DF-16B3-4D9E-8748-EFDCFEB7B573}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTProviderUnit", "Test\Unit\JWTProviderUnit\JWTProviderUnit.csproj", "{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProviderUnit", "Test\Unit\JWTProviderUnit\JWTProviderUnit.csproj", "{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{AAF976CF-6911-403F-A7D8-80B611752B5B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProviderIntegration", "Test\Integration\JWTProviderIntegration\JWTProviderIntegration.csproj", "{B7F83259-D279-4AD4-A869-7CB97181231D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtTest.Common", "Test\JwtTest.Common\JwtTest.Common.csproj", "{45345074-07ED-4041-8E41-26418D09300B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtTest.Common", "Test\JwtTest.Common\JwtTest.Common.csproj", "{45345074-07ED-4041-8E41-26418D09300B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
