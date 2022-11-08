@@ -10,4 +10,5 @@ jobs:
     steps:
       - uses: zwaldowski/match-label-action@v4
         with:
-          allowed: bug, enhancement, documentation, major, minor, patch
+          allowed: bug, enhancement, documentation
+          allowed: major, minor, patch
