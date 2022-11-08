@@ -11,4 +11,4 @@ jobs:
       - uses: zwaldowski/match-label-action@v4
         with:
           allowed: bug, enhancement, documentation
-          allowed: major, minor, patch
+          allowed_multiple: major, minor, patch
