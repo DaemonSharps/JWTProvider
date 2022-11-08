@@ -3,19 +3,15 @@ tag-template: 'v$NEXT_PATCH_VERSION'
 categories:
   - title: ' New Features'
     labels:
-      - 'type:features'
+      - 'type:enhancement'
 
   - title: ' Bugs Fixes'
     labels:
-      - 'type:fix'
+      - 'type:bug'
 
   - title: ' Documentation'
     labels:
       - 'type:documentation'
-
-  - title: ' Configuration'
-    labels:
-      - 'type:config'
 
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 template: |
