@@ -1,4 +1,4 @@
-name-template: 'JWT-$RESOLVED_VERSION 🌈'
+name-template: 'JWT-$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
@@ -7,7 +7,7 @@ categories:
   - title: '🐛 Bug Fixes'
     labels:
       - 'bug'
-  - title: ' Documentation'
+  - title: '📖 Documentation'
     labels:
       - 'documentation'
 
