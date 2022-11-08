@@ -1,5 +1,5 @@
-name-template: 'v$RESOLVED_VERSION 🌈'
-tag-template: 'v$RESOLVED_VERSION'
+name-template: 'v$MAJOR.$MINOR.$PATCH 🌈'
+tag-template: 'v$MAJOR.$MINOR.$PATCH'
 categories:
   - title: '🚀 Features'
     labels:
@@ -13,8 +13,7 @@ categories:
   - title: '🧰 Maintenance'
     label: 'chore'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
-version-resolver:
+change-title-escapes: '\<*_&'
   major:
     labels:
       - 'major'
