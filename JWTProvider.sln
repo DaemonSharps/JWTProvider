@@ -33,6 +33,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\Build_PR.yml = .github\workflows\Build_PR.yml
 		.github\workflows\CI.yml = .github\workflows\CI.yml
+		.github\workflows\release-draft.yml = .github\workflows\release-draft.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{9F0FBB23-3D1C-42B0-87D7-0D870DC83A00}"
+	ProjectSection(SolutionItems) = preProject
+		.github\release-drafter.yml = .github\release-drafter.yml
 	EndProjectSection
 EndProject
 Global
@@ -76,7 +82,8 @@ Global
 		{AAF976CF-6911-403F-A7D8-80B611752B5B} = {F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}
 		{B7F83259-D279-4AD4-A869-7CB97181231D} = {AAF976CF-6911-403F-A7D8-80B611752B5B}
 		{45345074-07ED-4041-8E41-26418D09300B} = {F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}
-		{F07586AD-040A-4E69-9A43-12904B7C6666} = {B22DA2A4-5217-40FC-8A08-806ABC9352A9}
+		{F07586AD-040A-4E69-9A43-12904B7C6666} = {9F0FBB23-3D1C-42B0-87D7-0D870DC83A00}
+		{9F0FBB23-3D1C-42B0-87D7-0D870DC83A00} = {B22DA2A4-5217-40FC-8A08-806ABC9352A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EC8FC17-7281-4E83-9021-72D9A9FBFBFF}
