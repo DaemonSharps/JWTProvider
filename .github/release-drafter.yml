@@ -1,6 +1,5 @@
 name-template: 'JWT-$RESOLVED_VERSION 🌈'
-tag-template: 'JWT-$RESOLVED_VERSION'
-version-template: $MINOR.$PATCH
+tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
     labels:
