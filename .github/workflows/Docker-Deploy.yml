@@ -9,22 +9,17 @@ on:
       version-tag:
         required: true
         type: string
+      docker-login:
+        required: true
+        type: string
+      docker-token:
+        required: true
+        type: string
 
 jobs:
-  get-repo-auth-info:
-    runs-on: ubuntu-latest
-    outputs:
-      docker-hub-user: ${{ steps.get-login.outputs.login }}
-      docker-hub-token: ${{ steps.get-token.outputs.token }}
-    steps:
-      - id: get-login
-        run: echo "login=${{ secrets.DOCKER_USER_LOGIN }}" >> $GITHUB_OUTPUT
-      - id: get-token
-        run: echo "token=${{ secrets.DOCKER_USER_AUTH_TOKEN }}" >> $GITHUB_OUTPUT
 
   docker-deploy:
     runs-on: ubuntu-latest
-    needs: get-repo-auth-info
     environment: ${{ inputs.enviroment-name }}
     steps:
     
@@ -40,8 +35,8 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ needs.get-auth-info.outputs.docker-hub-user }}
-        password: ${{ needs.get-auth-info.outputs.docker-hub-token }}
+        username: ${{ inputs.docker-login }}
+        password: ${{ inputs.docker-token }}
 
     - name: Build and push
       uses: docker/build-push-action@v3
