@@ -44,4 +44,4 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ secrets.docker_login }}/jwt-auth-api:${{ inputs.version_tag }}-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+        tags: ${{ secrets.docker_login }}/jwt-auth-api:${{ inputs.version_tag }}
