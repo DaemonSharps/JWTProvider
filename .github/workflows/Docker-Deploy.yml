@@ -3,16 +3,16 @@ name: Delpoy on stage
 on:
   workflow_call:
     inputs:
-      enviroment-name:
+      enviroment_name:
         required: true
         type: string
-      version-tag:
+      version_tag:
         required: true
         type: string
     secrets:
-      docker-login:
+      docker_login:
         required: true
-      docker-token:
+      docker_token:
         required: true
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
   docker-deploy:
     name: Проливка образа докера
     runs-on: ubuntu-latest
-    environment: ${{ inputs.enviroment-name }}
+    environment: ${{ inputs.enviroment_name }}
     steps:
     
     - name: Checkout
@@ -35,8 +35,8 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.docker-login }}
-        password: ${{ secrets.docker-token }}
+        username: ${{ secrets.docker_login }}
+        password: ${{ secrets.docker_token }}
 
     - name: Build and push
       uses: docker/build-push-action@v3
@@ -44,4 +44,4 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ secrets.docker-login }}/jwt-auth-api:${{ inputs.version-tag }}-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+        tags: ${{ secrets.docker_login }}/jwt-auth-api:${{ inputs.version_tag }}-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}

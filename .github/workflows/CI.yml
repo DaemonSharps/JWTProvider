@@ -31,7 +31,7 @@ jobs:
     name: Обновление черновика релиза
     runs-on: ubuntu-latest
     outputs:
-      release-tag: ${{ steps.release-drafter.outputs.tag_name }}
+      release_tag: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
 
       - id: release-drafter
@@ -40,21 +40,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy_on_stage:
+    name: Развертывание на стенды
     needs:
      - build
      - update_draft_release
     strategy:
       matrix:
-        enviroment-name: [ development, production ]
+        enviroment_name: [ development, production ]
         include:
           - enviroment-name: development
-            version-tag: dev
+            version_tag: dev
           - enviroment-name: production
-            version-tag: ${{ needs.update_draft_release.outputs.tag_name }}
+            version_tag: ${{ needs.update_draft_release.outputs.release_tag }}
     uses: DaemonSharps/JWTProvider/.github/workflows/Docker-Deploy.yml@master
     with:
-      enviroment-name: ${{ matrix.enviroment-name }}
-      version-tag: ${{ matrix.version-tag }}
+      enviroment-name: ${{ matrix.enviroment_name }}
+      version-tag: ${{ matrix.version_tag }}
     secrets:
       docker-login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker-token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
