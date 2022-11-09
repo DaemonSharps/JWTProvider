@@ -49,7 +49,7 @@ jobs:
         enviroment_name: [ development, production ]
         include:
           - enviroment-name: development
-            version_tag: dev
+            version_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
           - enviroment-name: production
             version_tag: ${{ needs.update_draft_release.outputs.release_tag }}
     uses: DaemonSharps/JWTProvider/.github/workflows/Docker-Deploy.yml@master
