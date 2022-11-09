@@ -18,6 +18,7 @@ on:
 jobs:
 
   docker-deploy:
+    name: Проливка образа докера
     runs-on: ubuntu-latest
     environment: ${{ inputs.enviroment-name }}
     steps:
