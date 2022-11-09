@@ -12,10 +12,8 @@ on:
     secrets:
       docker-login:
         required: true
-        type: string
       docker-token:
         required: true
-        type: string
 
 jobs:
 
