@@ -33,13 +33,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\Build-PR.yml = .github\workflows\Build-PR.yml
 		.github\workflows\CI.yml = .github\workflows\CI.yml
-		.github\workflows\Docker-Deploy.yml = .github\workflows\Docker-Deploy.yml
 		.github\workflows\Labeler.yml = .github\workflows\Labeler.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{9F0FBB23-3D1C-42B0-87D7-0D870DC83A00}"
 	ProjectSection(SolutionItems) = preProject
 		.github\release-drafter.yml = .github\release-drafter.yml
+		.github\build.yml = .github\build.yml
+		.github\docker-deploy.yml = .github\docker-deploy.yml
 	EndProjectSection
 EndProject
 Global
