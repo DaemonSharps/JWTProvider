@@ -32,5 +32,6 @@ jobs:
     with:
       enviroment-name: development
       version-tag: dev
+    secrets:
       docker-login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker-token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
