@@ -14,8 +14,13 @@ jobs:
   get-repo-auth-info:
     runs-on: ubuntu-latest
     outputs:
-      docker-hub-user: ${{ secrets.DOCKER_USER_LOGIN }}
-      docker-hub-token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+      docker-hub-user: ${{ steps.get-login.outputs.login }}
+      docker-hub-token: ${{ steps.get-token.outputs.token }}
+    steps:
+      - id: get-login
+        run: echo "login=${{ secrets.DOCKER_USER_LOGIN }}" >> $GITHUB_OUTPUT
+      - id: get-token
+        run: echo "token=${{ secrets.DOCKER_USER_AUTH_TOKEN }}" >> $GITHUB_OUTPUT
 
   docker-deploy:
     runs-on: ubuntu-latest
