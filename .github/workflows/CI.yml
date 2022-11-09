@@ -26,7 +26,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
-  docker-dev:
+  dev:
     needs: build
     uses: DaemonSharps/JWTProvider/.github/workflows/Docker-Deploy.yml@master
     with:
