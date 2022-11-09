@@ -25,8 +25,18 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
-
+      
+  update_draft_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   dev:
+
+    needs:
+      - build
+      - update_draft_release
     strategy:
       matrix:
         enviroment-name: [development, production]
@@ -34,9 +44,7 @@ jobs:
           - enviroment-name: development
             version-tag: dev
           - enviroment-name: production
-            version-tag: prod
-
-    needs: build
+            version-tag: ${{ needs.update_draft_release.outputs.tag_name }}
     uses: DaemonSharps/JWTProvider/.github/workflows/Docker-Deploy.yml@master
     with:
       enviroment-name: ${{ matrix.enviroment-name }}

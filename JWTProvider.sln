@@ -35,7 +35,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\CI.yml = .github\workflows\CI.yml
 		.github\workflows\Docker-Deploy.yml = .github\workflows\Docker-Deploy.yml
 		.github\workflows\Labeler.yml = .github\workflows\Labeler.yml
-		.github\workflows\Release-Draft.yml = .github\workflows\Release-Draft.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{9F0FBB23-3D1C-42B0-87D7-0D870DC83A00}"
