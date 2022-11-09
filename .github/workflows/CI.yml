@@ -27,11 +27,20 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
   dev:
+    strategy:
+      matrix:
+        enviroment-name: [development, production]
+        include:
+          - enviroment-name: development
+            version-tag: dev
+          - enviroment-name: production
+            version-tag: prod
+
     needs: build
     uses: DaemonSharps/JWTProvider/.github/workflows/Docker-Deploy.yml@master
     with:
-      enviroment-name: development
-      version-tag: dev
+      enviroment-name: matrix.enviroment-name
+      version-tag: matrix.version-tag
     secrets:
       docker-login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker-token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
