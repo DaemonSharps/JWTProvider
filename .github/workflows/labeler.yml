@@ -2,7 +2,8 @@ name: "Verify pull request labels"
 
 on:
   pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
+    branches: [ master ]
+    types: [opened, reopened, synchronize]
 
 jobs:
   triage:
