@@ -18,8 +18,6 @@ public class UsersDBContext : DbContext
 
     public UsersDBContext(DbContextOptions options) : base(options)
     {
-        //TODO: для проверок, потом убрать
-        this.Database.EnsureCreated();
     }
 
     public virtual DbSet<User> Users { get; set; }
