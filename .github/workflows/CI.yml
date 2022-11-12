@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: DaemonSharps/JWTProvider/.github/workflows/build.yml@master
+    uses: DaemonSharps/CI-CD/.github/workflows/build.yml@master
       
   update_draft_release:
     name: Обновление черновика релиза
@@ -34,7 +34,7 @@ jobs:
             version_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
           - enviroment_name: production
             version_tag: ${{ needs.update_draft_release.outputs.release_tag }}
-    uses: DaemonSharps/JWTProvider/.github/workflows/docker-deploy.yml@master
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@master
     with:
       enviroment_name: ${{ matrix.enviroment_name }}
       version_tag: ${{ matrix.version_tag }}
