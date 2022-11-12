@@ -14,10 +14,10 @@ COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 RUN dotnet restore "src/JWTProvider/JWTProvider.csproj"
 COPY . .
 WORKDIR "/src/src/JWTProvider"
-RUN dotnet build "JWTProvider.csproj" -c Debug -o /app/build
+RUN dotnet build "JWTProvider.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "JWTProvider.csproj" -c Debug -o /app/publish
+RUN dotnet publish "JWTProvider.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
