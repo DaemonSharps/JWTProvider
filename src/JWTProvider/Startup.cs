@@ -49,7 +49,7 @@ public class Startup
         services.AddDbContext<UsersDBContext>(options => options.UseInMemoryDatabase("Debug_User_DB"));
 #else
         services.AddDbContext<UsersDBContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 #endif
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
