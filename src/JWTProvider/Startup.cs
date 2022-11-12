@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Text;
 using Infrastructure.DataBase;
@@ -49,7 +50,7 @@ public class Startup
         services.AddDbContext<UsersDBContext>(options => options.UseInMemoryDatabase("Debug_User_DB"));
 #else
         services.AddDbContext<UsersDBContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+            options.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"),
                 b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 #endif
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
