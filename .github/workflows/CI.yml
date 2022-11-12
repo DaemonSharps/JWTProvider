@@ -31,13 +31,18 @@ jobs:
         enviroment_name: [ development, production ]
         include:
           - enviroment_name: development
-            version_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+            version_tags: |
+            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev-latest
           - enviroment_name: production
-            version_tag: ${{ needs.update_draft_release.outputs.release_tag }}
+            version_tags: |
+            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
+            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:latest
+
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@master
     with:
       enviroment_name: ${{ matrix.enviroment_name }}
-      version_tag: ${{ matrix.version_tag }}
+      version_tags: ${{ matrix.version_tags }}
     secrets:
       docker_login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker_token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
