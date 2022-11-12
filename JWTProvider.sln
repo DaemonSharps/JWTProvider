@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\Build-PR.yml = .github\workflows\Build-PR.yml
 		.github\workflows\CI.yml = .github\workflows\CI.yml
 		.github\workflows\Labeler.yml = .github\workflows\Labeler.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\docker-deploy.yml = .github\workflows\docker-deploy.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{9F0FBB23-3D1C-42B0-87D7-0D870DC83A00}"
