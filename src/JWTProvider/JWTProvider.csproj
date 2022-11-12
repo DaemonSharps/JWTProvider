@@ -9,19 +9,19 @@
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="11.0.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
 		<PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="2.0.1" />
 		<PackageReference Include="MyCSharp.HttpUserAgentParser" Version="2.0.1" />
 		<PackageReference Include="MyCSharp.HttpUserAgentParser.MemoryCache" Version="2.0.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
@@ -30,5 +30,6 @@
 		<None Remove="MyCSharp.HttpUserAgentParser.AspNetCore" />
 		<None Remove="MyCSharp.HttpUserAgentParser" />
 		<None Remove="MyCSharp.HttpUserAgentParser.MemoryCache" />
+		<None Remove="Npgsql.EntityFrameworkCore.PostgreSQL" />
 	</ItemGroup>
 </Project>

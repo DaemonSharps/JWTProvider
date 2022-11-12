@@ -14,7 +14,8 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Development",
+        "POSTGRES_CONNECTION_STRING": "Host=localhost;Port=5432;Database=users_db;Username=root;Password=1;"
       }
     },
     "IIS Express": {
@@ -22,14 +23,18 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Development",
+        "POSTGRES_CONNECTION_STRING": "Host=localhost;Port=5432;Database=users_db;Username=root;Password=1;"
       }
     },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/",
-      "environmentVariables": {}
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "POSTGRES_CONNECTION_STRING": "Host=localhost;Port=5432;Database=users_db;Username=root;Password=1;"
+      }
     }
   }
 }
