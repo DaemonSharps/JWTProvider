@@ -32,12 +32,12 @@ jobs:
         include:
           - enviroment_name: development
             version_tags: |
-            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
-            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev-latest
+              ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+              ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:dev-latest
           - enviroment_name: production
             version_tags: |
-            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
-            ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:latest
+              ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
+              ${{ secrets.DOCKER_USER_LOGIN }}/jwt-auth-api:latest
 
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@master
     with:
