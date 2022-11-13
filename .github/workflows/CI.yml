@@ -5,6 +5,11 @@ on:
   push:
     branches: [ master ]
 
+env:
+  COMPOSE_FOLDER: GarageSite
+  ENV_FILE_NAME: JWTProvider/api.env
+  COMPOSE_SERVICE_NAME: jwt-api
+  
 jobs:
   build:
     uses: DaemonSharps/CI-CD/.github/workflows/build.yml@stable
@@ -46,11 +51,6 @@ jobs:
     secrets:
       docker_login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker_token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
-
-  env:
-    COMPOSE_FOLDER: GarageSite
-    ENV_FILE_NAME: JWTProvider/api.env
-    COMPOSE_SERVICE_NAME: jwt-api
 
   deploy_on_compose_dev:
     name: Проливка на VPS
