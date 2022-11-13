@@ -18,14 +18,15 @@ jobs:
   update_draft_release:
     name: Обновление черновика релиза
     runs-on: ubuntu-latest
-    env:
-      RELEASE_TAG: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
 
       - id: release-drafter
         uses: release-drafter/release-drafter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set env:RELEASE_TAG
+        run: echo RELEASE_TAG=${{ steps.release-drafter.outputs.tag_name }}
 
   upload_on_hub:
     name: Загрузка образа в hub
