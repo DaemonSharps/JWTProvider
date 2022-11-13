@@ -57,7 +57,7 @@ jobs:
       compose_service_name: ${env:COMPOSE_SERVICE_NAME}
       image_tag_env: JWT_TAG=dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
       image_port_env: JWT_API_PORT=3000
-      environment_name: ${{ jobs.deploy_on_compose_dev.environment }}
+      environment_name: ${{ github.jobs.deploy_on_compose_dev.environment }}
     secrets:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -80,7 +80,7 @@ jobs:
       compose_service_name: ${env:COMPOSE_SERVICE_NAME}
       image_tag_env: JWT_TAG=${{ jobs.update_draft_release.outputs.release_tag }}
       image_port_env: JWT_API_PORT=3001
-      environment_name: ${{ jobs.deploy_on_compose_prod.environment }}
+      environment_name: ${{ github.jobs.deploy_on_compose_prod.environment }}
     secrets:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
