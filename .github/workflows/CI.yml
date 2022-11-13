@@ -38,7 +38,6 @@ jobs:
             version_tags: |
               daemonsharps/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
               daemonsharps/jwt-auth-api:latest
-
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
     with:
       enviroment_name: ${{ matrix.enviroment_name }}
@@ -52,10 +51,6 @@ jobs:
     needs:
       - upload_on_hub
     environment: development
-    env:
-      COMPOSE_FOLDER: GarageSite
-      ENV_FILE_NAME: JWTProvider/api.env
-      COMPOSE_SERVICE_NAME: jwt-api
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
     with:
       compose_folder: ${env:COMPOSE_FOLDER}
