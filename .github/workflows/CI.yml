@@ -5,6 +5,12 @@ on:
   push:
     branches: [ master ]
 
+env:
+  COMPOSE_FOLDER: GarageSite
+  ENV_FILE_NAME: JWTProvider/api.env
+  COMPOSE_SERVICE_NAME: jwt-api
+  DEV_IMAGE_TAG: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+
 jobs:
   build:
     uses: DaemonSharps/CI-CD/.github/workflows/build.yml@stable
@@ -12,8 +18,8 @@ jobs:
   update_draft_release:
     name: Обновление черновика релиза
     runs-on: ubuntu-latest
-    outputs:
-      release_tag: ${{ steps.release-drafter.outputs.tag_name }}
+    env:
+      RELEASE_TAG: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
 
       - id: release-drafter
@@ -32,11 +38,11 @@ jobs:
         include:
           - enviroment_name: development
             version_tags: |
-              daemonsharps/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+              daemonsharps/jwt-auth-api:${env:DEV_IMAGE_TAG}
               daemonsharps/jwt-auth-api:dev-latest
           - enviroment_name: production
             version_tags: |
-              daemonsharps/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
+              daemonsharps/jwt-auth-api:${env:RELEASE_TAG}
               daemonsharps/jwt-auth-api:latest
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
     with:
@@ -46,44 +52,31 @@ jobs:
       docker_login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker_token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
 
-  deploy_on_compose_dev:
+  deploy_on_compose:
     name: Проливка на VPS
     needs:
       - upload_on_hub
+      - update_draft_release
+    strategy:
+      matrix:
+        enviroment_name: [ development, production ]
+        include:
+          - enviroment_name: development
+            image_tag: ${env:DEV_IMAGE_TAG}
+            image_port: 3000
+          - enviroment_name: production
+            image_tag: ${env:RELEASE_TAG}
+            image_port: 3001
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
     with:
       compose_folder: ${env:COMPOSE_FOLDER}
       env_file_name: ${env:ENV_FILE_NAME}
       compose_service_name: ${env:COMPOSE_SERVICE_NAME}
-      image_tag_env: JWT_TAG=dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
-      image_port_env: JWT_API_PORT=3000
-      environment_name: ${{ github.jobs.deploy_on_compose_dev.environment }}
+      image_tag_env: JWT_TAG=${{ matrix.image_tag }}
+      image_port_env: JWT_API_PORT=${{ matrix.image_port }}
+      environment_name: ${{ matrix.enviroment_name }}
     secrets:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
       ENV_TEXT: ${{ secrets.ENV_TEXT }}
-    environment: development
-    env:
-      COMPOSE_FOLDER: GarageSite
-      ENV_FILE_NAME: JWTProvider/api.env
-      COMPOSE_SERVICE_NAME: jwt-api
-  
-  deploy_on_compose_prod:
-    name: Проливка на VPS
-    needs:
-      - deploy_on_compose_dev
-    uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
-    with:
-      compose_folder: ${env:COMPOSE_FOLDER}
-      env_file_name: ${env:ENV_FILE_NAME}
-      compose_service_name: ${env:COMPOSE_SERVICE_NAME}
-      image_tag_env: JWT_TAG=${{ jobs.update_draft_release.outputs.release_tag }}
-      image_port_env: JWT_API_PORT=3001
-      environment_name: ${{ github.jobs.deploy_on_compose_prod.environment }}
-    secrets:
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      SSH_HOST: ${{ secrets.SSH_HOST }}
-      SSH_USER: ${{ secrets.SSH_USER }}
-      ENV_TEXT: ${{ secrets.ENV_TEXT }}
-    environment: production
