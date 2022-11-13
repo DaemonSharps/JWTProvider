@@ -21,7 +21,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy_on_stage:
+  upload_on_hub:
     name: Загрузка образа в hub
     needs:
      - build
@@ -46,3 +46,46 @@ jobs:
     secrets:
       docker_login: ${{ secrets.DOCKER_USER_LOGIN }}
       docker_token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+
+  env:
+    COMPOSE_FOLDER: GarageSite
+    ENV_FILE_NAME: JWTProvider/api.env
+    COMPOSE_SERVICE_NAME: jwt-api
+
+  deploy_on_compose_dev:
+    name: Проливка на VPS
+    needs:
+      - upload_on_hub
+    environment: development
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
+    with:
+      compose_folder: ${env:COMPOSE_FOLDER}
+      env_file_name: ${env:ENV_FILE_NAME}
+      compose_service_name: ${env:COMPOSE_SERVICE_NAME}
+      image_tag_env: JWT_TAG=dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+      image_port_env: JWT_API_PORT=3000
+      environment_name: ${{ jobs.deploy_on_compose_dev.environment }}
+    secrets:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      ENV_TEXT: ${{ secrets.ENV_TEXT }}
+  
+  deploy_on_compose_prod:
+    name: Проливка на VPS
+    needs:
+      - deploy_on_compose_dev
+    environment: production
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
+    with:
+      compose_folder: ${env:COMPOSE_FOLDER}
+      env_file_name: ${env:ENV_FILE_NAME}
+      compose_service_name: ${env:COMPOSE_SERVICE_NAME}
+      image_tag_env: JWT_TAG=${{ jobs.update_draft_release.outputs.release_tag }}
+      image_port_env: JWT_API_PORT=3001
+      environment_name: ${{ jobs.deploy_on_compose_prod.environment }}
+    secrets:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      ENV_TEXT: ${{ secrets.ENV_TEXT }}
