@@ -50,8 +50,12 @@ jobs:
     name: Проливка на VPS
     needs:
       - upload_on_hub
-    environment: development
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
+    environment: development
+    env:
+      COMPOSE_FOLDER: GarageSite
+      ENV_FILE_NAME: JWTProvider/api.env
+      COMPOSE_SERVICE_NAME: jwt-api
     with:
       compose_folder: ${env:COMPOSE_FOLDER}
       env_file_name: ${env:ENV_FILE_NAME}
@@ -69,8 +73,8 @@ jobs:
     name: Проливка на VPS
     needs:
       - deploy_on_compose_dev
-    environment: production
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
+    environment: production
     with:
       compose_folder: ${env:COMPOSE_FOLDER}
       env_file_name: ${env:ENV_FILE_NAME}
