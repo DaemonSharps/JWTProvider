@@ -5,11 +5,6 @@ on:
   push:
     branches: [ master ]
 
-env:
-  COMPOSE_FOLDER: GarageSite
-  ENV_FILE_NAME: JWTProvider/api.env
-  COMPOSE_SERVICE_NAME: jwt-api
-  
 jobs:
   build:
     uses: DaemonSharps/CI-CD/.github/workflows/build.yml@stable
@@ -57,6 +52,10 @@ jobs:
     needs:
       - upload_on_hub
     environment: development
+    env:
+      COMPOSE_FOLDER: GarageSite
+      ENV_FILE_NAME: JWTProvider/api.env
+      COMPOSE_SERVICE_NAME: jwt-api
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
     with:
       compose_folder: ${env:COMPOSE_FOLDER}
