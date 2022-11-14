@@ -27,8 +27,6 @@ jobs:
     needs:
      - build
      - update_draft_release
-    outputs:
-      dev_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
     with:
       version_tags: |
@@ -50,7 +48,7 @@ jobs:
         enviroment_name: [ development, production ]
         include:
           - enviroment_name: development
-            image_tag: ${{ needs.upload_on_hub.outputs.dev_tag }}
+            image_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
             image_port: 3000
           - enviroment_name: production
             image_tag: ${{ needs.update_draft_release.outputs.release_tag }}
