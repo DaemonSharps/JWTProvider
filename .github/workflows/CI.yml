@@ -57,9 +57,6 @@ jobs:
     with:
       compose_folder: GarageSite
       env_file_name: JWTProvider/api.env
-      env_file_text: |
-        DOTNET_ENVIRONMENT=${{ secrets[format('{0}_DOTNET_ENVIRONMENT', matrix.enviroment_name)] }}
-        POSTGRES_CONNECTION_STRING=${{ secrets[format('{0}_POSTGRES_CONNECTION_STRING', matrix.enviroment_name)] }}
       compose_service_name: jwt-api
       image_tag_env: JWT_TAG=${{ matrix.image_tag }}
       image_port_env: JWT_API_PORT=${{ matrix.image_port }}
@@ -68,3 +65,6 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
+      ENV_TEXT: |
+        DOTNET_ENVIRONMENT=${{ secrets[format('{0}_DOTNET_ENVIRONMENT', matrix.enviroment_name)] }}
+        POSTGRES_CONNECTION_STRING=${{ secrets[format('{0}_POSTGRES_CONNECTION_STRING', matrix.enviroment_name)] }}
