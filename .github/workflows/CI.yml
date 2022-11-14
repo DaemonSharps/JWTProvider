@@ -65,6 +65,4 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      ENV_TEXT: |
-        DOTNET_ENVIRONMENT=${{ secrets[format('{0}_DOTNET_ENVIRONMENT', matrix.enviroment_name)] }}
-        POSTGRES_CONNECTION_STRING=${{ secrets[format('{0}_POSTGRES_CONNECTION_STRING', matrix.enviroment_name)] }}
+      ENV_TEXT: ${{ secrets[format('{0}_ENV_TEXT', matrix.enviroment_name)] }}
