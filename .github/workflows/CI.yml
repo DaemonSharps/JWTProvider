@@ -9,7 +9,6 @@ env:
   COMPOSE_FOLDER: GarageSite
   ENV_FILE_NAME: JWTProvider/api.env
   COMPOSE_SERVICE_NAME: jwt-api
-  DEV_IMAGE_TAG: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
 
 jobs:
   build:
@@ -18,15 +17,14 @@ jobs:
   update_draft_release:
     name: Обновление черновика релиза
     runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
 
       - id: release-drafter
         uses: release-drafter/release-drafter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set env.RELEASE_TAG
-        run: echo RELEASE_TAG=${{ steps.release-drafter.outputs.tag_name }} >> $GITHUB_ENV
 
   upload_on_hub:
     name: Загрузка образа в hub
@@ -39,11 +37,11 @@ jobs:
         include:
           - enviroment_name: development
             version_tags: |
-              daemonsharps/jwt-auth-api:${{ env.DEV_IMAGE_TAG }}
+              daemonsharps/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
               daemonsharps/jwt-auth-api:dev-latest
           - enviroment_name: production
             version_tags: |
-              daemonsharps/jwt-auth-api:${{ env.RELEASE_TAG }}
+              daemonsharps/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
               daemonsharps/jwt-auth-api:latest
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
     with:
@@ -63,10 +61,10 @@ jobs:
         enviroment_name: [ development, production ]
         include:
           - enviroment_name: development
-            image_tag: ${{ env.DEV_IMAGE_TAG }}
+            image_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
             image_port: 3000
           - enviroment_name: production
-            image_tag: ${{ env.RELEASE_TAG }}
+            image_tag: ${{ needs.update_draft_release.outputs.release_tag }}
             image_port: 3001
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
     with:
