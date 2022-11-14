@@ -24,9 +24,9 @@ jobs:
         uses: release-drafter/release-drafter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Set env:RELEASE_TAG
-        run: echo RELEASE_TAG=${{ steps.release-drafter.outputs.tag_name }}
+
+      - name: Set env.RELEASE_TAG
+        run: echo RELEASE_TAG=${{ steps.release-drafter.outputs.tag_name }} >> $GITHUB_ENV
 
   upload_on_hub:
     name: Загрузка образа в hub
@@ -39,11 +39,11 @@ jobs:
         include:
           - enviroment_name: development
             version_tags: |
-              daemonsharps/jwt-auth-api:${env:DEV_IMAGE_TAG}
+              daemonsharps/jwt-auth-api:${{ env.DEV_IMAGE_TAG }}
               daemonsharps/jwt-auth-api:dev-latest
           - enviroment_name: production
             version_tags: |
-              daemonsharps/jwt-auth-api:${env:RELEASE_TAG}
+              daemonsharps/jwt-auth-api:${{ env.RELEASE_TAG }}
               daemonsharps/jwt-auth-api:latest
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
     with:
@@ -63,16 +63,16 @@ jobs:
         enviroment_name: [ development, production ]
         include:
           - enviroment_name: development
-            image_tag: ${env:DEV_IMAGE_TAG}
+            image_tag: ${{ env.DEV_IMAGE_TAG }}
             image_port: 3000
           - enviroment_name: production
-            image_tag: ${env:RELEASE_TAG}
+            image_tag: ${{ env.RELEASE_TAG }}
             image_port: 3001
     uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
     with:
-      compose_folder: ${env:COMPOSE_FOLDER}
-      env_file_name: ${env:ENV_FILE_NAME}
-      compose_service_name: ${env:COMPOSE_SERVICE_NAME}
+      compose_folder: ${{ env.COMPOSE_FOLDER }
+      env_file_name: ${{ env.ENV_FILE_NAME }}
+      compose_service_name: ${{ env.COMPOSE_SERVICE_NAME }}
       image_tag_env: JWT_TAG=${{ matrix.image_tag }}
       image_port_env: JWT_API_PORT=${{ matrix.image_port }}
       environment_name: ${{ matrix.enviroment_name }}
