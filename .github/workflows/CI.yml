@@ -5,12 +5,13 @@ on:
   push:
     branches: [ master ]
 
+jobs:
+
 env:
   COMPOSE_FOLDER: GarageSite
   ENV_FILE_NAME: JWTProvider/api.env
   COMPOSE_SERVICE_NAME: jwt-api
-
-jobs:
+  
   build:
     uses: DaemonSharps/CI-CD/.github/workflows/build.yml@stable
       
