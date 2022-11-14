@@ -23,7 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload_on_hub:
-    name: Загрузка образа в hub
     needs:
      - build
      - update_draft_release
