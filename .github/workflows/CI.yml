@@ -38,12 +38,41 @@ jobs:
     secrets:
       DOCKER_LOGIN: ${{ secrets.DOCKER_USER_LOGIN }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+  
+  deploy_db:
+    name: Проливка на VPS DB
+    needs:
+      - update_draft_release
+    strategy:
+      matrix:
+        enviroment_name: [ development, production ]
+        include:
+          - enviroment_name: development
+            image_tag: alpine3.16
+            image_port: 5432
+          - enviroment_name: production
+            image_tag: alpine3.16
+            image_port: 5433
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
+    with:
+      compose_folder: GarageSite
+      env_file_name: JWTProvider/db.env
+      compose_service_name: jwt-db
+      image_tag_env: JWT_DB_TAG=${{ matrix.image_tag }}
+      image_port_env: JWT_DB_PORT=${{ matrix.image_port }}
+      environment_name: ${{ matrix.enviroment_name }}
+    secrets:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      ENV_TEXT: ${{ secrets[format('{0}_DB_ENV_TEXT', matrix.enviroment_name)] }}
 
-  deploy_on_compose:
-    name: Проливка на VPS
+  deploy_api:
+    name: Проливка на VPS API
     needs:
       - upload_on_hub
       - update_draft_release
+      - deploy_db
     strategy:
       matrix:
         enviroment_name: [ development, production ]
