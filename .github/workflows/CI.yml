@@ -29,6 +29,8 @@ jobs:
     strategy:
       matrix:
         enviroment_name: [ development, production ]
+        enviroment_name2: [ development, production ]
+        enviroment_name3: [ development, production ]
         include:
           - enviroment_name: development
             version_tags: |
@@ -41,7 +43,7 @@ jobs:
 
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@master
     with:
-      enviroment_name: ${{ matrix.enviroment_name }}
+      enviroment_name: ${{ matrix.enviroment_name }}-${{ matrix.enviroment_name2 }}-${{ matrix.enviroment_name3 }}
       version_tags: ${{ matrix.version_tags }}
     secrets:
       docker_login: ${{ secrets.DOCKER_USER_LOGIN }}
