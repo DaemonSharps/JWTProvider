@@ -42,6 +42,7 @@ jobs:
   deploy_db:
     name: Проливка на VPS DB
     needs:
+      - build
       - update_draft_release
     strategy:
       matrix:
