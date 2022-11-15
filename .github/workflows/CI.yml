@@ -8,6 +8,7 @@ on:
 jobs:
 
   build:
+    name: Сборка .NET
     uses: DaemonSharps/CI-CD/.github/workflows/build.yml@stable
       
   update_draft_release:
@@ -23,6 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload_on_hub:
+    name: Загрузка в Docker hub
     needs:
      - build
      - update_draft_release
