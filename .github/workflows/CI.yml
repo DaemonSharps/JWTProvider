@@ -6,8 +6,10 @@ on:
     branches: [ master ]
 
 jobs:
+
   build:
-    uses: DaemonSharps/CI-CD/.github/workflows/build.yml@master
+    name: Сборка .NET
+    uses: DaemonSharps/CI-CD/.github/workflows/build.yml@stable
       
   update_draft_release:
     name: Обновление черновика релиза
@@ -21,28 +23,47 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy_on_stage:
-    name: Развертывание на стенды
+  upload_on_hub:
+    name: Загрузка в Docker hub
     needs:
      - build
      - update_draft_release
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
+    with:
+      version_tags: |
+        daemonsharps/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+        daemonsharps/jwt-auth-api:dev-latest
+        daemonsharps/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
+        daemonsharps/jwt-auth-api:latest
+    secrets:
+      DOCKER_LOGIN: ${{ secrets.DOCKER_USER_LOGIN }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+
+  deploy_on_compose:
+    name: Проливка на VPS
+    needs:
+      - upload_on_hub
+      - update_draft_release
     strategy:
       matrix:
         enviroment_name: [ development, production ]
         include:
           - enviroment_name: development
-            version_tags: |
-              daemonsharps/jwt-auth-api:dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
-              daemonsharps/jwt-auth-api:dev-latest
+            image_tag: dev-${{ github.run_number }}.${{ github.run_id }}.${{ github.run_attempt }}
+            image_port: 3000
           - enviroment_name: production
-            version_tags: |
-              daemonsharps/jwt-auth-api:${{ needs.update_draft_release.outputs.release_tag }}
-              daemonsharps/jwt-auth-api:latest
-
-    uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@master
+            image_tag: ${{ needs.update_draft_release.outputs.release_tag }}
+            image_port: 3001
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-release.yml@stable
     with:
-      enviroment_name: ${{ matrix.enviroment_name }}
-      version_tags: ${{ matrix.version_tags }}
+      compose_folder: GarageSite
+      env_file_name: JWTProvider/api.env
+      compose_service_name: jwt-api
+      image_tag_env: JWT_TAG=${{ matrix.image_tag }}
+      image_port_env: JWT_API_PORT=${{ matrix.image_port }}
+      environment_name: ${{ matrix.enviroment_name }}
     secrets:
-      docker_login: ${{ secrets.DOCKER_USER_LOGIN }}
-      docker_token: ${{ secrets.DOCKER_USER_AUTH_TOKEN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      ENV_TEXT: ${{ secrets[format('{0}_ENV_TEXT', matrix.enviroment_name)] }}
