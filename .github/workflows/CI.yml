@@ -73,7 +73,6 @@ jobs:
     needs:
       - upload_on_hub
       - update_draft_release
-      - deploy_db
     strategy:
       matrix:
         enviroment_name: [ development, production ]
