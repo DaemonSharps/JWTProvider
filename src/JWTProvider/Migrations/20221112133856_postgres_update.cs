@@ -40,7 +40,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
@@ -49,7 +49,7 @@ namespace JWTProvider.Migrations
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
-                oldType: "datetimeoffset");
+                oldType: "timestamp with time zone");
 
             migrationBuilder.AlterColumn<string>(
                 name: "LastName",
@@ -57,7 +57,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
@@ -66,7 +66,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
@@ -75,7 +75,7 @@ namespace JWTProvider.Migrations
                 type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(DateTimeOffset),
-                oldType: "datetimeoffset",
+                oldType: "timestamp with time zone",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
@@ -84,7 +84,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(450)");
+                oldType: "text");
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "CreationDate",
@@ -92,7 +92,7 @@ namespace JWTProvider.Migrations
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
-                oldType: "datetimeoffset");
+                oldType: "timestamp with time zone");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
@@ -100,7 +100,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
@@ -108,7 +108,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "RefreshToken",
@@ -116,7 +116,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "OperatingSystemTypeId",
@@ -124,7 +124,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: true,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier",
+                oldType: "uuid",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
@@ -133,7 +133,7 @@ namespace JWTProvider.Migrations
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
-                oldType: "datetimeoffset");
+                oldType: "timestamp with time zone");
 
             migrationBuilder.AlterColumn<string>(
                 name: "IP",
@@ -141,7 +141,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
@@ -150,7 +150,7 @@ namespace JWTProvider.Migrations
                 type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(DateTimeOffset),
-                oldType: "datetimeoffset",
+                oldType: "timestamp with time zone",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
@@ -159,7 +159,7 @@ namespace JWTProvider.Migrations
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
-                oldType: "datetimeoffset");
+                oldType: "timestamp with time zone");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "AppId",
@@ -167,7 +167,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: true,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier",
+                oldType: "uuid",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<Guid>(
@@ -176,7 +176,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Hash",
@@ -184,7 +184,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "text");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
@@ -192,7 +192,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Code",
@@ -200,7 +200,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<Guid>(
@@ -209,7 +209,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Code",
@@ -217,7 +217,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<Guid>(
@@ -226,7 +226,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Code",
@@ -234,7 +234,7 @@ namespace JWTProvider.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "text",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<Guid>(
@@ -243,7 +243,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
@@ -251,7 +251,7 @@ namespace JWTProvider.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+                oldType: "uuid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -259,7 +259,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Patronymic",
                 table: "Users",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -268,7 +268,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "LastUpdate",
                 table: "Users",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone");
@@ -276,7 +276,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "LastName",
                 table: "Users",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -285,7 +285,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "FirstName",
                 table: "Users",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -294,7 +294,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "FinishDate",
                 table: "Users",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone",
@@ -303,7 +303,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Email",
                 table: "Users",
-                type: "nvarchar(450)",
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -311,7 +311,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "CreationDate",
                 table: "Users",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone");
@@ -319,7 +319,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
                 table: "Users",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -327,7 +327,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
                 table: "Sessions",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -335,7 +335,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "RefreshToken",
                 table: "Sessions",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -343,7 +343,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "OperatingSystemTypeId",
                 table: "Sessions",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: true,
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
@@ -352,7 +352,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "LastUpdate",
                 table: "Sessions",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone");
@@ -360,7 +360,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IP",
                 table: "Sessions",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -369,7 +369,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "FinishDate",
                 table: "Sessions",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone",
@@ -378,7 +378,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "CreationDate",
                 table: "Sessions",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone");
@@ -386,7 +386,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "AppId",
                 table: "Sessions",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: true,
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
@@ -395,7 +395,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
                 table: "Sessions",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -403,7 +403,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Hash",
                 table: "Passwords",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -411,7 +411,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
                 table: "Passwords",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -419,7 +419,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Code",
                 table: "OperatingSystemTypes",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -428,7 +428,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
                 table: "OperatingSystemTypes",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -436,7 +436,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Code",
                 table: "AppTypes",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -445,7 +445,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
                 table: "AppTypes",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -453,7 +453,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Code",
                 table: "Apps",
-                type: "nvarchar(max)",
+                type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -462,7 +462,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "AppTypeId",
                 table: "Apps",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
@@ -470,7 +470,7 @@ namespace JWTProvider.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "Id",
                 table: "Apps",
-                type: "uniqueidentifier",
+                type: "uuid",
                 nullable: false,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");

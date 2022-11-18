@@ -17,20 +17,20 @@ namespace JWTProvider.Migrations
             migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "CreationDate",
                 table: "Users",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: false,
                 defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
 
             migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "FinishDate",
                 table: "Users",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "LastUpdate",
                 table: "Users",
-                type: "datetimeoffset",
+                type: "timestamp with time zone",
                 nullable: false,
                 defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
 
@@ -38,8 +38,8 @@ namespace JWTProvider.Migrations
                 name: "AppTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,8 +50,8 @@ namespace JWTProvider.Migrations
                 name: "OperatingSystemTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -62,9 +62,9 @@ namespace JWTProvider.Migrations
                 name: "Apps",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AppTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true),
+                    AppTypeId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,15 +81,15 @@ namespace JWTProvider.Migrations
                 name: "Sessions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RefreshToken = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AppId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IP = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OperatingSystemTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastUpdate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    FinishDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    RefreshToken = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AppId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IP = table.Column<string>(type: "text", nullable: true),
+                    OperatingSystemTypeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    FinishDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
