@@ -13,7 +13,7 @@ namespace JWTProvider.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table => table.PrimaryKey("PK_UserRoles", x => x.Id));
 
@@ -21,12 +21,12 @@ namespace JWTProvider.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RoleId = table.Column<long>(type: "bigint", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    MiddleName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,8 +43,8 @@ namespace JWTProvider.Migrations
                 name: "Logins",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DisplayLogin = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DisplayLogin = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,8 +61,8 @@ namespace JWTProvider.Migrations
                 name: "Passwords",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Hash = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
