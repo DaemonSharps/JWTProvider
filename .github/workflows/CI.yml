@@ -62,6 +62,7 @@ jobs:
       image_tag_env: JWT_DB_TAG=${{ matrix.image_tag }}
       image_port_env: JWT_DB_PORT=${{ matrix.image_port }}
       environment_name: ${{ matrix.enviroment_name }}
+      project_name: garage-site
     secrets:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -91,6 +92,7 @@ jobs:
       image_tag_env: JWT_TAG=${{ matrix.image_tag }}
       image_port_env: JWT_API_PORT=${{ matrix.image_port }}
       environment_name: ${{ matrix.enviroment_name }}
+      project_name: garage-site
     secrets:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
