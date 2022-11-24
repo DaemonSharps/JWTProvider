@@ -47,7 +47,6 @@ jobs:
     name: Загрузка в Docker hub
     needs:
      - update_draft_release
-     - dump_postgres
     uses: DaemonSharps/CI-CD/.github/workflows/docker-deploy.yml@stable
     with:
       version_tags: |
@@ -91,6 +90,7 @@ jobs:
   deploy_api:
     name: Проливка на VPS API
     needs:
+      - dump_postgres
       - upload_on_hub
       - update_draft_release
     strategy:
