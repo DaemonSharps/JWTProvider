@@ -42,6 +42,7 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
+      ENV_TEXT: ${{ secrets[format('{0}_DB_ENV_TEXT', matrix.enviroment_name)] }}
 
   upload_on_hub:
     name: Загрузка в Docker hub
