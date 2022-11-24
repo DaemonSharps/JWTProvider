@@ -18,3 +18,7 @@ jobs:
       environment_name: ${{ matrix.enviroment_name }}
       project_name: garage-site
       compose_service_name: jwt-db
+    secrets:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
