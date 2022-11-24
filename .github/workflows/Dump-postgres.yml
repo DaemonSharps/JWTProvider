@@ -1,0 +1,24 @@
+name: Create Postgres dump
+
+on:
+  schedule:
+    - cron: "0 10 * * 1-5" #Каждый день ПН-ПТ в 10:00
+  workflow_dispatch:
+
+jobs:
+  dump_postgres:
+    name: Бекаб базы постгреса
+    strategy:
+      matrix:
+        enviroment_name: [ development, production ]
+    uses: DaemonSharps/CI-CD/.github/workflows/docker-postgres-dump.yml@stable
+    with:
+      compose_folder: GarageSite
+      env_file_name: JWTProvider/db.env
+      environment_name: ${{ matrix.enviroment_name }}
+      project_name: garage-site
+      compose_service_name: jwt-db
+    secrets:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
