@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{439EB3E7-66ED-401D-9A5A-C0E86E31055B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{439EB3E7-66ED-401D-9A5A-C0E86E31055B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{F72C14B3-3BC6-4BD0-A87E-20A3EDE1B370}"
 EndProject
@@ -19,11 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{8876D0EC-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfrastructureUnit", "Test\Unit\InfrastructureUnit\InfrastructureUnit.csproj", "{F1A260DF-16B3-4D9E-8748-EFDCFEB7B573}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTProviderUnit", "Test\Unit\JWTProviderUnit\JWTProviderUnit.csproj", "{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProviderUnit", "Test\Unit\JWTProviderUnit\JWTProviderUnit.csproj", "{AE4648AA-5674-4AEA-9E6C-F97C4F9E7A9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{AAF976CF-6911-403F-A7D8-80B611752B5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTProviderIntegration", "Test\Integration\JWTProviderIntegration\JWTProviderIntegration.csproj", "{B7F83259-D279-4AD4-A869-7CB97181231D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProviderIntegration", "Test\Integration\JWTProviderIntegration\JWTProviderIntegration.csproj", "{B7F83259-D279-4AD4-A869-7CB97181231D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtTest.Common", "Test\JwtTest.Common\JwtTest.Common.csproj", "{45345074-07ED-4041-8E41-26418D09300B}"
 EndProject
@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\Build-PR.yml = .github\workflows\Build-PR.yml
 		.github\workflows\CI.yml = .github\workflows\CI.yml
+		.github\workflows\Dump-postgres.yml = .github\workflows\Dump-postgres.yml
 		.github\workflows\Labeler.yml = .github\workflows\Labeler.yml
 	EndProjectSection
 EndProject
@@ -39,7 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{9F0FBB
 		.github\release-drafter.yml = .github\release-drafter.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTProvider", "src\JWTProvider\JWTProvider.csproj", "{87F7B2B1-7B78-4B3E-8825-A7F3D5D87742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTProvider", "src\JWTProvider\JWTProvider.csproj", "{87F7B2B1-7B78-4B3E-8825-A7F3D5D87742}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
